@@ -1,0 +1,46 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { DashboardComponent } from './dashboard.component';
+import { ModalsModule, WidgetsModule } from '../../_metronic/partials';
+import { ResumeComponent } from '../resume/resume.component';
+import { JobProfileComponent } from '../job-profile/job-profile.component';
+import { MockintoHistoryComponent } from '../mockinto-history/mockinto-history.component';
+import { MockintoScheduleComponent } from '../mockinto-schedule/mockinto-schedule.component';
+import { MockintoQuestionsComponent } from '../mockinto-questions/mockinto-questions.component';
+
+@NgModule({
+  declarations: [DashboardComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: DashboardComponent
+      },
+      {
+        path: 'resume',
+        component: ResumeComponent,
+      },
+      {
+        path: 'job-profile',
+        component: JobProfileComponent,
+      },
+      {
+        path: 'mockinto-questions',
+        component: MockintoQuestionsComponent,
+      },
+      {
+        path: 'mockinto-schedule',
+        component: MockintoScheduleComponent,
+      },
+      {
+        path: 'mockinto-history',
+        component: MockintoHistoryComponent,
+      }
+    ]),
+    WidgetsModule,
+    ModalsModule
+  ],
+})
+export class DashboardModule {}

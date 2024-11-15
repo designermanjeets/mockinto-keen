@@ -1,0 +1,211 @@
+<div
+  id="kt_activities"
+  class="bg-body"
+  data-kt-drawer="true"
+  data-kt-drawer-name="activities"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'300px', 'lg': '900px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#kt_activities_toggle"
+  data-kt-drawer-close="#kt_activities_close"
+>
+  <div class="card shadow-none rounded-0">
+    <div class="card-header" id="kt_activities_header">
+      <h3 class="card-title fw-bolder text-dark">Activity Logs</h3>
+
+      <div class="card-toolbar">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-active-light-primary me-n5"
+          id="kt_activities_close"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+            class="svg-icon svg-icon-1"
+          ></span>
+        </button>
+      </div>
+    </div>
+    <div class="card-body position-relative" id="kt_activities_body">
+      <div
+        id="kt_activities_scroll"
+        class="position-relative scroll-y me-n5 pe-5"
+        data-kt-scroll="true"
+        data-kt-scroll-height="auto"
+        data-kt-scroll-wrappers="#kt_activities_body"
+        data-kt-scroll-dependencies="#kt_activities_header, #kt_activities_footer"
+        data-kt-scroll-offset="5px"
+      >
+        <div class="timeline">
+          <!-- Item2 -->
+          <div class="timeline-item">
+            <div class="timeline-line w-40px"></div>
+
+            <div class="timeline-icon symbol symbol-circle symbol-40px">
+              <div class="symbol-label bg-light">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/communication/com009.svg'
+                  "
+                  class="svg-icon svg-icon-2 svg-icon-gray-500"
+                ></span>
+              </div>
+            </div>
+
+            <div class="timeline-content mb-10 mt-n2">
+              <div class="overflow-auto pe-3">
+                <div class="fs-5 fw-bold mb-2">
+                  Invitation for crafting engaging designs that speak human
+                  workshop
+                </div>
+
+                <div class="d-flex align-items-center mt-1 fs-6">
+                  <div class="text-muted me-2 fs-7">Sent at 4:23 PM by</div>
+
+                  <div
+                    class="symbol symbol-circle symbol-25px"
+                    data-bs-toggle="tooltip"
+                    data-bs-boundary="window"
+                    data-bs-placement="top"
+                    title="Alan Nilson"
+                  >
+                    <img src="./assets/media/avatars/300-1.jpg" alt="img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Item4 -->
+          <div class="timeline-item">
+            <div class="timeline-line w-40px"></div>
+
+            <div class="timeline-icon symbol symbol-circle symbol-40px">
+              <div class="symbol-label bg-light">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/abstract/abs027.svg'
+                  "
+                  class="svg-icon svg-icon-1"
+                ></span>
+              </div>
+            </div>
+
+            <div class="timeline-content mb-10 mt-n1">
+              <div class="pe-3 mb-5">
+                <div class="fs-5 fw-bold mb-2">
+                  Task
+                  <a class="text-primary fw-bolder me-1 cursor-pointer">
+                    #45890
+                  </a>
+                  merged with
+                  <a class="text-primary fw-bolder me-1 cursor-pointer">
+                    #45890
+                  </a>
+                  in “Ads Pro Admin Dashboard project:
+                </div>
+
+                <div class="d-flex align-items-center mt-1 fs-6">
+                  <div class="text-muted me-2 fs-7">
+                    Initiated at 4:23 PM by
+                  </div>
+
+                  <div
+                    class="symbol symbol-circle symbol-25px"
+                    data-bs-toggle="tooltip"
+                    data-bs-boundary="window"
+                    data-bs-placement="top"
+                    title="Nina Nilson"
+                  >
+                    <img src="./assets/media/avatars/300-14.jpg" alt="img" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Item6 -->
+          <div class="timeline-item">
+            <div class="timeline-line w-40px"></div>
+
+            <div class="timeline-icon symbol symbol-circle symbol-40px">
+              <div class="symbol-label bg-light">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/communication/com010.svg'
+                  "
+                  class="svg-icon svg-icon-1"
+                ></span>
+              </div>
+            </div>
+
+            <div class="timeline-content mb-10 mt-n1">
+              <div class="pe-3 mb-5">
+                <div class="fs-5 fw-bold mb-2">
+                  New case
+                  <a class="text-primary fw-bolder me-1 cursor-pointer">
+                    #67890
+                  </a>
+                  is assigned to you in Multi-platform Database Design project
+                </div>
+
+                <div class="overflow-auto pb-5">
+                  <div class="d-flex align-items-center mt-1 fs-6">
+                    <div class="text-muted me-2 fs-7">Added at 4:23 PM by</div>
+
+                    <a class="text-primary fw-bolder me-1 cursor-pointer">
+                      Alice Tan
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Item8  -->
+          <div class="timeline-item">
+            <div class="timeline-line w-40px"></div>
+
+            <div class="timeline-icon symbol symbol-circle symbol-40px">
+              <div class="symbol-label bg-light">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/ecommerce/ecm002.svg'
+                  "
+                  class="svg-icon svg-icon-3 svg-icon-primary"
+                ></span>
+              </div>
+            </div>
+
+            <div class="timeline-content mt-n1">
+              <div class="pe-3 mb-5">
+                <div class="fs-5 fw-bold mb-2">
+                  New order
+                  <a class="text-primary fw-bolder me-1 cursor-pointer">
+                    #67890
+                  </a>
+                  is placed for Workshow Planning & Budget Estimation
+                </div>
+
+                <div class="d-flex align-items-center mt-1 fs-6">
+                  <div class="text-muted me-2 fs-7">Placed at 4:23 PM by</div>
+
+                  <a class="text-primary fw-bolder me-1 cursor-pointer">
+                    Jimmy Bold
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer py-5 text-center" id="kt_activities_footer">
+      <a to="/crafted/pages/profile" class="btn btn-bg-body text-primary">
+        View All Activities
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
+          class="svg-icon svg-icon-3 svg-icon-primary"
+        ></span>
+      </a>
+    </div>
+  </div>
+</div>
