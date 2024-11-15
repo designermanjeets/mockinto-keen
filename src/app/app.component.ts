@@ -8,6 +8,7 @@ import { locale as jpLang } from './modules/i18n/vocabs/jp';
 import { locale as deLang } from './modules/i18n/vocabs/de';
 import { locale as frLang } from './modules/i18n/vocabs/fr';
 import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -20,7 +21,8 @@ import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switche
 export class AppComponent implements OnInit {
   constructor(
     private translationService: TranslationService,
-    private modeService: ThemeModeService
+    private modeService: ThemeModeService,
+    private router: Router
   ) {
     // register translations
     this.translationService.loadTranslations(
@@ -35,5 +37,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.modeService.init();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+        if(!loggedInUser) {
+          this.router.navigate(['/auth/login']);
+        }
+      }
+    });
   }
 }

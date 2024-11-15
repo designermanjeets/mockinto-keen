@@ -297,6 +297,26 @@ export class SharedService implements OnDestroy {
     );
   }
 
+  // Profile Actions
+  editProfile(profile: any): Observable<any> {
+    const payload = {
+      ...profile,
+      tenant: { id: this.tenantId }
+    }
+    this.isLoadingSubject.next(true);
+    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    .pipe(
+      map((data: any) => {
+        console.log('editProfile ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   // Misc Actions
 
   showToaster() {

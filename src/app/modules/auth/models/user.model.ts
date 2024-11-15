@@ -22,6 +22,7 @@ export class UserModel extends AuthModel {
   confirmPassword?: string;
   isAgreed?: boolean;
   user_email?: string;
+  candidates?: any;
 
   setUser(_user: unknown) {
     const user = _user as UserModel;

@@ -45,8 +45,10 @@
                     mb-3 mb-lg-0
                   "
                   placeholder="First name"
-                  name="fName"
-                  value="Max"
+                  name="first_name"
+                  [(ngModel)]="first_name"
+                  (ngModelChange)="updateFirstName($event)"
+                  value=""
                 />
               </div>
               <div class="col-lg-6 fv-row">
@@ -54,25 +56,13 @@
                   type="text"
                   class="form-control form-control-lg form-control-solid"
                   placeholder="Last name"
-                  name="lName"
-                  value="Smith"
+                  name="last_name"
+                  [(ngModel)]="last_name"
+                  (ngModelChange)="updateLastName($event)"
+                  value=""
                 />
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6"
-            >Company</label
-          >
-          <div class="col-lg-8 fv-row">
-            <input
-              type="text"
-              class="form-control form-control-lg form-control-solid"
-              placeholder="Company name"
-              name="company"
-              value="Keenthemes"
-            />
           </div>
         </div>
         <div class="row mb-6">
@@ -84,22 +74,26 @@
               type="tel"
               class="form-control form-control-lg form-control-solid"
               placeholder="Phone number"
-              name="contactPhone"
-              value="044 3276 454 935"
+              name="candidatePhone"
+              [(ngModel)]="candidatePhone"
+              (ngModelChange)="updateCandidatePhone($event)"
+              value=""
             />
           </div>
         </div>
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Company Site</span></label
+            ><span class="required">Email</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
-              type="text"
+              type="tel"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Company website"
-              name="companySite"
-              value="keenthemes.com"
+              placeholder="Email"
+              name="candidateEmail"
+              [(ngModel)]="candidateEmail"
+              (ngModelChange)="updateCandidateEmail($event)"
+              value=""
             />
           </div>
         </div>
@@ -442,7 +436,9 @@
           <div class="col-lg-8 fv-row">
             <select
               class="form-select form-select-solid form-select-lg"
-              name="timeZone"
+              name="preferredTimezone"
+              [(ngModel)]="preferredTimezone"
+              (ngModelChange)="updatePreferredTimezone($event)"
             >
               <option value="">Select a Timezone..</option>
               <option value="International Date Line West">
@@ -627,42 +623,6 @@
               <option value="CAD">CAD - Canadian dollar</option>
               <option value="CHF">CHF - Swiss franc</option>
             </select>
-          </div>
-        </div>
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6"
-            >Communication</label
-          >
-          <div class="col-lg-8 fv-row">
-            <div class="d-flex align-items-center mt-3">
-              <label class="form-check form-check-inline form-check-solid me-5"
-                ><input
-                  class="form-check-input"
-                  name="communication[]"
-                  type="checkbox"
-                /><span class="fw-bold ps-2 fs-6">Email</span></label
-              ><label class="form-check form-check-inline form-check-solid"
-                ><input
-                  class="form-check-input"
-                  name="communication[]"
-                  type="checkbox"
-                /><span class="fw-bold ps-2 fs-6">Phone</span></label
-              >
-            </div>
-          </div>
-        </div>
-        <div class="row mb-0">
-          <label class="col-lg-4 col-form-label fw-bold fs-6"
-            >Allow Marketing</label
-          >
-          <div class="col-lg-8 d-flex align-items-center">
-            <div class="form-check form-check-solid form-switch fv-row">
-              <input
-                class="form-check-input w-45px h-30px"
-                type="checkbox"
-                id="allowmarketing"
-              /><label class="form-check-label"></label>
-            </div>
           </div>
         </div>
       </div>

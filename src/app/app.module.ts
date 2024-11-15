@@ -40,6 +40,8 @@ import {
 } from '@angular-material-components/datetime-picker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { ProfileDetailsComponent } from './modules/account/settings/forms/profile-details/profile-details.component';
+import { MockintoBillingComponent } from './pages/mockinto-billing/mockinto-billing.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -63,7 +65,9 @@ function appInitializer(authService: AuthService) {
     ActivityLogsComponent, 
     NotificationsComponent, 
     MyProfileComponent, 
-    CheckoutComponent
+    CheckoutComponent,
+    ProfileDetailsComponent,
+    MockintoBillingComponent
   ],
   imports: [
     BrowserModule,

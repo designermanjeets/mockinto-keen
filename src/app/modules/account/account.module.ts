@@ -6,7 +6,7 @@ import { AccountRoutingModule } from './account-routing.module';
 import { AccountComponent } from '../account/account.component';
 import { OverviewComponent } from './overview/overview.component';
 import { SettingsComponent } from './settings/settings.component';
-import { ProfileDetailsComponent } from './settings/forms/profile-details/profile-details.component';
+// import { ProfileDetailsComponent } from './settings/forms/profile-details/profile-details.component';
 import { ConnectedAccountsComponent } from './settings/forms/connected-accounts/connected-accounts.component';
 import { DeactivateAccountComponent } from './settings/forms/deactivate-account/deactivate-account.component';
 import { EmailPreferencesComponent } from './settings/forms/email-preferences/email-preferences.component';
@@ -19,7 +19,7 @@ import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
     AccountComponent,
     OverviewComponent,
     SettingsComponent,
-    ProfileDetailsComponent,
+    // ProfileDetailsComponent,
     ConnectedAccountsComponent,
     DeactivateAccountComponent,
     EmailPreferencesComponent,

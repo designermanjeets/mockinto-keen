@@ -1,16 +1,9 @@
 <ng-container *ngIf="user$ | async as _user">
   <div class="menu-item px-3">
     <div class="menu-content d-flex align-items-center px-3">
-      <div class="symbol symbol-50px me-5">
-        <img alt="Logo" [src]="_user.pic" />
-      </div>
-
       <div class="d-flex flex-column">
         <div class="fw-bolder d-flex align-items-center fs-5">
-          {{ _user.first_name }} {{ _user.last_name }}
-          <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2"
-            >Pro</span
-          >
+          {{ _user.candidates[0].candidateEmail }}
         </div>
         <a class="fw-bold text-muted text-hover-primary fs-7 cursor-pointer">
           {{ _user.user_email }}
@@ -22,20 +15,11 @@
   <div class="separator my-2"></div>
 
   <div class="menu-item px-5">
-    <a routerLink="/crafted/pages/profile" class="menu-link px-5">
+    <a routerLink="/dashboard/account-settings" class="menu-link px-5">
       My Profile
     </a>
   </div>
-
-  <div class="menu-item px-5">
-    <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">
-      <span class="menu-text">My Projects</span>
-      <span class="menu-badge">
-        <span class="badge badge-light-danger badge-circle fw-bolder fs-7">3</span>
-      </span>
-    </a>
-  </div>
-
+  
   <div
     class="menu-item px-5"
     data-kt-menu-trigger="hover"
@@ -49,53 +33,19 @@
 
     <div class="menu-sub menu-sub-dropdown w-175px py-4">
       <div class="menu-item px-3">
-        <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">Referrals</a>
+        <a class="menu-link px-5 cursor-pointer" routerLink="/dashboard/mockinto-plan" placement="top-start" ngbTooltip="Coming soon">My Plan</a>
       </div>
 
       <div class="menu-item px-3">
-        <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">Billing</a>
+        <a class="menu-link px-5 cursor-pointer" routerLink="/dashboard/mockinto-billing" placement="top-start" ngbTooltip="Coming soon">Billing</a>
       </div>
 
       <div class="menu-item px-3">
-        <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">Payments</a>
-      </div>
-
-      <div class="menu-item px-3">
-        <a class="menu-link d-flex flex-stack px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">
-          Statements
-          <i
-            class="fas fa-exclamation-circle ms-2 fs-7"
-            data-bs-toggle="tooltip"
-            title="View your statements"
-          ></i>
-        </a>
-      </div>
-
-      <div class="separator my-2"></div>
-
-      <div class="menu-item px-3">
-        <div class="menu-content px-3">
-          <label
-            class="form-check form-switch form-check-custom form-check-solid"
-          >
-            <input
-              class="form-check-input w-30px h-20px"
-              type="checkbox"
-              value="1"
-              defaultChecked="{true}"
-              name="notifications"
-            />
-            <span class="form-check-label text-muted fs-7">Notifications</span>
-          </label>
-        </div>
+        <a class="menu-link px-5 cursor-pointer" routerLink="/dashboard/mockinto-payments"  placement="top-start" ngbTooltip="Coming soon">Payments</a>
       </div>
     </div>
   </div>
-
-  <div class="menu-item px-5">
-    <a class="menu-link px-5 cursor-pointer" placement="top-start" ngbTooltip="Coming soon">My Statements</a>
-  </div>
-
+  
   <div class="separator my-2"></div>
 
   <div
@@ -148,13 +98,7 @@
       </div>
     </div>
   </div>
-
-  <div class="menu-item px-5 my-1">
-    <a routerLink="/crafted/account/settings" class="menu-link px-5">
-      Account Settings
-    </a>
-  </div>
-
+  
   <div class="menu-item px-5">
     <a (click)="logout()" class="menu-link px-5 cursor-pointer"> Sign Out </a>
   </div>
