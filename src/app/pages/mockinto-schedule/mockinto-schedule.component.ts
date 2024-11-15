@@ -113,7 +113,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         return;
       }
       if(result.isConfirmed) {
-        this.sharedService.deleteMockintoSchedule(profile).subscribe(
+        this.sharedService.deleteMockintoScheduleBulk([{ id: profile.schedule.id }]).subscribe(
           data => {
             this.fetchAllMockintoSchedules();
           }
@@ -141,7 +141,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       if(result.isConfirmed) {
         const profiles_filter = this.mockintoSchedules.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
-          return { id: item.id };
+          return { id: item.schedule.id };
         });
         this.sharedService.deleteMockintoScheduleBulk(profiles).subscribe(
           data => {
@@ -159,8 +159,9 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterOpened().subscribe(result => {
-      this.mockJobProfile = mockinto.mockJobProfile;
-      this.mockResume = mockinto.resume;
+      this.mockJobProfile = mockinto.jobPostingId;
+      this.mockResume = mockinto.schedule.resume.id;
+      this.dateControl.patchValue(mockinto.schedule.scheduleStartDate);
       this.cdRef.detectChanges();
     });
 
@@ -184,26 +185,9 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addUpdateMockintoSchedule(patchValue?: any) {
-
     this.sharedService.isLoadingSubject.next(true);
     if(Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
-      const payload = {
-        ...patchValue.mockinto,
-        "mockJobProfile": this.mockJobProfile,
-        "jobDescription": this.mockResume,
-      }
-      this.sharedService.updateMockintoSchedule(payload).subscribe(
-        data => {
-          if(data) {
-            this.sharedService.isLoadingSubject.next(false);
-            this.closeDialog();
-            this.fetchAllMockintoSchedules();
-          }
-        }
-      );
-    } else {
-      console.log(this.mockJobProfile);
-      console.log(this.mockResume);
+      console.log(patchValue);
       const payload = {
         "active": 1,
         "deleted": 0,
@@ -223,18 +207,42 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         "resume": {
             "id": this.mockResume
         }
-    };
-      console.log(payload);
-      console.log(this.dateControl);
-      this.sharedService.addMockintoSchedule(payload).subscribe(
-        data => {
-          if(data) {
-            this.sharedService.isLoadingSubject.next(false);
-            this.closeDialog();
-            this.fetchAllMockintoSchedules();
-          }
+      };
+      this.sharedService.updateMockintoSchedule(payload).subscribe(data => {
+        if(data) {
+          this.sharedService.isLoadingSubject.next(false);
+          this.closeDialog();
+          this.fetchAllMockintoSchedules();
         }
-      );
+      });
+    } else {
+      const payload = {
+        "active": 1,
+        "deleted": 0,
+        "interviewPeriodMinutes": 0,
+        "scheduleStartDate": this.dateControl,
+        "scheduleStatusId": 0,
+        "updatedBy": 0,
+        "jobPosting": {
+            "id": this.mockJobProfile,
+            "active": 1,
+            "deleted": 0,
+            "updatedBy": 0,
+            "tenant": {
+                "id": "1"
+            }
+        },
+        "resume": {
+            "id": this.mockResume
+        }
+      };
+      this.sharedService.addMockintoSchedule(payload).subscribe(data => {
+        if(data) {
+          this.sharedService.isLoadingSubject.next(false);
+          this.closeDialog();
+          this.fetchAllMockintoSchedules();
+        }
+      });
     }
   }
 

@@ -231,6 +231,7 @@ export class SharedService implements OnDestroy {
       tenant: { id: this.tenantId },
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
+    console.log(payload);
     this.isLoadingSubject.next(true);
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
@@ -246,8 +247,14 @@ export class SharedService implements OnDestroy {
   }
 
   updateMockintoSchedule(mockintoSchedule: any): Observable<any> {
+    const payload = {
+      ...mockintoSchedule,
+      tenant: { id: this.tenantId },
+      candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
+    }
+    console.log(payload);
     this.isLoadingSubject.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, mockintoSchedule)
+    return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
       map((data: any) => {
         console.log('updateMockintoSchedule ', data);
@@ -260,9 +267,9 @@ export class SharedService implements OnDestroy {
     );
   }
 
-  deleteMockintoSchedule(mockintoSchedule: any): Observable<any> {
+  deleteMockintoSchedule(mockintoSchedule: any): Observable<any> { // Single Not Working at the Moment
     this.isLoadingSubject.next(true);
-    return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule?interviewScheduleId=${mockintoSchedule.id}`)
+    return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule?interviewScheduleId=${mockintoSchedule.schedule.id}`)
     .pipe(
       map((data: any) => {
         console.log('deleteMockintoSchedule ', data);
