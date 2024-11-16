@@ -19,6 +19,7 @@ import { NavigationEnd, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
+
   constructor(
     private translationService: TranslationService,
     private modeService: ThemeModeService,

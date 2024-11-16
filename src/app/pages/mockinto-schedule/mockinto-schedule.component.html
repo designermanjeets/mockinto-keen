@@ -321,8 +321,8 @@
                         <div class="modal-header">
                             <!--begin::Modal title-->
                             <h2>
-                                <span *ngIf="!data.mockinto">Add</span>
-                                <span *ngIf="data.mockinto">Edit</span>
+                                <span *ngIf="!data.mockscheduledata">Add</span>
+                                <span *ngIf="data.mockscheduledata">Edit</span>
                                 Mockinto Schedules</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
@@ -351,8 +351,8 @@
                                                 <div class="pb-12">
                                                     <!--begin::Description-->
                                                     <div class="text-muted fw-semibold fs-4">
-                                                        <span *ngIf="!data.mockinto">Add</span>
-                                                        <span *ngIf="data.mockinto">Edit</span>
+                                                        <span *ngIf="!data.mockscheduledata">Add</span>
+                                                        <span *ngIf="data.mockscheduledata">Edit</span>
                                                         Mockinto Schedules</div>
                                                     <!--end::Description-->
                                                 </div>
@@ -433,7 +433,7 @@
                                                 <!--end::Input group-->
                                                 <!--begin::Actions-->
                                                 <div class="d-flex flex-stack">
-                                                    <button type="button" class="btn btn-lg btn-primary" (click)="addUpdateMockintoSchedule(data)" [disabled]="!mockJobProfile || !mockResume">
+                                                    <button type="button" class="btn btn-lg btn-primary" (click)="addUpdateMockintoSchedule(data.mockscheduledata)" [disabled]="!mockJobProfile || !mockResume || !dateControl.value">
                                                         <ng-container *ngIf="isLoading$ | async">
                                                             <span class="indicator-progress" [style.display]="'block'">
                                                               Please wait...

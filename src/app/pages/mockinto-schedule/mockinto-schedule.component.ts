@@ -152,16 +152,15 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     });
   }
 
-  editMockintoSchedule(mockinto: any) {
-    console.log('editMockintoSchedule', mockinto);
+  editMockintoSchedule(mockscheduledata?: any) {
     const dialogRef = this.dialog.open(this.addDialogTemplate, {
-      data: { mockinto },
+      data: { mockscheduledata },
     });
 
     dialogRef.afterOpened().subscribe(result => {
-      this.mockJobProfile = mockinto.jobPostingId;
-      this.mockResume = mockinto.schedule.resume.id;
-      this.dateControl.patchValue(mockinto.schedule.scheduleStartDate);
+      this.mockJobProfile = mockscheduledata.jobPostingId;
+      this.mockResume = mockscheduledata.schedule.resume.id;
+      this.dateControl.patchValue(new Date(mockscheduledata.schedule.scheduleStartDate));
       this.cdRef.detectChanges();
     });
 
@@ -186,29 +185,31 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   addUpdateMockintoSchedule(patchValue?: any) {
     this.sharedService.isLoadingSubject.next(true);
-    if(Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
-      console.log(patchValue);
-      const payload = {
-        "active": 1,
-        "deleted": 0,
-        "interviewPeriodMinutes": 0,
-        "scheduleStartDate": this.dateControl,
-        "scheduleStatusId": 0,
-        "updatedBy": 0,
-        "jobPosting": {
-            "id": this.mockJobProfile,
-            "active": 1,
-            "deleted": 0,
-            "updatedBy": 0,
-            "tenant": {
-                "id": "1"
-            }
-        },
-        "resume": {
-            "id": this.mockResume
+    if(patchValue) {
+      const payload = Object.assign({},
+        {
+          "active": 1,
+          "deleted": 0,
+          "interviewPeriodMinutes": 0,
+          "scheduleStartDate": moment(this.dateControl.value).toISOString(),
+          "scheduleStatusId": 0,
+          "updatedBy": 0,
+          "jobPosting": {
+              "id": this.mockJobProfile,
+              "active": 1,
+              "deleted": 0,
+              "updatedBy": 0,
+              "tenant": {
+                  "id": "1"
+              }
+          },
+          "resume": {
+              "id": this.mockResume
+          }
         }
-      };
-      this.sharedService.updateMockintoSchedule(payload).subscribe(data => {
+      );
+      const cleanedData = this.removeCircularReferences(payload);
+      this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
         if(data) {
           this.sharedService.isLoadingSubject.next(false);
           this.closeDialog();
@@ -220,7 +221,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         "active": 1,
         "deleted": 0,
         "interviewPeriodMinutes": 0,
-        "scheduleStartDate": this.dateControl,
+        "scheduleStartDate": moment(this.dateControl.value).toISOString(),
         "scheduleStatusId": 0,
         "updatedBy": 0,
         "jobPosting": {
@@ -244,6 +245,19 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         }
       });
     }
+  }
+
+ removeCircularReferences(obj: any, seen = new WeakSet()) {
+    if (obj && typeof obj === 'object') {
+      if (seen.has(obj)) return undefined;
+      seen.add(obj);
+      const result: any = Array.isArray(obj) ? [] : {};
+      for (const key in obj) {
+        result[key] = this.removeCircularReferences(obj[key], seen);
+      }
+      return result;
+    }
+    return obj;
   }
 
   onMasterChange(event: any) {

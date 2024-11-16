@@ -4,7 +4,7 @@
     <div class="card-header card-header-stretch border-bottom border-gray-200">
         <!--begin::Title-->
         <div class="card-title">
-            <h3 class="fw-bold m-0">All Payments</h3>
+            <h3 class="fw-bold m-0">My Mockintos</h3>
         </div>
         <!--end::Title-->
         <!--begin::Toolbar-->
@@ -29,37 +29,7 @@
             aria-labelledby="kt_billing_months">
             <!--begin::Table container-->
             <div class="table-responsive">
-                <!--begin::Table-->
-                <table class="table table-row-bordered align-middle gy-4 gs-9">
-                    <thead class="border-bottom border-gray-200 fs-6 text-gray-600 fw-bold bg-light bg-opacity-75">
-                        <tr>
-                            <td class="min-w-150px">Date</td>
-                            <td class="min-w-250px">Description</td>
-                            <td class="min-w-150px">Amount</td>
-                            <td class="min-w-150px">Invoice</td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                    <tbody class="fw-semibold text-gray-600">
-                        <!--begin::Table row-->
-                        <tr *ngFor="let payment of allPayments">
-                            <td>{{ payment.created | date }}</td>
-                            <td>
-                                <a href="#">{{ payment.description || 'Plan Startup' }}</a>
-                            </td>
-                            <td>${{ payment.amount }}</td>
-                            <td>
-                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary">PDF</a>
-                            </td>
-                            <td class="text-right
-                            ">
-                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary">View</a>
-                            </td>
-                        </tr>
-                        <!--end::Table row-->
-                    </tbody>
-                </table>
-                <!--end::Table-->
+                
             </div>
             <!--end::Table container-->
         </div>
