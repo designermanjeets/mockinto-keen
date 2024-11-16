@@ -52,11 +52,11 @@ export class DashboardComponent implements OnInit {
       (data) => {
         console.log('data', data);
         if(!data) {
-          // Return Mock for now
-          this.dashboardData = this.mockData;
-          console.log('this.dashboardData', this.dashboardData);
-          this.cdr.detectChanges();
+          // this.dashboardData = this.mockData;
+        } else {
+          this.dashboardData = data;
         }
+        this.cdr.detectChanges();
       }
     );
   }
