@@ -148,7 +148,12 @@ export class MockintoBillingComponent implements OnInit {
 
   fetchAllPayments() {
     this.plutoService.getPaymentHistory().subscribe((res) => {
+      res.data.forEach((payment: any) => {
+        payment.amount = payment.amount / 100;
+        payment.created = new Date(payment.created * 1000).toLocaleString();
+      });
       this.allPayments = res.data;
+      console.log(this.allPayments);
       this.cdRef.detectChanges();
     });
   }

@@ -77,17 +77,6 @@ export class CreateSubscriptionComponent implements OnInit {
       });
   }
 
-
-  clear() {
-    this.checkoutForm.patchValue({
-      name: '',
-      email: '',
-      address: '',
-      zipcode: '',
-      city: '',
-    });
-  }
-
   collectPayment() {
     if (this.paying() || this.checkoutForm.invalid) return;
     this.paying.set(true);
@@ -128,7 +117,7 @@ export class CreateSubscriptionComponent implements OnInit {
               title: 'Success',
               text: 'Payment completed successfully',
             });
-            this.clear();
+            this.checkoutForm.reset();
           }
         },
         error: (err) => {
@@ -142,10 +131,29 @@ export class CreateSubscriptionComponent implements OnInit {
       });
   }
 
+  cancelPayment() {
+    (Swal as any).fire({
+      icon: 'error',
+      title: 'Cancel Payment',
+      text: 'Are you sure you want to cancel payment?',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light"
+      }
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.checkoutForm.reset();
+        this.router.navigate(['dashboard/mockinto-plan']);
+      }
+    });
+  }
+
   fetchAllPlans() {
     this.plutoService.getAllPlans().subscribe((res) => {
       if(res) {
-        console.log(res);
         this.allPlans = res.data;
         this.cdRef.detectChanges();
       }

@@ -40,18 +40,16 @@
                                             <th class="min-w-70px text-end">Remove</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="text-gray-600">
+                                    <tbody class="text-gray-600" *ngIf="allPlans?.length">
                                         <tr>
-                                            <td>${{allPlans[2].amount/100}} - Starter plan for upto 10 Mockinto
-                                                schedules</td>
+                                            <td>${{allPlans[2].amount/100}} - Starter plan for upto 10 Mockinto schedules</td>
                                             <td>1</td>
                                             <td>${{allPlans[2].amount/100}} / {{allPlans[2].interval}}</td>
                                             <td class="text-end">
                                                 <!--begin::Delete-->
-                                                <a href="#"
-                                                    class="btn btn-icon btn-flex btn-active-light-primary w-30px h-30px me-3"
+                                                <a class="btn btn-icon btn-flex btn-active-light-primary w-30px h-30px me-3"
                                                     data-bs-toggle="tooltip" title="Delete"
-                                                    data-kt-action="product_remove">
+                                                    data-kt-action="product_remove" (click)="cancelPayment()">
                                                     <i class="ki-duotone ki-trash fs-3">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
@@ -277,7 +275,7 @@
             </div>
             <!--end::Content-->
             <!--begin::Sidebar-->
-            <div class="flex-column flex-lg-row-auto w-100 w-lg-350px w-xl-350px mb-10 order-1 order-lg-2">
+            <div class="flex-column flex-lg-row-auto w-100 w-lg-350px w-xl-350px mb-10 order-1 order-lg-2" *ngIf="allPlans?.length">
                 <!--begin::Card-->
                 <div class="card card-flush pt-3 mb-0" data-kt-sticky="true" data-kt-sticky-name="subscription-summary"
                     data-kt-sticky-offset="{default: false, lg: '200px'}"
@@ -362,7 +360,7 @@
                         <!--begin::Actions-->
                         <div class="mb-0 d-flex">
                             <button type="submit" class="btn btn-light-primary me-10"
-                                id="kt_subscriptions_create_button" (click)="clear()">
+                                id="kt_subscriptions_create_button" (click)="cancelPayment()">
                                 Cancel
                             </button>
                             <button type="submit" class="btn btn-primary" id="kt_subscriptions_create_button"

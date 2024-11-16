@@ -366,7 +366,7 @@
                     <tbody class="fw-semibold text-gray-600">
                         <!--begin::Table row-->
                         <tr *ngFor="let payment of allPayments">
-                            <td>{{ payment.created | date }}</td>
+                            <td>{{ payment.created }}</td>
                             <td>
                                 <a href="#">{{ payment.description || 'Plan Startup' }}</a>
                             </td>
