@@ -202,17 +202,33 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
     this.sharedService.isLoadingSubject.next(true);
     mockSchedule.schedule.botJobCandidateQuestions[j].question = this.mockQuestion;
-    console.log(mockSchedule.schedule.botJobCandidateQuestions[j].question);
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const payload = Object.assign({},
+      mockSchedule.schedule.botJobCandidateQuestions[j],
+      {
+        "question": this.mockQuestion,
+        "candidate": {
+          "id": loggedInUser.id,
+        },
+        "jobPosting": {
+          "id": mockSchedule.jobPostingId,
+        },
+        "tenant": {
+          "id": loggedInUser.tenant_id,
+        },
+        "interviewSchedule": {
+          "id": mockSchedule.schedule.id,
+        },
+    });
+
     if(mockSchedule) {
-      const payload = Object.assign({}, mockSchedule.schedule );
-      const cleanedData = this.removeCircularReferences(payload);
-      // this.sharedService.updateMockintoQuestion(cleanedData).subscribe(data => {
-      //   if(data) {
-      //     this.sharedService.isLoadingSubject.next(false);
-      //     this.closeDialog();
-      //     this.fetchAllMockintoQuestions();
-      //   }
-      // });
+      this.sharedService.updateMockintoQuestion(payload).subscribe(data => {
+        if(data) {
+          this.sharedService.isLoadingSubject.next(false);
+          this.closeDialog();
+          this.fetchAllMockintoQuestions();
+        }
+      });
     } else {
       const payload = Object.assign({}, mockSchedule.schedule );
       // this.sharedService.addMockintoQuestion(payload).subscribe(data => {

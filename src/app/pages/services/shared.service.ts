@@ -41,7 +41,7 @@ export class SharedService implements OnDestroy {
 
   fetchDashboardData(): Observable<any> {
     this.isLoadingSubject.next(true);
-    return this.http.get<any>(`${environment.apiUrl}/dashboard?candidateId=${this.candidateId}&tenantId=${this.tenantId}`)
+    return this.http.get<any>(`${environment.apiUrl}/candidate/dashboard?candidateId=${this.candidateId}&tenantId=${this.tenantId}`)
     .pipe(
       map((data: any) => {
         console.log('fetchDashboardData', data);
@@ -346,7 +346,7 @@ export class SharedService implements OnDestroy {
       tenant: { id: this.tenantId },
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
-    return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
+    return this.http.post<any>(`${environment.apiUrl}/botJobCandidateQuestion`, payload)
     .pipe(
       map((data: any) => {
         console.log('addMockintoQuestion ', data);
@@ -365,10 +365,10 @@ export class SharedService implements OnDestroy {
       tenant: { id: this.tenantId },
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
-    return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
+    return this.http.put<any>(`${environment.apiUrl}/botJobCandidateQuestion`, payload)
     .pipe(
       map((data: any) => {
-        console.log('updateMockintoQuestion ', data);
+        console.log('botJobCandidateQuestion ', data);
         return data;
       }),
       catchError((err) => {
