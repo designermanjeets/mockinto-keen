@@ -1,0 +1,8 @@
+:host {
+    ::ng-deep {
+        .accordion.accordion-icon-toggle .accordion-icon {
+            justify-content: start;
+            display: inline-block;
+        }
+    }
+}

@@ -323,6 +323,76 @@ export class SharedService implements OnDestroy {
     );
   }
 
+  // Mockinto Questions
+
+  fetchAllMockintoQuestions(status: number, page: number, size: number): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
+    .pipe(
+      map((data: any) => {
+        console.log('fetchAllMockintoQuestions ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  addMockintoQuestion(mockintoQuestion: any): Observable<any> {
+    const payload = {
+      ...mockintoQuestion,
+      tenant: { id: this.tenantId },
+      candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
+    }
+    return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
+    .pipe(
+      map((data: any) => {
+        console.log('addMockintoQuestion ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  updateMockintoQuestion(mockintoQuestion: any): Observable<any> {
+    const payload = {
+      ...mockintoQuestion,
+      tenant: { id: this.tenantId },
+      candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
+    }
+    return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
+    .pipe(
+      map((data: any) => {
+        console.log('updateMockintoQuestion ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  deleteMockintoQuestionBulk(mockintoQuestions: any): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoQuestions })
+    .pipe(
+      map((data: any) => {
+        console.log('deleteMockintoQuestionBulk ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   // Misc Actions
 
   showToaster() {
