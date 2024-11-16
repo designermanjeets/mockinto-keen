@@ -9,6 +9,7 @@ import { locale as deLang } from './modules/i18n/vocabs/de';
 import { locale as frLang } from './modules/i18n/vocabs/fr';
 import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 import { NavigationEnd, Router } from '@angular/router';
+import { AuthService } from './modules/auth';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -23,7 +24,8 @@ export class AppComponent implements OnInit {
   constructor(
     private translationService: TranslationService,
     private modeService: ThemeModeService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     // register translations
     this.translationService.loadTranslations(
@@ -38,11 +40,21 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.modeService.init();
-
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-        if(!loggedInUser) {
+        if(loggedInUser) {
+          const jwtExpired = loggedInUser.jwtExpirationInSec;
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (jwtExpired && currentTime > jwtExpired - 60) { // refresh token 1 minute before expiration
+            // this.authService.refreshToken().subscribe((response) => {
+            //   console.log(response);
+            //   if (response) {
+            //     localStorage.setItem('auth-user', JSON.stringify(response));
+            //   }
+            // });
+          }
+        } else {
           this.router.navigate(['/auth/login']);
         }
       }

@@ -393,6 +393,22 @@ export class SharedService implements OnDestroy {
     );
   }
 
+  // Mockinto History
+  fetchAllMockintoSchedulesByCandidate(status: number, page: number, size: number): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
+    .pipe(
+      map((data: any) => {
+        console.log('fetchAllMockintoSchedulesByCandidate ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   // Misc Actions
 
   showToaster() {
