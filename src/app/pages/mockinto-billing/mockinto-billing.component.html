@@ -7,7 +7,7 @@
             <h3><b>Create Payment</b></h3>
         </div>
         <!--end::Title-->
-        <section class="container w-100">
+        <section class="container w-100 d-none">
             <div class="card-toolbar w-100">
                 <mat-card style="margin: 25px" class=" w-100">
                     <mat-card-content>
@@ -192,76 +192,6 @@
                         <!--end::Actions-->
                     </div>
                     <!--end::Card-->
-                </div>
-                <!--end::Col-->
-                <!--begin::Col-->
-                <div class="col-xl-6" data-kt-billing-element="card">
-                    <!--begin::Card-->
-                    <div class="card card-dashed h-xl-100 flex-row flex-stack flex-wrap p-6">
-                        <!--begin::Info-->
-                        <div class="d-flex flex-column py-2">
-                            <!--begin::Owner-->
-                            <div class="d-flex align-items-center fs-4 fw-bold mb-5">Jhon Larson</div>
-                            <!--end::Owner-->
-                            <!--begin::Wrapper-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Icon-->
-                                <img src="assets/media/svg/card-logos/mastercard.svg" alt="" class="me-4" />
-                                <!--end::Icon-->
-                                <!--begin::Details-->
-                                <div>
-                                    <div class="fs-4 fw-bold">Mastercard **** 1290</div>
-                                    <div class="fs-6 fw-semibold text-gray-400">Card expires at 03/23</div>
-                                </div>
-                                <!--end::Details-->
-                            </div>
-                            <!--end::Wrapper-->
-                        </div>
-                        <!--end::Info-->
-                        <!--begin::Actions-->
-                        <div class="d-flex align-items-center py-2">
-                            <button class="btn btn-sm btn-light btn-active-light-primary me-3"
-                                data-kt-billing-action="card-delete">
-                                <!--begin::Indicator label-->
-                                <span class="indicator-label">Delete</span>
-                                <!--end::Indicator label-->
-                                <!--begin::Indicator progress-->
-                                <span class="indicator-progress">Please wait...
-                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                <!--end::Indicator progress-->
-                            </button>
-                            <button class="btn btn-sm btn-light btn-active-light-primary" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_new_card">Edit</button>
-                        </div>
-                        <!--end::Actions-->
-                    </div>
-                    <!--end::Card-->
-                </div>
-                <!--end::Col-->
-                <!--begin::Col-->
-                <div class="col-xl-6">
-                    <!--begin::Notice-->
-                    <div
-                        class="notice d-flex bg-light-primary rounded border-primary border border-dashed h-lg-100 p-6">
-                        <!--begin::Wrapper-->
-                        <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
-                            <!--begin::Content-->
-                            <div class="mb-3 mb-md-0 fw-semibold">
-                                <h4 class="text-gray-900 fw-bold">Important Note!</h4>
-                                <div class="fs-6 text-gray-700 pe-7">Please carefully read
-                                    <a href="#" class="fw-bold me-1">Product Terms</a>adding
-                                    <br />your new payment card
-                                </div>
-                            </div>
-                            <!--end::Content-->
-                            <!--begin::Action-->
-                            <a href="#" class="btn btn-primary px-6 align-self-center text-nowrap"
-                                data-bs-toggle="modal" data-bs-target="#kt_modal_new_card">Add Card</a>
-                            <!--end::Action-->
-                        </div>
-                        <!--end::Wrapper-->
-                    </div>
-                    <!--end::Notice-->
                 </div>
                 <!--end::Col-->
             </div>

@@ -44,6 +44,7 @@ import { ProfileDetailsComponent } from './modules/account/settings/forms/profil
 import { MockintoBillingComponent } from './pages/mockinto-billing/mockinto-billing.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { DeactivateAccountComponent } from './modules/account/settings/forms/deactivate-account/deactivate-account.component';
+import { CreateSubscriptionComponent } from './pages/create-subscription/create-subscription.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -70,7 +71,8 @@ function appInitializer(authService: AuthService) {
     CheckoutComponent,
     ProfileDetailsComponent,
     DeactivateAccountComponent,
-    MockintoBillingComponent
+    MockintoBillingComponent,
+    CreateSubscriptionComponent
   ],
   imports: [
     BrowserModule,

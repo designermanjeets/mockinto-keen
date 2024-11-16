@@ -33,4 +33,10 @@ export class StripeMockintoService {
         );
     }
 
+    getAllPlans(): Observable<any> {
+        return this.http.get<any>(
+            `${StripeMockintoService.STRIPE_BASE_URL}/plans`, { headers: this.HEADERS }
+        );
+    }
+
 }

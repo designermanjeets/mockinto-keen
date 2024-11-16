@@ -1,0 +1,11 @@
+.border-primary {
+    border: 2px solid #007bff;
+}
+
+.plancard {
+    border: 2px solid transparent;
+    &:hover {
+        background-color: var(--bs-primary-light) !important;
+        border: 2px solid #007bff;
+    }
+}
