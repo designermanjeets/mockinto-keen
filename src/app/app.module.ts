@@ -42,6 +42,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { ProfileDetailsComponent } from './modules/account/settings/forms/profile-details/profile-details.component';
 import { MockintoBillingComponent } from './pages/mockinto-billing/mockinto-billing.component';
+import { NgxStripeModule } from 'ngx-stripe';
+import { DeactivateAccountComponent } from './modules/account/settings/forms/deactivate-account/deactivate-account.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -67,6 +69,7 @@ function appInitializer(authService: AuthService) {
     MyProfileComponent, 
     CheckoutComponent,
     ProfileDetailsComponent,
+    DeactivateAccountComponent,
     MockintoBillingComponent
   ],
   imports: [
@@ -100,7 +103,8 @@ function appInitializer(authService: AuthService) {
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    NgxStripeModule.forRoot('pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0'),
   ],
   providers: [
     {

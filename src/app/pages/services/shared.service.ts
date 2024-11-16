@@ -21,16 +21,22 @@ export class SharedService implements OnDestroy {
 
   authUser = localStorage.getItem('auth-user');
 
-  candidateId = JSON.parse(this.authUser || '{}').candidates[0].id;
-  tenantId = JSON.parse(this.authUser || '{}').tenant_id;
+  candidateId: any;
+  tenantId: any;
 
   constructor(
     private router: Router,
     private http: HttpClient
   ) {
-    this.isLoadingSubject = new BehaviorSubject<boolean>(false);
-    this.isLoading$ = this.
-    isLoadingSubject.asObservable();
+    if(!this.authUser) {
+      this.router.navigate(['/auth/login']);
+    } else {
+      this.candidateId = JSON.parse(this.authUser || '{}').candidates[0].id;
+      this.tenantId = JSON.parse(this.authUser || '{}').tenant_id;
+      this.isLoadingSubject = new BehaviorSubject<boolean>(false);
+      this.isLoading$ = this.
+      isLoadingSubject.asObservable();
+    }
   }
 
   fetchDashboardData(): Observable<any> {

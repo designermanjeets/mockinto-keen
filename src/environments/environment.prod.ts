@@ -7,6 +7,7 @@ export const environment = {
   appVersion: 'v1.0.0',
   isMockEnabled: false,
   apiUrl: 'https://app.mockinto.com',
+  STRIPE_PUBLIC_KEY: "pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0"
 };
 
 /*

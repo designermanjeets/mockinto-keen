@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
     const authToken = authUser?.token;
     let authReq = req;
 
-    if (authToken) {
+    if (authToken && !req.url.includes('https://api.stripe.com/')) {
       authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${authToken}`
