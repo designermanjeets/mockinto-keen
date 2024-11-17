@@ -46,9 +46,11 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { DeactivateAccountComponent } from './modules/account/settings/forms/deactivate-account/deactivate-account.component';
 import { CreateSubscriptionComponent } from './pages/create-subscription/create-subscription.component';
 import { MockintoReportComponent } from './pages/mockinto-report/mockinto-report.component';
-import { WidgetsModule } from './_metronic/partials';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MixedWidget2Component } from './pages/mock-widgets/mixed-widget2/mixed-widget2.component';
+import { MixedWidget7Component } from './pages/mock-widgets/mixed-widget7/mixed-widget7.component';
+import { DropdownMenusModule } from './_metronic/partials';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -77,7 +79,9 @@ function appInitializer(authService: AuthService) {
     DeactivateAccountComponent,
     MockintoBillingComponent,
     CreateSubscriptionComponent,
-    MockintoReportComponent
+    MockintoReportComponent,
+    MixedWidget2Component,
+    MixedWidget7Component
   ],
   imports: [
     BrowserModule,
@@ -114,7 +118,6 @@ function appInitializer(authService: AuthService) {
     MatDividerModule,
     MatCardModule,
     NgxStripeModule.forRoot('pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0'),
-    
   ],
   providers: [
     {
