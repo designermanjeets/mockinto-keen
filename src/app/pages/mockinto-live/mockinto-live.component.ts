@@ -104,6 +104,10 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       this.isMeetingProgress = false;
       this.jogIDBotQuestions = [];
     } else {
+      if(this.SpeechRecognitionisInProgress || this.speechSynthesisInProgress) {
+        this.resetRecognition();
+        this.synth.cancel();
+      }
       this.fetchAllMockintoQuestionsByJobPostingId();
     }
   }

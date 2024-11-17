@@ -47,7 +47,7 @@
                         <button class="btn btn-icon btn-light-primary position-relative rounded-lg me-3 border border-gray-300">
                             <i class="fa-solid fa-video"></i>
                         </button>
-                        <button class="btn btn-danger position-relative border border-gray-300" (click)="startOrStopMockinto()">
+                        <button [disabled]="speechSynthesisInProgress || SpeechRecognitionisInProgress" class="btn btn-danger position-relative border border-gray-300" (click)="startOrStopMockinto()">
                             <span *ngIf="!isMeetingProgress">
                                 <i class="fa-solid fa-phone animation-blink"></i>
                                 Start Mockinto
