@@ -409,6 +409,21 @@ export class SharedService implements OnDestroy {
     );
   }
 
+  fetchMockintoReportByScheduleId(scheduleId: any): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/report?scheduleId=${scheduleId}`)
+    .pipe(
+      map((data: any) => {
+        console.log('fetchMockintoReportByScheduleId ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('No Report Found'));
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   // Misc Actions
 
   showToaster() {

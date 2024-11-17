@@ -21,7 +21,6 @@ import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
     SettingsComponent,
     // ProfileDetailsComponent,
     ConnectedAccountsComponent,
-    DeactivateAccountComponent,
     EmailPreferencesComponent,
     NotificationsComponent,
     SignInMethodComponent,

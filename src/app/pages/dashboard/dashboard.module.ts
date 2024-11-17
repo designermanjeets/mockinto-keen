@@ -12,6 +12,7 @@ import { MyProfileComponent } from '../my-profile/my-profile.component';
 import { MockintoBillingComponent } from '../mockinto-billing/mockinto-billing.component';
 import { MockintoPlanComponent } from '../mockinto-plan/mockinto-plan.component';
 import { CreateSubscriptionComponent } from '../create-subscription/create-subscription.component';
+import { MockintoReportComponent } from '../mockinto-report/mockinto-report.component';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -61,6 +62,10 @@ import { CreateSubscriptionComponent } from '../create-subscription/create-subsc
       {
         path: 'create-subscription',
         component: CreateSubscriptionComponent,
+      },
+      {
+        path: 'mockinto-report/:id',
+        component: MockintoReportComponent
       }
     ]),
     WidgetsModule,

@@ -259,7 +259,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     return obj;
   }
 
-  onSubMasterChange(event: any, idx: number, ijx: number) {
+  onSubMasterChange(event: any, idx: number) {
     this.masterCheckbox = event;
     const filteredQuestions = this.mockintoQuestionsFiltered(idx);
     this.mockintoQuestions[idx].schedule.botJobCandidateQuestions.forEach((item: any) => {
@@ -283,11 +283,11 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     this.mockintoQuestions.forEach((item: any) => item.checked = false);
   }
 
-  onPageChange(event: any, idx: number, ijx: number) {
+  onPageChange(event: any) {
     this.fetchAllMockintoQuestions(event.pageIndex, event.pageSize);
   }
 
-  onSubPageChange(event: any, idx: number, ijx: number) {
+  onSubPageChange(event: any, idx: number) {
     const paginators = this.paginatorSub.toArray();
     const start = paginators[idx].pageIndex * paginators[idx].pageSize;
     const end = start + paginators[idx].pageSize;

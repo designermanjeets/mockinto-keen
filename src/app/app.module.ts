@@ -6,7 +6,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
@@ -45,6 +45,10 @@ import { MockintoBillingComponent } from './pages/mockinto-billing/mockinto-bill
 import { NgxStripeModule } from 'ngx-stripe';
 import { DeactivateAccountComponent } from './modules/account/settings/forms/deactivate-account/deactivate-account.component';
 import { CreateSubscriptionComponent } from './pages/create-subscription/create-subscription.component';
+import { MockintoReportComponent } from './pages/mockinto-report/mockinto-report.component';
+import { WidgetsModule } from './_metronic/partials';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -72,7 +76,8 @@ function appInitializer(authService: AuthService) {
     ProfileDetailsComponent,
     DeactivateAccountComponent,
     MockintoBillingComponent,
-    CreateSubscriptionComponent
+    CreateSubscriptionComponent,
+    MockintoReportComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +111,10 @@ function appInitializer(authService: AuthService) {
     NgxMatNativeDateModule,
     MatButtonModule,
     MatSelectModule,
+    MatDividerModule,
+    MatCardModule,
     NgxStripeModule.forRoot('pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0'),
+    
   ],
   providers: [
     {
