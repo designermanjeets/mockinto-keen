@@ -13,6 +13,7 @@ import { MockintoBillingComponent } from '../mockinto-billing/mockinto-billing.c
 import { MockintoPlanComponent } from '../mockinto-plan/mockinto-plan.component';
 import { CreateSubscriptionComponent } from '../create-subscription/create-subscription.component';
 import { MockintoReportComponent } from '../mockinto-report/mockinto-report.component';
+import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -66,6 +67,10 @@ import { MockintoReportComponent } from '../mockinto-report/mockinto-report.comp
       {
         path: 'mockinto-report/:id',
         component: MockintoReportComponent
+      },
+      {
+        path: 'mockinto-live',
+        component: MockintoLiveComponent
       }
     ]),
     WidgetsModule,

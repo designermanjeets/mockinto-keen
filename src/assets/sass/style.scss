@@ -6710,3 +6710,24 @@ pre code {
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
     color: #000000de !important;
 }
+
+.menu-state-bg .menu-item .menu-link.mockintolive {
+    transition: color 0.2s ease;
+    background-color: #ff3d00;
+    color: #ffffff;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    .menu-title {
+        color: #ffffff !important;
+    }
+}
+
+body:not([data-kt-sticky-header=on]) .header .header-menu .menu > .menu-item > .menu-link.mockintolive {
+    transition: color 0.2s ease;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    border-radius: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

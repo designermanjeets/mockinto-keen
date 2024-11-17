@@ -51,6 +51,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MixedWidget2Component } from './pages/mock-widgets/mixed-widget2/mixed-widget2.component';
 import { MixedWidget7Component } from './pages/mock-widgets/mixed-widget7/mixed-widget7.component';
 import { DropdownMenusModule } from './_metronic/partials';
+import { MockintoLiveComponent } from './pages/mockinto-live/mockinto-live.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -81,7 +82,8 @@ function appInitializer(authService: AuthService) {
     CreateSubscriptionComponent,
     MockintoReportComponent,
     MixedWidget2Component,
-    MixedWidget7Component
+    MixedWidget7Component,
+    MockintoLiveComponent
   ],
   imports: [
     BrowserModule,
