@@ -69,7 +69,7 @@ import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component'
         component: MockintoReportComponent
       },
       {
-        path: 'mockinto-live',
+        path: 'mockinto-live/:id',
         component: MockintoLiveComponent
       }
     ]),

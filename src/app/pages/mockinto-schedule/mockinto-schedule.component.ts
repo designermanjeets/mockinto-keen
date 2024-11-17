@@ -9,6 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { map, Observable, startWith } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mockinto-schedule',
@@ -46,7 +47,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {
   }
 
@@ -181,6 +183,28 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   closeDialog() {
     this.dialog.closeAll();
+  }
+
+  startMockintoSchedule(schedule: any) {
+    (Swal as any).fire({
+      text: "Are you sure you would like to Start? This will start the Mock Interview and the minutes will start counting down.",
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, Start it!",
+      cancelButtonText: "No",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light"
+      }
+    }).then((result: any) => {
+      if(result.isDismissed) {
+        return;
+      }
+      if(result.isConfirmed) {
+        this.router.navigate([`/dashboard/mockinto-live/${schedule.jobPostingId}`]);
+      }
+    });
   }
 
   addUpdateMockintoSchedule(patchValue?: any) {

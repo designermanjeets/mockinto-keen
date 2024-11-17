@@ -5,13 +5,23 @@
     background-color: #fff;
 }
 .transcriptbox {
-    height: 260px;
+    height: 160px;
     overflow: auto;
     border-left: 4px solid var(--bs-primary);
 }
 
 .transcriptboxcandidate {
-    height: 325px;
+    height: 225px;
     overflow: auto;
     border-left: 4px solid var(--bs-success);
+}
+.kt-containerMeeting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: scroll;
+    max-width: none;
 }

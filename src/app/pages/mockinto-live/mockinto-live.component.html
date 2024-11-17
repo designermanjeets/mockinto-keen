@@ -1,5 +1,5 @@
 <!--begin::Container-->
-<div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
+<div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl" [ngClass]="{'kt-containerMeeting': isMeetingProgress}">
     <!--begin::Post-->
     <div class="content flex-row-fluid" id="kt_content">
         <!--begin::Card-->
@@ -47,9 +47,9 @@
                         <button class="btn btn-icon btn-light-primary position-relative rounded-lg me-3 border border-gray-300">
                             <i class="fa-solid fa-video"></i>
                         </button>
-                        <button class="btn btn-danger position-relative border border-gray-300">
+                        <button class="btn btn-danger position-relative border border-gray-300" (click)="startOrStopMockinto()">
                             <span *ngIf="!isMeetingProgress">
-                                <i class="fa-solid fa-phone"></i>
+                                <i class="fa-solid fa-phone animation-blink"></i>
                                 Start Mockinto
                             </span>
                             <span *ngIf="isMeetingProgress">
@@ -73,7 +73,7 @@
             <!--begin::Card body-->
             <div class="card-body">
                 <section class="row bg-light-primary">
-                    <section class="col-4">
+                    <section class="col-3">
                         <!--begin::Body -->
                         <div class="card-body">
                             <!--begin::Header -->
@@ -95,7 +95,7 @@
                             <!--begin::Post -->
                             <div class="mb-5">
                                 <!--begin::Image -->
-                                <div class="bgi-no-repeat bgi-size-cover rounded min-h-250px mb-5"
+                                <div class="bgi-no-repeat bgi-size-cover rounded min-h-150px mb-5"
                                     [style.background-image]="'url(./assets/media/Avatar.jpeg)'"></div>
                                 <!--end::Image -->
                             </div>
@@ -104,7 +104,7 @@
                         <!--end::Body -->
 
                     </section>
-                    <section class="col-8">
+                    <section class="col-9">
                         <!--  justify-content-end -->
                         <section class="pt-5 pb-3 d-flex">
                             <button class="btn white-bg position-relative border border-gray-300 me-3">
@@ -143,7 +143,7 @@
                     </section>
                 </section>
                 <section class="row bg-light-success">
-                    <section class="col-4">
+                    <section class="col-3">
                         <!--begin::Body -->
                         <div class="card-body">
                             <!--begin::Header -->
@@ -165,7 +165,7 @@
                             <!--begin::Post -->
                             <div class="mb-5">
                                 <!--begin::Image -->
-                                <div class="bgi-no-repeat bgi-size-cover rounded min-h-250px mb-5"
+                                <div class="bgi-no-repeat bgi-size-cover rounded min-h-150px mb-5"
                                     [style.background-image]="'url(./assets/media/avatars/300-5.jpg)'"></div>
                                 <!--end::Image -->
                             </div>
@@ -173,7 +173,7 @@
                         </div>
                         <!--end::Body -->
                     </section>
-                    <section class="col-8 mt-5">
+                    <section class="col-9 mt-5">
                         <div class="card-body rounded bg-gray-200 p-0 mt-5 transcriptboxcandidate">
                             <div class="p-3">
                                 <!--begin::User -->
@@ -224,6 +224,16 @@
 
 <!-- Loader -->
 <section class="overlay-loader" *ngIf="isLoading$ | async">
-    <mat-spinner color="warn"></mat-spinner>
+    <!-- <mat-spinner color="warn"></mat-spinner> -->
+     <div class="card">
+        <div class="card-body">
+            <div class="d-flex-column justify-content-center text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Please wait your session is being loaded...</p>
+            </div>
+         </div>
+     </div>
 </section>
 <!-- ./Loader -->

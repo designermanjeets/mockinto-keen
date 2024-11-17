@@ -424,6 +424,23 @@ export class SharedService implements OnDestroy {
     );
   }
 
+  // Live Mockinto
+
+  fetchAllMockintoQuestionsByJobPostingId(jobPostingId: any): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/jobposting/all?jobPostingId=${jobPostingId}`)
+    .pipe(
+      map((data: any) => {
+        console.log('fetchAllMockintoQuestionsByJobPostingId ', data);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   // Misc Actions
 
   showToaster() {
