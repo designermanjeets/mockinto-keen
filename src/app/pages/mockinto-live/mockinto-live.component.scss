@@ -25,3 +25,14 @@
     overflow: scroll;
     max-width: none;
 }
+
+:host {
+    ::ng-deep {
+        .noUi-handle-lower {
+            display: none;
+        }
+        .noUi-connects {
+            background-color: var(--bs-secondary);
+        }
+    }
+}

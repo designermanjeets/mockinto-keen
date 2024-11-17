@@ -107,37 +107,44 @@
                     <section class="col-9">
                         <!--  justify-content-end -->
                         <section class="pt-5 pb-3 d-flex">
-                            <button class="btn white-bg position-relative border border-gray-300 me-3">
+                            <button [disabled]="speechSynthesisInProgress || SpeechRecognitionisInProgress || !isMeetingProgress" id="next_question_tooltip" class="btn white-bg position-relative border border-gray-300 me-3" placement="top-start" ngbTooltip="Move to next Question"  (click)="onNextQuestion()">
                                 <span>
                                     Next Question
                                     <i class="fa-regular fa-circle-right"></i>
                                 </span>
                             </button>
-                            <button class="btn btn-danger position-relative border border-gray-300">
+                            <button [disabled]="speechSynthesisInProgress || isReadyForNextQuestion || !isMeetingProgress" id="record_answer_tooltip" class="btn btn-danger position-relative border border-gray-300 me-5" placement="top-start" ngbTooltip="Click to Record your answer" (click)="onRecordAnswer()">
                                 <span>
                                     <i class="fa-solid fa-headset"></i>
+                                    <span *ngIf="!SpeechRecognitionisInProgress">&nbsp;Start</span>
+                                    <span *ngIf="SpeechRecognitionisInProgress">&nbsp;Stop</span>
                                     Record Answer
                                 </span>
                             </button>
+                            <section class="p-1 bg-light-primary w-150px me-5">
+                                <p class="pb-0 mb-0">Voice Pitch</p>
+                                <div id="kt_slider_voice_pitch"></div>
+                            </section>
+                            <section class="p-1 bg-light-primary w-150px me-5">
+                                <p class="pb-0 mb-0">Voice Rate</p>
+                                <div id="kt_slider_voice_rate"></div>
+                            </section>
                         </section>
                         <div class="card-body rounded bg-gray-200 p-0 mt-2 transcriptbox position-relative d-flex align-items-start">
                             <div class="p-3">
                                 <!--begin::User -->
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
+                                <ng-container *ngFor="let currentQ of mockintoQueAnsBank">
+                                    <div class="d-flex align-items-center mb-5">
+                                        <div class="d-flex align-items-center flex-grow-1">
+                                            <div class="d-flex flex-column">
+                                                <span class="text-gray-400 fw-bold">{{currentQ.ques_timestamp}}</span>
+                                                <p class="text-gray-800 text-hover-primary fs-6 fw-bolder">
+                                                    {{currentQ.question}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </section>
@@ -176,22 +183,18 @@
                     <section class="col-9 mt-5">
                         <div class="card-body rounded bg-gray-200 p-0 mt-5 transcriptboxcandidate">
                             <div class="p-3">
-                                <!--begin::User -->
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
-                                <p>Lorem Isume</p>
+                                <ng-container *ngFor="let currentQ of mockintoQueAnsBank">
+                                    <div class="d-flex align-items-center mb-5">
+                                        <div class="d-flex align-items-center flex-grow-1">
+                                            <div class="d-flex flex-column">
+                                                <span class="text-gray-400 fw-bold">{{currentQ.ans_timestamp}}</span>
+                                                <p class="text-gray-800 text-hover-primary fs-6 fw-bolder">
+                                                    {{currentQ.answer}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </section>

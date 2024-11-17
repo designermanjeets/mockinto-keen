@@ -44,7 +44,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/candidate/dashboard?candidateId=${this.candidateId}&tenantId=${this.tenantId}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchDashboardData', data);
         return data;
       }),
       catchError((err) => {
@@ -64,7 +63,6 @@ export class SharedService implements OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/resume?candidateId=${this.candidateId}&tenantId=${this.tenantId}`, formData)
     .pipe(
       map((data: any) => {
-        console.log('uploadResume ', data);
         return data;
       }),
       catchError((err) => {
@@ -79,7 +77,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/resume/candidate/all?candidateId=${this.candidateId}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllResumes ', data);
         return data;
       }),
       catchError((err) => {
@@ -108,7 +105,6 @@ export class SharedService implements OnDestroy {
             filename = matches[1];
           }
         }
-        console.log('Extracted filename:', filename);
         return { filename, data: data.body as ArrayBuffer };
       }),
       catchError((err) => {
@@ -123,7 +119,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/resume/all`, { body: resumes })
     .pipe(
       map((data: any) => {
-        console.log('deleteResume ', data);
         return data;
       }),
       catchError((err) => {
@@ -140,7 +135,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/jobPosting/all?tenantId=${this.tenantId}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllJobProfiles ', data);
         return data;
       }),
       catchError((err) => {
@@ -155,7 +149,6 @@ export class SharedService implements OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/jobPosting`, jobProfile)
     .pipe(
       map((data: any) => {
-        console.log('addJobProfile ', data);
         return data;
       }),
       catchError((err) => {
@@ -174,7 +167,6 @@ export class SharedService implements OnDestroy {
     return this.http.put<any>(`${environment.apiUrl}/jobPosting`, payload)
     .pipe(
       map((data: any) => {
-        console.log('editJobProfile ', data);
         return data;
       }),
       catchError((err) => {
@@ -189,7 +181,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/jobPosting?jobPostingId=${jobProfile.id}`)
     .pipe(
       map((data: any) => {
-        console.log('deleteJobProfile ', data);
         return data;
       }),
       catchError((err) => {
@@ -204,7 +195,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/jobPosting/all`, { body: jobProfiles })
     .pipe(
       map((data: any) => {
-        console.log('deleteJobProfileBulk ', data);
         return data;
       }),
       catchError((err) => {
@@ -221,7 +211,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}&sortField=${sortField}&sortDirection=${sortDirection}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllMockintoSchedules ', data);
         return data;
       }),
       catchError((err) => {
@@ -242,7 +231,6 @@ export class SharedService implements OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
       map((data: any) => {
-        console.log('addMockintoSchedule ', data);
         return data;
       }),
       catchError((err) => {
@@ -263,7 +251,6 @@ export class SharedService implements OnDestroy {
     return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
       map((data: any) => {
-        console.log('updateMockintoSchedule ', data);
         return data;
       }),
       catchError((err) => {
@@ -278,7 +265,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule?interviewScheduleId=${mockintoSchedule.schedule.id}`)
     .pipe(
       map((data: any) => {
-        console.log('deleteMockintoSchedule ', data);
         return data;
       }),
       catchError((err) => {
@@ -293,7 +279,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoSchedules })
     .pipe(
       map((data: any) => {
-        console.log('deleteMockintoScheduleBulk ', data);
         return data;
       }),
       catchError((err) => {
@@ -313,7 +298,6 @@ export class SharedService implements OnDestroy {
     return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
     .pipe(
       map((data: any) => {
-        console.log('editProfile ', data);
         return data;
       }),
       catchError((err) => {
@@ -330,7 +314,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllMockintoQuestions ', data);
         return data;
       }),
       catchError((err) => {
@@ -349,7 +332,6 @@ export class SharedService implements OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/botJobCandidateQuestion`, payload)
     .pipe(
       map((data: any) => {
-        console.log('addMockintoQuestion ', data);
         return data;
       }),
       catchError((err) => {
@@ -368,7 +350,6 @@ export class SharedService implements OnDestroy {
     return this.http.put<any>(`${environment.apiUrl}/botJobCandidateQuestion`, payload)
     .pipe(
       map((data: any) => {
-        console.log('botJobCandidateQuestion ', data);
         return data;
       }),
       catchError((err) => {
@@ -383,7 +364,6 @@ export class SharedService implements OnDestroy {
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoQuestions })
     .pipe(
       map((data: any) => {
-        console.log('deleteMockintoQuestionBulk ', data);
         return data;
       }),
       catchError((err) => {
@@ -399,7 +379,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllMockintoSchedulesByCandidate ', data);
         return data;
       }),
       catchError((err) => {
@@ -414,7 +393,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/report?scheduleId=${scheduleId}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchMockintoReportByScheduleId ', data);
         return data;
       }),
       catchError((err) => {
@@ -431,7 +409,6 @@ export class SharedService implements OnDestroy {
     return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/jobposting/all?jobPostingId=${jobPostingId}`)
     .pipe(
       map((data: any) => {
-        console.log('fetchAllMockintoQuestionsByJobPostingId ', data);
         return data;
       }),
       catchError((err) => {
