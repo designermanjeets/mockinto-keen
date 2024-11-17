@@ -134,51 +134,55 @@
                                                         </thead>
                                                         <tbody class="fw-semibold text-gray-600">
                                                             <!--  let ques of question.schedule.botJobCandidateQuestions -->
-                                                            <tr *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;">
-                                                                <td>
-                                                                    <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                                                        <input class="form-check-input" type="checkbox" [(ngModel)]="ques.checked" (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex align-items-center">
-                                                                        <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                                                        <a (click)="editMockintoQuestion(question, ques, idx, j)" class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-end" data-kt-filemanager-table="action_dropdown">
-                                                                    <div class="d-flex justify-content-end">
-                                                                        <!--begin::Share link-->
-                                                                        <div class="ms-2" data-kt-filemanger-table="copy_link">
-                                                                            <button type="button"
-                                                                                class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                (click)="editMockintoQuestion(question, ques, idx, j)"
-                                                                                >
-                                                                                <i class="ki-duotone ki-fasten fs-5 m-0">
-                                                                                    <span class="path1"></span>
-                                                                                    <span class="path2"></span>
-                                                                                </i>
-                                                                            </button>
+                                                              <!-- *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;" -->
+                                                               <!-- *ngFor="let ques of question.schedule.botJobCandidateQuestions | slice:subQuestionsSlice[j].start:subQuestionsSlice[j].end; let j = index;" -->
+                                                            <ng-container *ngIf="subQuestionsSlice?.length">
+                                                                <tr *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;">
+                                                                    <td>
+                                                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                            <input class="form-check-input" type="checkbox" [(ngModel)]="ques.checked" (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
                                                                         </div>
-                                                                        <!--end::Share link-->
-                                                                        <!--begin::More-->
-                                                                        <div class="ms-2">
-                                                                            <button type="button"
-                                                                                class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                (click)="deleteMockintoQuestion(ques)"
-                                                                                >
-                                                                                <i class="ki-duotone ki-trash fs-5 m-0">
-                                                                                    <span class="path1"></span>
-                                                                                    <span class="path2"></span>
-                                                                                    <span class="path3"></span>
-                                                                                    <span class="path4"></span>
-                                                                                </i>
-                                                                            </button>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
+                                                                            <a (click)="editMockintoQuestion(question, ques, idx, j)" class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
                                                                         </div>
-                                                                        <!--end::More-->
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
+                                                                    </td>
+                                                                    <td class="text-end" data-kt-filemanager-table="action_dropdown">
+                                                                        <div class="d-flex justify-content-end">
+                                                                            <!--begin::Share link-->
+                                                                            <div class="ms-2" data-kt-filemanger-table="copy_link">
+                                                                                <button type="button"
+                                                                                    class="btn btn-sm btn-icon btn-light btn-active-light-primary"
+                                                                                    (click)="editMockintoQuestion(question, ques, idx, j)"
+                                                                                    >
+                                                                                    <i class="ki-duotone ki-fasten fs-5 m-0">
+                                                                                        <span class="path1"></span>
+                                                                                        <span class="path2"></span>
+                                                                                    </i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <!--end::Share link-->
+                                                                            <!--begin::More-->
+                                                                            <div class="ms-2">
+                                                                                <button type="button"
+                                                                                    class="btn btn-sm btn-icon btn-light btn-active-light-primary"
+                                                                                    (click)="deleteMockintoQuestion(ques)"
+                                                                                    >
+                                                                                    <i class="ki-duotone ki-trash fs-5 m-0">
+                                                                                        <span class="path1"></span>
+                                                                                        <span class="path2"></span>
+                                                                                        <span class="path3"></span>
+                                                                                        <span class="path4"></span>
+                                                                                    </i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <!--end::More-->
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-container>
                                                         </tbody>
                                                     </table>
                                                     <!--end::Table-->

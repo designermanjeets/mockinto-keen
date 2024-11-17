@@ -38,6 +38,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   mockScheduleID: any;
   mockQuestion: string = '';
   mockintoSchedules: any = [];
+  subQuestionsSlice: any = [];
 
   // Picker
   @ViewChild('picker') picker: any;
@@ -95,16 +96,20 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     this.sharedService.fetchAllMockintoQuestions(1, page, size).subscribe(
       data => {
         if(data) {
-          // this.paginatorLength[] = data.totalElements;
-          data.content.forEach((item: any, idx: number) => {
-            this.paginatorLength[idx] = item.schedule.botJobCandidateQuestions.length;
-            // item.schedule.botJobCandidateQuestions?.forEach((schedule: any) => {
-
-            // });
-          });
-          console.log(this.paginatorLength)
           this.mockintoQuestions = data.content;
-          console.log(this.mockintoQuestions)
+          this.paginator.length = data.totalElements;
+          data.content.forEach((item: any, idx: number) => {
+            setTimeout(() => {
+              if(this.paginatorSub.toArray()[idx]) {
+                this.paginatorLength[idx] = item.schedule.botJobCandidateQuestions.length;
+                const paginators = this.paginatorSub.toArray();
+                const start = paginators[idx].pageIndex * paginators[idx].pageSize;
+                const end = start + paginators[idx].pageSize;
+                this.subQuestionsSlice.splice(idx, 0, { start, end });
+                this.cdRef.detectChanges();
+              }
+            }, 100);
+          });
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject.next(false);
@@ -279,11 +284,15 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   onPageChange(event: any, idx: number, ijx: number) {
-    // this.fetchAllMockintoQuestions(event.pageIndex, event.pageSize);
+    this.fetchAllMockintoQuestions(event.pageIndex, event.pageSize);
   }
 
   onSubPageChange(event: any, idx: number, ijx: number) {
-    console.log(event)
+    const paginators = this.paginatorSub.toArray();
+    const start = paginators[idx].pageIndex * paginators[idx].pageSize;
+    const end = start + paginators[idx].pageSize;
+    this.subQuestionsSlice[idx] = { start, end };
+    this.cdRef.detectChanges();
   }
 
   mockintoQuestionsFiltered(idx: number) {
