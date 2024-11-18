@@ -7,6 +7,7 @@ import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 export type UserType = UserModel | undefined;
 
@@ -63,11 +64,22 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
+    if(this.router.url.includes('auth/login')) {
+      return;
+    }
     localStorage.removeItem(this.authLocalStorageToken);
-    this.router.navigate(['/auth/login'], {
-      queryParams: {},
+    (Swal as any).fire({
+      title: 'Logout',
+      text: 'You have been successfully logged out!',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      this.router.navigate(['/auth/login'], {
+        queryParams: {},
+      });
+      document.location.reload();
     });
-    window.location.reload();
   }
 
   getUserByToken(): Observable<UserType> {

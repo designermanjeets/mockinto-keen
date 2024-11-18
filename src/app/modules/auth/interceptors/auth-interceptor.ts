@@ -4,12 +4,17 @@ import { Observable, throwError, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { UserModel } from '../models/user.model';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const authUser = this.getAuthUser();
@@ -38,13 +43,31 @@ export class AuthInterceptor implements HttpInterceptor {
           if (!authReq.url.includes('/refresh') && !this.isRefreshing) {
             return this.handle401Error(authReq, next);
           } else {
-            this.authService.logout();
+            (Swal as any).fire({
+              title: 'Session Expired',
+              text: 'Your session has expired. Please login again.',
+              icon: 'error',
+              showConfirmButton: false,
+              showCancelButton: true,
+              cancelButtonText: 'OK'
+            }).then(() => {
+              this.authService.logout();
+            });
             return throwError(() => error);
           }
         }
 
         if (error.status === 403) {
-          this.authService.logout();
+          (Swal as any).fire({
+            title: 'Forbidden',
+            text: 'You do not have permission to access this resource.',
+            icon: 'error',
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: 'OK'
+          }).then(() => {
+            this.authService.logout();
+          });
           return throwError(() => error);
         }
 

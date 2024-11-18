@@ -3,6 +3,7 @@ import {NavigationCancel, NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {LayoutService} from '../../core/layout.service';
 import {MenuComponent} from '../../../kt/components';
+import { SharedService } from 'src/app/pages/services/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private unsubscribe: Subscription[] = [];
 
-  constructor(private layout: LayoutService, private router: Router) {
+  constructor(
+    private layout: LayoutService, 
+    private router: Router,
+    private sharedService: SharedService,
+  ) {
     this.routingChanges();
   }
 
@@ -42,6 +47,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
+    this.sharedService.sendToRouter$.subscribe((data) => {
+      if (data) {
+        console.log('data', data);
+        // this.router.navigate([data]);
+      }
+    });
   }
 
   routingChanges() {
