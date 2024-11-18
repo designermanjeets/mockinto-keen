@@ -65,7 +65,8 @@ export class DashboardComponent implements OnInit {
   }
 
   goToMockintoSchedule() {
-    this.router.navigate(['mockinto-schedule'], { relativeTo: this.activatedRoute });
+    // this.router.navigate(['mockinto-schedule'], { relativeTo: this.activatedRoute });
+    this.router.navigateByUrl('/dashboard/mockinto-schedule');
   }
 
   async openModal() {

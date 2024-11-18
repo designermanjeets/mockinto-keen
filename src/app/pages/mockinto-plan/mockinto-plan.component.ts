@@ -11,6 +11,8 @@ export class MockintoPlanComponent implements OnInit {
 
   allPlans: any = [];
 
+  upgrade_plan_radio: any;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private plutoService: StripeMockintoService,
@@ -31,7 +33,8 @@ export class MockintoPlanComponent implements OnInit {
     });
   }
 
-  selectplan(event: Event, plan: string) {
+  selectplan(event: Event, plan?: string) {
+    console.log(plan);
     event.stopImmediatePropagation();
     switch (plan) {
       case 'starter':

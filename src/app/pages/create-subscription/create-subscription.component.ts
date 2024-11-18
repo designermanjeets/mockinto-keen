@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { StripeMockintoService } from '../services/stripe.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserModel } from 'src/app/modules/auth';
 import { StripeElementsOptions } from '@stripe/stripe-js';
 import { injectStripe, StripePaymentElementComponent } from 'ngx-stripe';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
@@ -18,6 +18,8 @@ import Swal from 'sweetalert2';
 export class CreateSubscriptionComponent implements OnInit {
   
   allPlans: any = [];
+  selectedPlan: any;
+  checkoutForm: FormGroup;
 
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
 
@@ -26,15 +28,6 @@ export class CreateSubscriptionComponent implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly plutoService = inject(StripeMockintoService);
   readonly stripe = injectStripe(environment.STRIPE_PUBLIC_KEY);
-
-  checkoutForm = this.fb.group({
-    name: [this.logginInUser.first_name || '', [Validators.required]],
-    email: [this.logginInUser.user_email || '', [Validators.required]],
-    address: [this.logginInUser.address || '', [Validators.required]],
-    zipcode: ['', [Validators.required]],
-    city: ['', [Validators.required]],
-    amount: [900, [Validators.required, Validators.pattern(/\d+/)]],
-  });
 
   elementsOptions: StripeElementsOptions = {
     locale: 'en',
@@ -58,12 +51,28 @@ export class CreateSubscriptionComponent implements OnInit {
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.fetchAllPlans();
+  }
 
+  initCheckoutform() {
+    this.checkoutForm = this.fb.group({
+      name: [this.logginInUser.first_name || '', [Validators.required]],
+      email: [this.logginInUser.user_email || '', [Validators.required]],
+      address: [this.logginInUser.address || '', [Validators.required]],
+      zipcode: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      amount: [this.selectedPlan.amount, [Validators.required, Validators.pattern(/\d+/)]],
+    });
+
+
+    if (this.selectedPlan) {
+      this.checkoutForm.get('amount')?.setValue(this.selectedPlan.amount);
+    }
 
     const amount = this.checkoutForm.get('amount')?.value;
     this.plutoService
@@ -155,6 +164,22 @@ export class CreateSubscriptionComponent implements OnInit {
     this.plutoService.getAllPlans().subscribe((res) => {
       if(res) {
         this.allPlans = res.data;
+        this.activatedRoute.queryParams.subscribe((params) => {
+          if (params.plan) {
+            this.selectedPlan = this.allPlans.find((p: any) => {
+              if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'startup') {
+                return p;
+              }
+              if(p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'advanced') {
+                return p;
+              }
+              if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'enterprise') {
+                return p;
+              }
+            });
+          }
+        });
+        this.initCheckoutform();
         this.cdRef.detectChanges();
       }
     });

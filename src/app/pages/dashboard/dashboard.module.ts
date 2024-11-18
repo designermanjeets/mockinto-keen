@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule, WidgetsModule } from '../../_metronic/partials';
+
 import { ResumeComponent } from '../resume/resume.component';
 import { JobProfileComponent } from '../job-profile/job-profile.component';
 import { MockintoHistoryComponent } from '../mockinto-history/mockinto-history.component';
@@ -14,67 +15,40 @@ import { MockintoPlanComponent } from '../mockinto-plan/mockinto-plan.component'
 import { CreateSubscriptionComponent } from '../create-subscription/create-subscription.component';
 import { MockintoReportComponent } from '../mockinto-report/mockinto-report.component';
 import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component';
+import { DashboardWrapperComponent } from '../dashboard-wrapper/dashboard-wrapper.component';
+
+const dashboardRoutes: Routes = [
+  {
+    path: '',
+    component: DashboardWrapperComponent,
+    children: [
+      { path: '', redirectTo: 'landing', pathMatch: 'full' },
+      { path: 'landing', component: DashboardComponent },
+      { path: 'resume', component: ResumeComponent },
+      { path: 'job-profile', component: JobProfileComponent },
+      { path: 'mockinto-questions', component: MockintoQuestionsComponent },
+      { path: 'mockinto-schedule', component: MockintoScheduleComponent },
+      { path: 'mockinto-history', component: MockintoHistoryComponent },
+      { path: 'account-settings', component: MyProfileComponent },
+      { path: 'mockinto-billing', component: MockintoBillingComponent },
+      { path: 'mockinto-plan', component: MockintoPlanComponent },
+      { path: 'mockinto-payments', component: MockintoHistoryComponent },
+      { path: 'create-subscription', component: CreateSubscriptionComponent },
+      { path: 'mockinto-report/:id', component: MockintoReportComponent },
+      { path: 'mockinto-live/:id', component: MockintoLiveComponent },
+      { path: '**', redirectTo: 'resume' }
+    ]
+  }
+];
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: DashboardComponent
-      },
-      {
-        path: 'resume',
-        component: ResumeComponent,
-      },
-      {
-        path: 'job-profile',
-        component: JobProfileComponent,
-      },
-      {
-        path: 'mockinto-questions',
-        component: MockintoQuestionsComponent,
-      },
-      {
-        path: 'mockinto-schedule',
-        component: MockintoScheduleComponent,
-      },
-      {
-        path: 'mockinto-history',
-        component: MockintoHistoryComponent,
-      },
-      {
-        path: 'account-settings',
-        component: MyProfileComponent,
-      },
-      {
-        path: 'mockinto-billing',
-        component: MockintoBillingComponent,
-      },
-      {
-        path: 'mockinto-plan',
-        component: MockintoPlanComponent,
-      },
-      {
-        path: 'mockinto-payments',
-        component: MockintoHistoryComponent,
-      },
-      {
-        path: 'create-subscription',
-        component: CreateSubscriptionComponent,
-      },
-      {
-        path: 'mockinto-report/:id',
-        component: MockintoReportComponent
-      },
-      {
-        path: 'mockinto-live/:id',
-        component: MockintoLiveComponent
-      }
-    ]),
+    RouterModule.forChild(dashboardRoutes),
     WidgetsModule,
     ModalsModule
   ],
+  exports: [RouterModule]
 })
 export class DashboardModule {}

@@ -32,6 +32,10 @@ const routes: Routes = [
     component: LayoutComponent,
     children: Routing,
   },
+  {
+    path: '**',
+    redirectTo: 'error/404',
+  }
 ];
 
 @NgModule({

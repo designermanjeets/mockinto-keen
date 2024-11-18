@@ -19,7 +19,7 @@ export class SharedService implements OnDestroy {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
-  authUser = localStorage.getItem('auth-user');
+  authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
 
   candidateId: any;
   tenantId: any;
@@ -31,8 +31,8 @@ export class SharedService implements OnDestroy {
     if(!this.authUser) {
       this.router.navigate(['/auth/login']);
     } else {
-      this.candidateId = JSON.parse(this.authUser || '{}').candidates[0].id;
-      this.tenantId = JSON.parse(this.authUser || '{}').tenant_id;
+      this.candidateId = this.authUser.candidates[0].id;
+      this.tenantId = this.authUser.tenant_id;
       this.isLoadingSubject = new BehaviorSubject<boolean>(false);
       this.isLoading$ = this.
       isLoadingSubject.asObservable();

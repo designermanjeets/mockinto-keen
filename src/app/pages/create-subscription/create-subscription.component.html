@@ -42,9 +42,9 @@
                                     </thead>
                                     <tbody class="text-gray-600" *ngIf="allPlans?.length">
                                         <tr>
-                                            <td>${{allPlans[2].amount/100}} - Starter plan for upto 10 Mockinto schedules</td>
+                                            <td>${{selectedPlan.amount/100}} - Plan for upto 10 Mockinto schedules</td>
                                             <td>1</td>
-                                            <td>${{allPlans[2].amount/100}} / {{allPlans[2].interval}}</td>
+                                            <td>${{selectedPlan.amount/100}} / {{selectedPlan.interval}}</td>
                                             <td class="text-end">
                                                 <!--begin::Delete-->
                                                 <a class="btn btn-icon btn-flex btn-active-light-primary w-30px h-30px me-3"
@@ -92,10 +92,10 @@
                             <!--begin::Options-->
                             <div id="kt_create_new_payment_method">
                                 <div class="py-1">
-                                    <section class="container w-100">
+                                    <section class="container w-100 p-0">
                                         <div class="card-toolbar w-100">
-                                            <mat-card style="margin: 25px" class=" w-100">
-                                                <mat-card-content>
+                                            <mat-card class=" w-100">
+                                                <mat-card-content *ngIf="checkoutForm">
                                                     <div [formGroup]="checkoutForm">
                                                         <div style="display: flex; flex-direction: row; gap: 10px">
                                                             <mat-form-field appearance="outline" style="flex: 1">
@@ -291,7 +291,7 @@
                     </div>
                     <!--end::Card header-->
                     <!--begin::Card body-->
-                    <div class="card-body pt-0 fs-6">
+                    <div class="card-body pt-0 fs-6" *ngIf="logginInUser?.candidates">
                         <!--begin::Section-->
                         <div class="mb-7">
                             <!--begin::Title-->
@@ -328,8 +328,8 @@
                                 <span class="badge badge-light-info me-2">Starter</span>
                                 <!--end::Plan-->
                                 <!--begin::Price-->
-                                <span class="fw-semibold text-gray-600">${{allPlans[2].amount/100}} /
-                                    {{allPlans[2].interval}}</span>
+                                <span class="fw-semibold text-gray-600">${{selectedPlan.amount/100}} /
+                                    {{selectedPlan.interval}}</span>
                                 <!--end::Price-->
                             </div>
                             <!--end::Details-->

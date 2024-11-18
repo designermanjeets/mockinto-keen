@@ -6,6 +6,7 @@ import { BehaviorSubject, Subscription, timestamp } from 'rxjs';
 import * as moment from 'moment';
 
 import noUiSlider from 'nouislider';
+import Swal from 'sweetalert2';
 
 declare var window: any;
 
@@ -101,8 +102,20 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   
   startOrStopMockinto() {
     if(this.isMeetingProgress) {
-      this.isMeetingProgress = false;
-      this.jogIDBotQuestions = [];
+      (Swal as any).fire({
+        title: 'Are you sure?',
+        text: 'The meeting will be stopped and you will be redirected to the Mockinto History Page!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Stop it!',
+        cancelButtonText: 'No, keep it',
+      }).then((result: any) => {
+        if (result.isConfirmed) {
+          this.isMeetingProgress = false;
+          this.jogIDBotQuestions = [];
+          this.router.navigate(['dashboard/mockinto-history']);
+        }
+      });
     } else {
       if(this.SpeechRecognitionisInProgress || this.speechSynthesisInProgress) {
         this.resetRecognition();
