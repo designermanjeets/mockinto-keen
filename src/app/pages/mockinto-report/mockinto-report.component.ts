@@ -35,7 +35,7 @@ export class MockintoReportComponent implements OnInit {
   }
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
@@ -45,18 +45,18 @@ export class MockintoReportComponent implements OnInit {
           this.allMockintoHistory = data.content;
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
   }
 
   reportMockintoSchedule(mockintoSchedule: any) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchMockintoReportByScheduleId(mockintoSchedule.id).subscribe(
       data => {
         if(data) {
-          this.sharedService.isLoadingSubject.next(false);
+          this.sharedService.isLoadingSubject?.next(false);
           this.router.navigate([`/dashboard/mockinto-report/${mockintoSchedule.id || 99}`]);
         }
       }

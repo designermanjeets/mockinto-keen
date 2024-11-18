@@ -67,6 +67,7 @@ export class AuthService implements OnDestroy {
     this.router.navigate(['/auth/login'], {
       queryParams: {},
     });
+    window.location.reload();
   }
 
   getUserByToken(): Observable<UserType> {

@@ -36,7 +36,7 @@ export class MockintoHistoryComponent implements OnInit {
   }
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
@@ -44,18 +44,18 @@ export class MockintoHistoryComponent implements OnInit {
           this.allMockintoHistory = data.content;
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
   }
 
   reportMockintoSchedule(mockintoSchedule: any) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchMockintoReportByScheduleId(mockintoSchedule.id).subscribe(
       data => {
         if(data) {
-          this.sharedService.isLoadingSubject.next(false);
+          this.sharedService.isLoadingSubject?.next(false);
           this.router.navigate([`/dashboard/mockinto-report/${mockintoSchedule.id || 99}`]);
         }
       }
@@ -63,11 +63,11 @@ export class MockintoHistoryComponent implements OnInit {
   }
 
   editMockintoSchedule(mockintoSchedule: any) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     // this.sharedService.fetchMockintoScheduleById(mockintoSchedule.id).subscribe(
     //   data => {
     //     if(data) {
-    //       this.sharedService.isLoadingSubject.next(false);
+    //       this.sharedService.isLoadingSubject?.next(false);
     //       this.router.navigate([`/dashboard/mockinto-schedule/${mockintoSchedule.id || 99}`]);
     //     }
     //   }
@@ -75,7 +75,7 @@ export class MockintoHistoryComponent implements OnInit {
   }
 
   deleteMockintoSchedule(mockintoSchedule: any) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     // this.sharedService.deleteMockintoSchedule(mockintoSchedule.id).subscribe(
     //   data => {
     //     if(data) {
@@ -86,7 +86,7 @@ export class MockintoHistoryComponent implements OnInit {
   }
 
   deleteBulk () {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     // const ids = this.someChecked.map((item: any) => item.id);
     // this.sharedService.deleteBulkMockintoSchedules(ids).subscribe(
     //   data => {

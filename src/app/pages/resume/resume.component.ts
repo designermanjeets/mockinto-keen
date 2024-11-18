@@ -44,7 +44,7 @@ export class ResumeComponent implements OnInit {
   }
 
   fetchAllResumes(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllResumes(page, size).subscribe(
       data => {
         if(data) {
@@ -52,7 +52,7 @@ export class ResumeComponent implements OnInit {
           this.resumes = data.content;
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
@@ -161,7 +161,7 @@ export class ResumeComponent implements OnInit {
   }
 
   uploadResume() {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.uploadResume(this.resumeFile).subscribe(
       data => {
         this.fileName = '';

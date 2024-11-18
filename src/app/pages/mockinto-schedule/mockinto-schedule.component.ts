@@ -84,7 +84,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
@@ -92,7 +92,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
           this.mockintoSchedules = data.content;
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
@@ -208,7 +208,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addUpdateMockintoSchedule(patchValue?: any) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     if(patchValue) {
       const payload = Object.assign({},
         {
@@ -235,7 +235,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       const cleanedData = this.removeCircularReferences(payload);
       this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
         if(data) {
-          this.sharedService.isLoadingSubject.next(false);
+          this.sharedService.isLoadingSubject?.next(false);
           this.closeDialog();
           this.fetchAllMockintoSchedules();
         }
@@ -263,7 +263,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       };
       this.sharedService.addMockintoSchedule(payload).subscribe(data => {
         if(data) {
-          this.sharedService.isLoadingSubject.next(false);
+          this.sharedService.isLoadingSubject?.next(false);
           this.closeDialog();
           this.fetchAllMockintoSchedules();
         }

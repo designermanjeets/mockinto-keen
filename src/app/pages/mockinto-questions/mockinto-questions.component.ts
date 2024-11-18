@@ -79,20 +79,20 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
           this.mockintoSchedules = data.content;
         }
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
   }
 
   fetchAllMockintoQuestions(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoQuestions(1, page, size).subscribe(
       data => {
         if(data) {
@@ -112,7 +112,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
           });
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
@@ -205,7 +205,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     mockSchedule.schedule.botJobCandidateQuestions[j].question = this.mockQuestion;
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const payload = Object.assign({},
@@ -229,7 +229,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     if(mockSchedule) {
       this.sharedService.updateMockintoQuestion(payload).subscribe(data => {
         if(data) {
-          this.sharedService.isLoadingSubject.next(false);
+          this.sharedService.isLoadingSubject?.next(false);
           this.closeDialog();
           this.fetchAllMockintoQuestions();
         }
@@ -238,7 +238,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       const payload = Object.assign({}, mockSchedule.schedule );
       // this.sharedService.addMockintoQuestion(payload).subscribe(data => {
       //   if(data) {
-      //     this.sharedService.isLoadingSubject.next(false);
+      //     this.sharedService.isLoadingSubject?.next(false);
       //     this.closeDialog();
       //     this.fetchAllMockintoQuestions();
       //   }

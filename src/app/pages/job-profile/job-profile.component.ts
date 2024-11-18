@@ -59,7 +59,7 @@ export class JobProfileComponent implements OnInit {
   }
 
   fetchAlljobProfiles(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllJobProfiles(page, size).subscribe(
       data => {
         if(data) {
@@ -67,7 +67,7 @@ export class JobProfileComponent implements OnInit {
           this.jobProfiles = data.content;
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject.next(false);
+        this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
       }
     );
@@ -163,7 +163,7 @@ export class JobProfileComponent implements OnInit {
 
   addUpdatejobDescription(patchValue?: any) {
     const tags = this.fruits?.map((item: any) => item).join(',');
-    this.sharedService.isLoadingSubject.next(true);
+    this.sharedService.isLoadingSubject?.next(true);
     if(Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
       const payload = {
         ...patchValue.jobdescription,
@@ -174,7 +174,7 @@ export class JobProfileComponent implements OnInit {
       this.sharedService.updateJobProfile(payload).subscribe(
         data => {
           if(data) {
-            this.sharedService.isLoadingSubject.next(false);
+            this.sharedService.isLoadingSubject?.next(false);
             this.closeDialog();
             this.fetchAlljobProfiles();
           }
@@ -195,7 +195,7 @@ export class JobProfileComponent implements OnInit {
       this.sharedService.addJobProfile(payload).subscribe(
         data => {
           if(data) {
-            this.sharedService.isLoadingSubject.next(false);
+            this.sharedService.isLoadingSubject?.next(false);
             this.closeDialog();
             this.fetchAlljobProfiles();
           }

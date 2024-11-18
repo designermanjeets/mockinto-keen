@@ -28,7 +28,7 @@ export class SharedService implements OnDestroy {
     private router: Router,
     private http: HttpClient
   ) {
-    if(!this.authUser) {
+    if(Object.keys(this.authUser).length === 0) {
       this.router.navigate(['/auth/login']);
     } else {
       this.candidateId = this.authUser.candidates[0].id;
@@ -40,7 +40,7 @@ export class SharedService implements OnDestroy {
   }
 
   fetchDashboardData(): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/candidate/dashboard?candidateId=${this.candidateId}&tenantId=${this.tenantId}`)
     .pipe(
       map((data: any) => {
@@ -49,14 +49,14 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // BEGIN: Manage Resumes
 
   uploadResume(file: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('fileName', file.name);
@@ -68,12 +68,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   fetchAllResumes(page: number, size: number): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/resume/candidate/all?candidateId=${this.candidateId}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
@@ -82,12 +82,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   previewResume(resumeId: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     const responseTypeHeader = { responseType: 'arraybuffer' }; 
     return this.http.get<any>(`${environment.apiUrl}/resume/${resumeId}`, {
       responseType: 'arraybuffer' as 'json',
@@ -110,12 +110,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteResume(resumes: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/resume/all`, { body: resumes })
     .pipe(
       map((data: any) => {
@@ -124,14 +124,14 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // Job Profile/Job Posting Actions
 
   fetchAllJobProfiles(page: number, size: number): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/jobPosting/all?tenantId=${this.tenantId}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
@@ -140,12 +140,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   addJobProfile(jobProfile: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.post<any>(`${environment.apiUrl}/jobPosting`, jobProfile)
     .pipe(
       map((data: any) => {
@@ -154,7 +154,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -163,7 +163,7 @@ export class SharedService implements OnDestroy {
       ...jobProfile,
       tenant: { id: this.tenantId}
     }
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.put<any>(`${environment.apiUrl}/jobPosting`, payload)
     .pipe(
       map((data: any) => {
@@ -172,12 +172,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteJobProfile(jobProfile: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/jobPosting?jobPostingId=${jobProfile.id}`)
     .pipe(
       map((data: any) => {
@@ -186,12 +186,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteJobProfileBulk(jobProfiles: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/jobPosting/all`, { body: jobProfiles })
     .pipe(
       map((data: any) => {
@@ -200,14 +200,14 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // Mockinto Schedules
 
   fetchAllMockintoSchedules(status: number, page: number, size: number, sortField: string, sortDirection: string): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}&sortField=${sortField}&sortDirection=${sortDirection}`)
     .pipe(
       map((data: any) => {
@@ -216,7 +216,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -227,7 +227,7 @@ export class SharedService implements OnDestroy {
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
     console.log(payload);
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
       map((data: any) => {
@@ -236,7 +236,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -247,7 +247,7 @@ export class SharedService implements OnDestroy {
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
     console.log(payload);
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
       map((data: any) => {
@@ -256,12 +256,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteMockintoSchedule(mockintoSchedule: any): Observable<any> { // Single Not Working at the Moment
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule?interviewScheduleId=${mockintoSchedule.schedule.id}`)
     .pipe(
       map((data: any) => {
@@ -270,12 +270,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteMockintoScheduleBulk(mockintoSchedules: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoSchedules })
     .pipe(
       map((data: any) => {
@@ -284,7 +284,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -294,7 +294,7 @@ export class SharedService implements OnDestroy {
       ...profile,
       tenant: { id: this.tenantId }
     }
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
     .pipe(
       map((data: any) => {
@@ -303,14 +303,14 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // Mockinto Questions
 
   fetchAllMockintoQuestions(status: number, page: number, size: number): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
@@ -319,7 +319,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -337,7 +337,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
@@ -355,12 +355,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   deleteMockintoQuestionBulk(mockintoQuestions: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoQuestions })
     .pipe(
       map((data: any) => {
@@ -369,13 +369,13 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // Mockinto History
   fetchAllMockintoSchedulesByCandidate(status: number, page: number, size: number): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}`)
     .pipe(
       map((data: any) => {
@@ -384,12 +384,12 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   fetchMockintoReportByScheduleId(scheduleId: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/report?scheduleId=${scheduleId}`)
     .pipe(
       map((data: any) => {
@@ -398,14 +398,14 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(new Error('No Report Found'));
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
   // Live Mockinto
 
   fetchAllMockintoQuestionsByJobPostingId(jobPostingId: any): Observable<any> {
-    this.isLoadingSubject.next(true);
+    this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/jobposting/all?jobPostingId=${jobPostingId}`)
     .pipe(
       map((data: any) => {
@@ -414,7 +414,7 @@ export class SharedService implements OnDestroy {
       catchError((err) => {
         return of(undefined);
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      finalize(() => this.isLoadingSubject?.next(false))
     );
   }
 
