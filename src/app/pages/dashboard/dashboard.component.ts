@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../_metronic/partials';
 import { SharedService } from '../services/shared.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +41,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +62,10 @@ export class DashboardComponent implements OnInit {
         this.cdr.detectChanges();
       }
     );
+  }
+
+  goToMockintoSchedule() {
+    this.router.navigate(['mockinto-schedule'], { relativeTo: this.activatedRoute });
   }
 
   async openModal() {
