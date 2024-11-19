@@ -432,18 +432,14 @@
                                                     <!--end::Label-->
                                                     <div class="input-group">
                                                         <mat-form-field class="w-100">
-                                                            <input matInput [ngxMatDatetimePicker]="pickerCustomIcon"
-                                                                placeholder="Choose a date" [formControl]="dateControl"
-                                                                [min]="minDate" [max]="maxDate">
-                                                            <ngx-mat-datepicker-toggle matSuffix
-                                                                [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
-                                                            <ngx-mat-datetime-picker #pickerCustomIcon>
-                                                                <ngx-mat-datepicker-actions>
-                                                                    <button mat-button
-                                                                        ngxMatDatepickerCancel>Cancel</button>
-                                                                    <button mat-raised-button color="primary"
-                                                                        ngxMatDatepickerApply>Apply</button>
-                                                                </ngx-mat-datepicker-actions>
+                                                            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date"
+                                                              [formControl]="dateControl" [min]="minDate" [max]="maxDate">
+                                                            <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+                                                            <ngx-mat-datetime-picker #picker>
+                                                              <ngx-mat-datepicker-actions>
+                                                                <button mat-button ngxMatDatepickerCancel>Cancel</button>
+                                                                <button mat-raised-button color="primary" ngxMatDatepickerApply>Apply</button>
+                                                              </ngx-mat-datepicker-actions>
                                                             </ngx-mat-datetime-picker>
                                                         </mat-form-field>
                                                     </div>

@@ -29,7 +29,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.logout();
-    document.location.reload();
+    // document.location.reload();
   }
 
   selectLanguage(lang: string) {

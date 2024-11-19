@@ -31,6 +31,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   private unsubscribe: Subscription[] = [];
 
   isMeetingProgress: boolean = false;
+  mockintoSchedule: any = {};
   jobPostingId: string = '';
   jogIDBotQuestions: any = [];
 
@@ -62,6 +63,16 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
   ngOnInit(): void {
     this.jobPostingId = this.router.url.split('/')[3]; // Fixed Position Don't Change the Path in routing
+    this.fetchMockintoScheduleById();
+  }
+
+  fetchMockintoScheduleById() {
+    this.sharedService.fetchMockintoScheduleById(this.jobPostingId).subscribe((res) => {
+      if(res) {
+        this.mockintoSchedule = res;
+        console.log(this.mockintoSchedule);
+      }
+    });
   }
 
   ngAfterContentInit(): void {
@@ -114,6 +125,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
           this.isMeetingProgress = false;
           this.jogIDBotQuestions = [];
           this.router.navigate(['dashboard/mockinto-history']);
+          this.endMockintoSchedule();
         }
       });
     } else {
@@ -123,6 +135,14 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       }
       this.fetchAllMockintoQuestionsByJobPostingId();
     }
+  }
+
+  endMockintoSchedule() {
+    this.sharedService.endMockintoSchedule(this.jobPostingId).subscribe((res) => {
+      this.isMeetingProgress = false;
+      this.jogIDBotQuestions = [];
+      this.router.navigate(['dashboard/mockinto-history']);
+    });
   }
 
   fetchAllMockintoQuestionsByJobPostingId() {

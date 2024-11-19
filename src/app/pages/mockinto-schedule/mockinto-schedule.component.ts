@@ -10,6 +10,7 @@ import { map, Observable, startWith } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxMatDatetimepicker, NgxMatTimepickerComponent } from '@angular-material-components/datetime-picker';
 
 @Component({
   selector: 'app-mockinto-schedule',
@@ -35,13 +36,13 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
 
   // Picker
-  @ViewChild('picker') picker: any;
+  @ViewChild('picker') picker: NgxMatDatetimepicker<any>;
   public date: moment.Moment;
   public enableMeridian = false;
   public minDate = new Date(Date.now());
   public maxDate: moment.Moment;
   public dateControl = new FormControl(new Date());
-  public dateControlMinMax = new FormControl(new Date());
+  public timeControlMinMax = new FormControl(new Date());
 
   constructor(
     private sharedService: SharedService,
@@ -176,11 +177,39 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       data: { },
     });
 
+    dialogRef.afterOpened().subscribe(result => {
+      const newDate = new Date();
+      newDate.setMinutes(newDate.getMinutes() + 31);
+      this.dateControl.patchValue(newDate);
+      this.dateControl.valueChanges.subscribe((value) => {
+        if (value) {
+          const currentTime = new Date();
+          const givenTime = new Date(value);
+          const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
+          if (timeDifference >= 30) {
+            // Proceed with your logic
+          } else {
+            // Show error
+            (Swal as any).fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'The time should be at least 30 minutes from now!',
+            }).then((result: any) => {
+              const newDate = new Date();
+              newDate.setMinutes(newDate.getMinutes() + 31);
+              this.dateControl.patchValue(newDate);
+            });
+          }
+        }
+        this.cdRef.detectChanges();
+      });
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
   }
-
+  
   closeDialog() {
     this.dialog.closeAll();
   }

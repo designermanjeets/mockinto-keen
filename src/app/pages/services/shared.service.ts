@@ -19,6 +19,9 @@ export class SharedService implements OnDestroy {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  sendToRouter$: Observable<any>;
+  sendToRouterSubject: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+
   authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
 
   candidateId: any;
@@ -34,8 +37,8 @@ export class SharedService implements OnDestroy {
       this.candidateId = this.authUser.candidates[0].id;
       this.tenantId = this.authUser.tenant_id;
       this.isLoadingSubject = new BehaviorSubject<boolean>(false);
-      this.isLoading$ = this.
-      isLoadingSubject.asObservable();
+      this.isLoading$ = this.isLoadingSubject.asObservable();
+      this.sendToRouter$ = this.sendToRouterSubject.asObservable();
     }
   }
 
@@ -219,6 +222,20 @@ export class SharedService implements OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+  
+  fetchMockintoScheduleById(scheduleId: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/interviewSchedule?InterviewScheduleId=${scheduleId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('No Schedule Found'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
 
   addMockintoSchedule(mockintoSchedule: any): Observable<any> {
     const payload = {
@@ -383,6 +400,21 @@ export class SharedService implements OnDestroy {
       }),
       catchError((err) => {
         return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+  endMockintoSchedule(mockintoSchedule: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    console.log(mockintoSchedule);
+    return this.http.post<any>(`${environment.apiUrl}/interviewSchedule/end`, mockintoSchedule)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Error Ending Mockinto Schedule'));
       }),
       finalize(() => this.isLoadingSubject?.next(false))
     );
