@@ -11,9 +11,10 @@
                     <!--begin::Icon-->
                     <div class="symbol symbol-circle me-5">
                         <div class="symbol-label bg-transparent text-primary border border-secondary border-dashed">
-                            <i class="ki-duotone ki-abstract-47 fs-2x text-primary">
+                            <i class="ki-duotone ki-message-text">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
+                                <span class="path3"></span>
                             </i>
                         </div>
                     </div>
@@ -47,8 +48,7 @@
                             <span class="path2"></span>
                         </i>
                         <input type="text" data-kt-filemanager-table-filter="search"
-                            class="form-control form-control-solid w-250px ps-15"
-                            placeholder="Search" />
+                            class="form-control form-control-solid w-250px ps-15" placeholder="Search" />
                     </div>
                     <!--end::Search-->
                 </div>
@@ -57,7 +57,9 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end">
                         <!--begin::Add customer-->
-                        <button type="button" class="btn btn-flex btn-primary" *ngIf="!someChecked?.length" (click)="addMockintoQuestionDialog()" data-bs-toggle="modal" data-bs-target="#kt_modal_upload">
+                        <button type="button" class="btn btn-flex btn-primary" *ngIf="!someChecked?.length"
+                            (click)="addMockintoQuestionDialog()" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_upload">
                             <i class="ki-duotone ki-folder-up fs-2">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
@@ -100,11 +102,14 @@
                                         <!--begin::Item-->
                                         <div class="mb-5">
                                             <!--begin::Header-->
-                                            <div class="accordion-header py-3 d-flex collapse collapsed" data-bs-toggle="collapse" [attr.data-bs-target]="'#kt_accordion_item'+idx">
+                                            <div class="accordion-header py-3 d-flex collapse collapsed"
+                                                data-bs-toggle="collapse"
+                                                [attr.data-bs-target]="'#kt_accordion_item'+idx">
                                                 <section class="d-flex w-100">
                                                     <div class="w-45px">
                                                         <span class="accordion-icon">
-                                                            <i class="ki-duotone ki-arrow-right fs-4"><span class="path1"></span><span class="path2"></span></i>
+                                                            <i class="ki-duotone ki-arrow-right fs-4"><span
+                                                                    class="path1"></span><span class="path2"></span></i>
                                                         </span>
                                                     </div>
                                                     <div class="w-250px">{{question.schedule.id}}</div>
@@ -116,16 +121,21 @@
                                             <!--end::Header-->
 
                                             <!--begin::Body-->
-                                            <div [attr.id]="'kt_accordion_item'+idx" class="fs-6 collapse ps-10" [attr.data-bs-parent]="'#kt_accordion'+idx">
-                                                
+                                            <div [attr.id]="'kt_accordion_item'+idx" class="fs-6 collapse ps-10"
+                                                [attr.data-bs-parent]="'#kt_accordion'+idx">
+
                                                 <div class="card-body">
                                                     <!--begin::Table-->
                                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                                         <thead>
-                                                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                                                                 <th class="w-10px pe-2">
-                                                                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                                                        <input class="form-check-input" type="checkbox" [(ngModel)]="masterCheckbox" (ngModelChange)="onSubMasterChange($event, idx)" />
+                                                                    <div
+                                                                        class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            [(ngModel)]="masterCheckbox"
+                                                                            (ngModelChange)="onSubMasterChange($event, idx)" />
                                                                     </div>
                                                                 </th>
                                                                 <th class="min-w-250px">Mockinto</th>
@@ -134,33 +144,43 @@
                                                         </thead>
                                                         <tbody class="fw-semibold text-gray-600">
                                                             <!--  let ques of question.schedule.botJobCandidateQuestions -->
-                                                              <!-- *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;" -->
-                                                               <!-- *ngFor="let ques of question.schedule.botJobCandidateQuestions | slice:subQuestionsSlice[j].start:subQuestionsSlice[j].end; let j = index;" -->
+                                                            <!-- *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;" -->
+                                                            <!-- *ngFor="let ques of question.schedule.botJobCandidateQuestions | slice:subQuestionsSlice[j].start:subQuestionsSlice[j].end; let j = index;" -->
                                                             <ng-container *ngIf="subQuestionsSlice?.length">
-                                                                <tr *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;">
+                                                                <tr
+                                                                    *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;">
                                                                     <td>
-                                                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                                                            <input class="form-check-input" type="checkbox" [(ngModel)]="ques.checked" (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
+                                                                        <div
+                                                                            class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox"
+                                                                                [(ngModel)]="ques.checked"
+                                                                                (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="d-flex align-items-center">
-                                                                            <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                                                            <a (click)="editMockintoQuestion(question, ques, idx, j)" class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
+                                                                            <i
+                                                                                class="ki-duotone ki-files fs-2x text-primary me-4"></i>
+                                                                            <a (click)="editMockintoQuestion(question, ques, idx, j)"
+                                                                                class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
                                                                         </div>
                                                                     </td>
-                                                                    <td class="text-end" data-kt-filemanager-table="action_dropdown">
+                                                                    <td class="text-end"
+                                                                        data-kt-filemanager-table="action_dropdown">
                                                                         <div class="d-flex justify-content-end">
                                                                             <!--begin::Share link-->
-                                                                            <div class="ms-2" data-kt-filemanger-table="copy_link">
+                                                                            <div class="ms-2"
+                                                                                data-kt-filemanger-table="copy_link">
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                    (click)="editMockintoQuestion(question, ques, idx, j)"
-                                                                                    >
-                                                                                    <i class="ki-duotone ki-fasten fs-5 m-0">
+                                                                                    (click)="editMockintoQuestion(question, ques, idx, j)">
+
+                                                                                    <i class="ki-duotone ki-pencil">
                                                                                         <span class="path1"></span>
                                                                                         <span class="path2"></span>
                                                                                     </i>
+
                                                                                 </button>
                                                                             </div>
                                                                             <!--end::Share link-->
@@ -168,9 +188,9 @@
                                                                             <div class="ms-2">
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                    (click)="deleteMockintoQuestion(ques)"
-                                                                                    >
-                                                                                    <i class="ki-duotone ki-trash fs-5 m-0">
+                                                                                    (click)="deleteMockintoQuestion(ques)">
+                                                                                    <i
+                                                                                        class="ki-duotone ki-trash-square">
                                                                                         <span class="path1"></span>
                                                                                         <span class="path2"></span>
                                                                                         <span class="path3"></span>
@@ -186,14 +206,9 @@
                                                         </tbody>
                                                     </table>
                                                     <!--end::Table-->
-                                                    <mat-paginator
-                                                        #paginatorSub
-                                                        [length]="paginatorLength[idx]"
-                                                        [pageSize]="5"
-                                                        [pageSizeOptions]="[5, 10, 25, 100]"
-                                                        (page)="onSubPageChange($event, idx)"
-                                                        aria-label="Select page"
-                                                    >
+                                                    <mat-paginator #paginatorSub [length]="paginatorLength[idx]"
+                                                        [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"
+                                                        (page)="onSubPageChange($event, idx)" aria-label="Select page">
                                                     </mat-paginator>
                                                 </div>
                                                 <!--end::Card body-->
@@ -209,16 +224,10 @@
                         </tr>
                     </tbody>
                 </table>
-                
+
                 <!--end::Table-->
-                <mat-paginator 
-                    #paginator
-                    [length]="100"
-                    [pageSize]="10"
-                    [pageSizeOptions]="[5, 10, 25, 100]"
-                    (page)="onPageChange($event)"
-                    aria-label="Select page"
-                >
+                <mat-paginator #paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="onPageChange($event)" aria-label="Select page">
                 </mat-paginator>
             </div>
             <!--end::Card body-->
@@ -376,10 +385,11 @@
                             <h2>
                                 <span *ngIf="!data.mockQuestionData">Add</span>
                                 <span *ngIf="data.mockQuestionData">Edit</span>
-                                Mockinto Question</h2>
+                                Mockinto Question
+                            </h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" (click)="closeDialog()">
+                            <div class="btn btn-sm btn-icon" (click)="closeDialog()">
                                 <i class="ki-duotone ki-cross fs-1">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
@@ -395,7 +405,8 @@
                                 <!--begin::Container-->
                                 <div class="container">
                                     <!--begin::Form-->
-                                    <form class="mx-auto w-100 mw-600px" novalidate="novalidate" id="kt_modal_create_project_form" method="post">
+                                    <form class="mx-auto w-100 mw-600px" novalidate="novalidate"
+                                        id="kt_modal_create_project_form" method="post">
                                         <!--begin::Settings-->
                                         <div class="current" data-kt-stepper-element="content">
                                             <!--begin::Wrapper-->
@@ -406,7 +417,8 @@
                                                     <div class="text-muted fw-semibold fs-4">
                                                         <span *ngIf="!data.mockQuestionData">Add</span>
                                                         <span *ngIf="data.mockQuestionData">Edit</span>
-                                                        Mockinto Question</div>
+                                                        Mockinto Question
+                                                    </div>
                                                     <!--end::Description-->
                                                 </div>
                                                 <!--end::Heading-->
@@ -414,9 +426,11 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Mockinto Schedule ID</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Job Profile">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Job Profile">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -426,9 +440,13 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <select class="form-select form-select-solid" placeholder="Select Mockinto Schedule ID" aria-label="Select Mockinto Schedule ID" name="mockScheduleID" [(ngModel)]="mockScheduleID">
+                                                    <select class="form-select form-select-solid"
+                                                        placeholder="Select Mockinto Schedule ID"
+                                                        aria-label="Select Mockinto Schedule ID" name="mockScheduleID"
+                                                        [(ngModel)]="mockScheduleID">
                                                         <option value="">--select--</option>
-                                                        <option *ngFor="let opt of mockintoSchedules" [value]="opt.schedule.id">{{opt.schedule.id}}</option>
+                                                        <option *ngFor="let opt of mockintoSchedules"
+                                                            [value]="opt.schedule.id">{{opt.schedule.id}}</option>
                                                     </select>
                                                     <!--end::Input-->
                                                 </div>
@@ -436,9 +454,11 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Job Profile</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Resume">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Resume">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -448,9 +468,12 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <select class="form-select form-select-solid" placeholder="Select Job Profile" aria-label="Select Job Profile" name="mockJobProfile" [(ngModel)]="mockJobProfile">
+                                                    <select class="form-select form-select-solid"
+                                                        placeholder="Select Job Profile" aria-label="Select Job Profile"
+                                                        name="mockJobProfile" [(ngModel)]="mockJobProfile">
                                                         <option value="">--select--</option>
-                                                        <option *ngFor="let job of allJobProfiles" [value]="job.id">{{job.jobHeader}}</option>
+                                                        <option *ngFor="let job of allJobProfiles" [value]="job.id">
+                                                            {{job.jobHeader}}</option>
                                                     </select>
                                                     <!--end::Input-->
                                                 </div>
@@ -459,9 +482,11 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Question</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Resume">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Resume">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -471,24 +496,30 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <textarea cols="4" type="text" class="form-control form-control-solid" placeholder="Enter Question" value="" name="mockQuestion" [(ngModel)]="mockQuestion"></textarea>
+                                                    <textarea cols="4" type="text"
+                                                        class="form-control form-control-solid"
+                                                        placeholder="Enter Question" value="" name="mockQuestion"
+                                                        [(ngModel)]="mockQuestion"></textarea>
                                                     <mat-hint align="end">Remaining Characters: 3000</mat-hint>
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
-                                                
+
                                                 <!--begin::Actions-->
                                                 <div class="d-flex flex-stack">
-                                                    <button type="button" class="btn btn-lg btn-primary" (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)" [disabled]="!mockJobProfile || !mockQuestion">
+                                                    <button type="button" class="btn btn-lg btn-primary"
+                                                        (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)"
+                                                        [disabled]="!mockJobProfile || !mockQuestion">
                                                         <ng-container *ngIf="isLoading$ | async">
                                                             <span class="indicator-progress" [style.display]="'block'">
-                                                              Please wait...
-                                                              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                                Please wait...
+                                                                <span
+                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                                             </span>
-                                                          </ng-container>
-                                                          <ng-container *ngIf="(isLoading$ | async) === false">
+                                                        </ng-container>
+                                                        <ng-container *ngIf="(isLoading$ | async) === false">
                                                             <span class="indicator-label">Submit</span>
-                                                          </ng-container>
+                                                        </ng-container>
                                                     </button>
                                                 </div>
                                                 <!--end::Actions-->
@@ -520,5 +551,5 @@
 <!-- Loader -->
 <section class="overlay-loader" *ngIf="isLoading$ | async">
     <mat-spinner color="warn"></mat-spinner>
- </section>
+</section>
 <!-- ./Loader -->

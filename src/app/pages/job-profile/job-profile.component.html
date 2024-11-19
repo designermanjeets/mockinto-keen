@@ -11,7 +11,7 @@
                     <!--begin::Icon-->
                     <div class="symbol symbol-circle me-5">
                         <div class="symbol-label bg-transparent text-primary border border-secondary border-dashed">
-                            <i class="ki-duotone ki-abstract-47 fs-2x text-primary">
+                            <i class="ki-duotone ki-briefcase">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
@@ -47,8 +47,7 @@
                             <span class="path2"></span>
                         </i>
                         <input type="text" data-kt-filemanager-table-filter="search"
-                            class="form-control form-control-solid w-250px ps-15"
-                            placeholder="Search" />
+                            class="form-control form-control-solid w-250px ps-15" placeholder="Search" />
                     </div>
                     <!--end::Search-->
                 </div>
@@ -57,7 +56,9 @@
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end">
                         <!--begin::Add customer-->
-                        <button type="button" class="btn btn-flex btn-primary" *ngIf="!someChecked?.length" (click)="addJobDescriptionDialog()" data-bs-toggle="modal" data-bs-target="#kt_modal_upload">
+                        <button type="button" class="btn btn-flex btn-primary" *ngIf="!someChecked?.length"
+                            (click)="addJobDescriptionDialog()" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_upload">
                             <i class="ki-duotone ki-folder-up fs-2">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
@@ -86,7 +87,8 @@
                         <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                             <th class="w-10px pe-2">
                                 <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="masterCheckbox" (ngModelChange)="onMasterChange($event)" />
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="masterCheckbox"
+                                        (ngModelChange)="onMasterChange($event)" />
                                 </div>
                             </th>
                             <th class="min-w-250px">Name</th>
@@ -99,19 +101,22 @@
                         <tr *ngFor="let item of jobProfiles; let i = index;">
                             <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="item.checked" (ngModelChange)="onRowCheckChange($event, i)" />
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="item.checked"
+                                        (ngModelChange)="onRowCheckChange($event, i)" />
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editJobProfile(item)" class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
+                                    <a (click)="editJobProfile(item)"
+                                        class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editJobProfile(item)" class="text-gray-800 text-hover-primary c-p">{{item.jobDescription}}</a>
+                                    <a (click)="editJobProfile(item)"
+                                        class="text-gray-800 text-hover-primary c-p">{{item.jobDescription}}</a>
                                 </div>
                             </td>
                             <td>{{item.createdDate | date}}</td>
@@ -121,9 +126,8 @@
                                     <div class="ms-2" data-kt-filemanger-table="copy_link">
                                         <button type="button"
                                             class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                            (click)="editJobProfile(item)"
-                                            >
-                                            <i class="ki-duotone ki-fasten fs-5 m-0">
+                                            (click)="editJobProfile(item)">
+                                            <i class="ki-duotone ki-pencil">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
                                             </i>
@@ -134,9 +138,8 @@
                                     <div class="ms-2">
                                         <button type="button"
                                             class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                            (click)="deleteJobProfile(item)"
-                                            >
-                                            <i class="ki-duotone ki-trash fs-5 m-0">
+                                            (click)="deleteJobProfile(item)">
+                                            <i class="ki-duotone ki-trash-square">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
                                                 <span class="path3"></span>
@@ -151,14 +154,8 @@
                     </tbody>
                 </table>
                 <!--end::Table-->
-                <mat-paginator 
-                    #paginator
-                    [length]="100"
-                    [pageSize]="10"
-                    [pageSizeOptions]="[5, 10, 25, 100]"
-                    (page)="onPageChange($event)"
-                    aria-label="Select page"
-                >
+                <mat-paginator #paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="onPageChange($event)" aria-label="Select page">
                 </mat-paginator>
             </div>
             <!--end::Card body-->
@@ -316,10 +313,11 @@
                             <h2>
                                 <span *ngIf="!data.jobdescription">Add</span>
                                 <span *ngIf="data.jobdescription">Edit</span>
-                                Job Profile</h2>
+                                Job Profile
+                            </h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" (click)="closeDialog()">
+                            <div class="btn btn-sm btn-icon" (click)="closeDialog()">
                                 <i class="ki-duotone ki-cross fs-1">
                                     <span class="path1"></span>
                                     <span class="path2"></span>
@@ -335,7 +333,8 @@
                                 <!--begin::Container-->
                                 <div class="container">
                                     <!--begin::Form-->
-                                    <form class="mx-auto w-100 mw-600px" novalidate="novalidate" id="kt_modal_create_project_form" method="post">
+                                    <form class="mx-auto w-100 mw-600px" novalidate="novalidate"
+                                        id="kt_modal_create_project_form" method="post">
                                         <!--begin::Settings-->
                                         <div class="current" data-kt-stepper-element="content">
                                             <!--begin::Wrapper-->
@@ -346,7 +345,8 @@
                                                     <div class="text-muted fw-semibold fs-4">
                                                         <span *ngIf="!data.jobdescription">Add</span>
                                                         <span *ngIf="data.jobdescription">Edit</span>
-                                                        Job Profile</div>
+                                                        Job Profile
+                                                    </div>
                                                     <!--end::Description-->
                                                 </div>
                                                 <!--end::Heading-->
@@ -354,9 +354,11 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Job Profile Name</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Job Profile name">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Job Profile name">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -366,16 +368,20 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="text" class="form-control form-control-solid" placeholder="Enter Job Name" value="" name="jobName" [(ngModel)]="jobName" />
+                                                    <input type="text" class="form-control form-control-solid"
+                                                        placeholder="Enter Job Name" value="" name="jobName"
+                                                        [(ngModel)]="jobName" />
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Job Tags</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Tags">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Tags">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -386,22 +392,25 @@
                                                     <!--end::Label-->
                                                     <!--begin::Dropzone-->
                                                     <mat-chip-grid #chipGrid aria-label="Fruit selection">
-                                                        <mat-chip-row *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                                                          {{fruit}}
-                                                          <button matChipRemove [attr.aria-label]="'remove ' + fruit">
-                                                            <mat-icon>cancel</mat-icon>
-                                                          </button>
+                                                        <mat-chip-row *ngFor="let fruit of fruits"
+                                                            (removed)="remove(fruit)">
+                                                            {{fruit}}
+                                                            <button matChipRemove [attr.aria-label]="'remove ' + fruit">
+                                                                <mat-icon>cancel</mat-icon>
+                                                            </button>
                                                         </mat-chip-row>
                                                     </mat-chip-grid>
-                                                    <input type="text" placeholder="Enter Job Tags" class="form-control form-control-solid" #fruitInput [formControl]="fruitCtrl"
-                                                        [matChipInputFor]="chipGrid" 
+                                                    <input type="text" placeholder="Enter Job Tags"
+                                                        class="form-control form-control-solid" #fruitInput
+                                                        [formControl]="fruitCtrl" [matChipInputFor]="chipGrid"
                                                         [matAutocomplete]="auto"
                                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                        (matChipInputTokenEnd)="add($event)"
-                                                    />
-                                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                                                        <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
-                                                        {{fruit}}
+                                                        (matChipInputTokenEnd)="add($event)" />
+                                                    <mat-autocomplete #auto="matAutocomplete"
+                                                        (optionSelected)="selected($event)">
+                                                        <mat-option *ngFor="let fruit of filteredFruits | async"
+                                                            [value]="fruit">
+                                                            {{fruit}}
                                                         </mat-option>
                                                     </mat-autocomplete>
                                                     <!--end::Dropzone-->
@@ -410,9 +419,11 @@
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
-                                                    <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                                                    <label
+                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Job Description</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip" title="Specify Job Description">
+                                                        <span class="ms-1" data-bs-toggle="tooltip"
+                                                            title="Specify Job Description">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -422,23 +433,29 @@
                                                     </label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <textarea cols="4" type="text" class="form-control form-control-solid" placeholder="Enter Job Description" value="" name="jobDescription" [(ngModel)]="jobDescription"></textarea>
+                                                    <textarea cols="4" type="text"
+                                                        class="form-control form-control-solid"
+                                                        placeholder="Enter Job Description" value=""
+                                                        name="jobDescription" [(ngModel)]="jobDescription"></textarea>
                                                     <mat-hint align="end">Remaining Characters: 3000</mat-hint>
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Actions-->
                                                 <div class="d-flex flex-stack">
-                                                    <button type="button" class="btn btn-lg btn-primary" (click)="addUpdatejobDescription(data)" [disabled]="!jobName || !jobDescription">
+                                                    <button type="button" class="btn btn-lg btn-primary"
+                                                        (click)="addUpdatejobDescription(data)"
+                                                        [disabled]="!jobName || !jobDescription">
                                                         <ng-container *ngIf="isLoading$ | async">
                                                             <span class="indicator-progress" [style.display]="'block'">
-                                                              Please wait...
-                                                              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                                Please wait...
+                                                                <span
+                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
                                                             </span>
-                                                          </ng-container>
-                                                          <ng-container *ngIf="(isLoading$ | async) === false">
+                                                        </ng-container>
+                                                        <ng-container *ngIf="(isLoading$ | async) === false">
                                                             <span class="indicator-label">Submit</span>
-                                                          </ng-container>
+                                                        </ng-container>
                                                     </button>
                                                 </div>
                                                 <!--end::Actions-->
@@ -470,7 +487,8 @@
 <div class="position-fixed top-0 end-0 p-3 z-index-9999">
     <div id="kt_docs_toast_toggle" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <i class="ki-duotone ki-abstract-19 fs-2 text-danger me-3"><span class="path1"></span><span class="path2"></span></i>
+            <i class="ki-duotone ki-abstract-19 fs-2 text-danger me-3"><span class="path1"></span><span
+                    class="path2"></span></i>
             <strong class="me-auto">Success</strong>
             <small>11 secs ago</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -485,5 +503,5 @@
 <!-- Loader -->
 <section class="overlay-loader" *ngIf="isLoading$ | async">
     <mat-spinner color="warn"></mat-spinner>
- </section>
+</section>
 <!-- ./Loader -->

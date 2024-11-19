@@ -11,7 +11,7 @@
                     <!--begin::Icon-->
                     <div class="symbol symbol-circle me-5">
                         <div class="symbol-label bg-transparent text-primary border border-secondary border-dashed">
-                            <i class="ki-duotone ki-abstract-47 fs-2x text-primary">
+                            <i class="ki-duotone ki-questionnaire-tablet">
                                 <span class="path1"></span>
                                 <span class="path2"></span>
                             </i>
@@ -47,8 +47,7 @@
                             <span class="path2"></span>
                         </i>
                         <input type="text" data-kt-filemanager-table-filter="search"
-                            class="form-control form-control-solid w-250px ps-15"
-                            placeholder="Search" />
+                            class="form-control form-control-solid w-250px ps-15" placeholder="Search" />
                     </div>
                     <!--end::Search-->
                 </div>
@@ -86,7 +85,8 @@
                         <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                             <th class="w-10px pe-2">
                                 <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="masterCheckbox" (ngModelChange)="onMasterChange($event)" />
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="masterCheckbox"
+                                        (ngModelChange)="onMasterChange($event)" />
                                 </div>
                             </th>
                             <th class="min-w-250px">Mockinto</th>
@@ -100,18 +100,21 @@
                         <tr *ngFor="let item of allMockintoHistory; let i = index;">
                             <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" [(ngModel)]="item.checked" (ngModelChange)="onRowCheckChange($event, i)" />
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="item.checked"
+                                        (ngModelChange)="onRowCheckChange($event, i)" />
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editMockintoSchedule(item)" class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
+                                    <a (click)="editMockintoSchedule(item)"
+                                        class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a class="text-gray-800 text-hover-primary c-p">{{item.schedule.scheduleStartDate | date}}</a>
+                                    <a class="text-gray-800 text-hover-primary c-p">{{item.schedule.scheduleStartDate |
+                                        date}}</a>
                                 </div>
                             </td>
                             <td>{{item.schedule.createdDate | date}}</td>
@@ -119,7 +122,8 @@
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone
                                     ki-files fs-2x text-primary me-4"></i>
-                                    <button type="button" (click)="reportMockintoSchedule(item)" class="btn btn-flex btn-primary">View Report</button>
+                                    <button type="button" (click)="reportMockintoSchedule(item)"
+                                        class="btn btn-flex btn-primary">View Report</button>
                                 </div>
                             </td>
                             <td class="text-end" data-kt-filemanager-table="action_dropdown">
@@ -128,9 +132,8 @@
                                     <div class="ms-2">
                                         <button type="button"
                                             class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                            (click)="deleteMockintoSchedule(item)"
-                                            >
-                                            <i class="ki-duotone ki-trash fs-5 m-0">
+                                            (click)="deleteMockintoSchedule(item)">
+                                            <i class="ki-duotone ki-trash-square">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
                                                 <span class="path3"></span>
@@ -145,14 +148,8 @@
                     </tbody>
                 </table>
                 <!--end::Table-->
-                <mat-paginator 
-                    #paginator
-                    [length]="100"
-                    [pageSize]="10"
-                    [pageSizeOptions]="[5, 10, 25, 100]"
-                    (page)="onPageChange($event)"
-                    aria-label="Select page"
-                >
+                <mat-paginator #paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                    (page)="onPageChange($event)" aria-label="Select page">
                 </mat-paginator>
             </div>
             <!--end::Card body-->
@@ -296,28 +293,29 @@
             </div>
         </div>
         <!--end::Checkbox template-->
-    <!--end::Post-->
-</div>
-<!--end::Container-->
+        <!--end::Post-->
+    </div>
+    <!--end::Container-->
 
-<!--begin::Toast-->
-<div class="position-fixed top-0 end-0 p-3 z-index-9999">
-    <div id="kt_docs_toast_toggle" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <i class="ki-duotone ki-abstract-19 fs-2 text-danger me-3"><span class="path1"></span><span class="path2"></span></i>
-            <strong class="me-auto">Success</strong>
-            <small>11 secs ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            File addedd successfully!
+    <!--begin::Toast-->
+    <div class="position-fixed top-0 end-0 p-3 z-index-9999">
+        <div id="kt_docs_toast_toggle" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="ki-duotone ki-abstract-19 fs-2 text-danger me-3"><span class="path1"></span><span
+                        class="path2"></span></i>
+                <strong class="me-auto">Success</strong>
+                <small>11 secs ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                File addedd successfully!
+            </div>
         </div>
     </div>
-</div>
-<!--end::Toast-->
+    <!--end::Toast-->
 
-<!-- Loader -->
-<section class="overlay-loader" *ngIf="isLoading$ | async">
-    <mat-spinner color="warn"></mat-spinner>
- </section>
-<!-- ./Loader -->
+    <!-- Loader -->
+    <section class="overlay-loader" *ngIf="isLoading$ | async">
+        <mat-spinner color="warn"></mat-spinner>
+    </section>
+    <!-- ./Loader -->

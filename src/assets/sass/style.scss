@@ -7044,3 +7044,14 @@ body:not([data-kt-sticky-header=on]) .header .header-menu .menu > .menu-item > .
     top: auto;
     right: 28px
 }
+
+
+:root {
+    --bs-primary: #FF3D00;
+    --bs-link-color: #FF3D00;
+    --bs-primary-active: #FF3D00
+}
+
+.link-primary:hover, .link-primary:focus, .link-primary {
+    color: #FF3D00 !important
+}
