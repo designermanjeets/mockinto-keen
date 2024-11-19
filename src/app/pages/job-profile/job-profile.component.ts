@@ -152,6 +152,13 @@ export class JobProfileComponent implements OnInit {
       data: { },
     });
 
+    dialogRef.afterOpened().subscribe(result => {
+      this.jobName = '';
+      this.jobDescription = '';
+      this.fruits = [];
+      this.cdRef.detectChanges();
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });

@@ -131,6 +131,14 @@ export class ResumeComponent implements OnInit {
       data: { },
     });
 
+    dialogRef.afterOpened().subscribe(() => {
+      this.fileName = '';
+      this.resumeFile = '';
+      if(this.fileUploadInput) {
+        this.fileUploadInput.nativeElement.value = '';
+      }
+    })
+
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
