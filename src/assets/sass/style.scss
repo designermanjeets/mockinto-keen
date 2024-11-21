@@ -7066,3 +7066,7 @@ body:not([data-kt-sticky-header=on]) .header .header-menu .menu > .menu-item > .
 .progress-bar{
     background-color: #ff3d00 !important;
 }
+body.no-background {
+    background-image: none !important;
+    background-color: #fff;
+}
