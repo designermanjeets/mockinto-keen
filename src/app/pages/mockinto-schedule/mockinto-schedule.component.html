@@ -119,16 +119,16 @@
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
                                     <a (click)="editMockintoSchedule(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
+                                        class="text-gray-800 text-hover-primary c-p">{{item?.jobHeader}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a class="text-gray-800 text-hover-primary c-p">{{item.schedule.scheduleStartDate |
+                                    <a class="text-gray-800 text-hover-primary c-p">{{item?.scheduleStartDate |
                                         date}}</a>
                                 </div>
                             </td>
-                            <td>{{item.schedule.createdDate | date}}</td>
+                            <td>{{item?.createdDate | date}}</td>
                             <td class="text-end" data-kt-filemanager-table="action_dropdown">
                                 <div class="d-flex justify-content-end">
                                     <!--begin::Share link-->

@@ -86,7 +86,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
+    this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
           this.paginator.length = data.totalElements;
@@ -231,7 +231,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         return;
       }
       if(result.isConfirmed) {
-        this.router.navigate([`/dashboard/mockinto-live/${schedule.jobPostingId}`]);
+        this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
       }
     });
   }
