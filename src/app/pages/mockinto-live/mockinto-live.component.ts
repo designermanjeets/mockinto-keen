@@ -48,6 +48,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   currentQuestionIndex: number = 0;
   candidateAnswers: any = [];
   mockintoQueAnsBank: any = [];
+  botQuestion:any ;
 
   voicePitch: number = 0;
   voiceRate: number = 0;
@@ -123,9 +124,16 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       }).then((result: any) => {
         if (result.isConfirmed) {
           this.isMeetingProgress = false;
-          this.jogIDBotQuestions = [];
+          //this.jogIDBotQuestions = [];
           this.router.navigate(['dashboard/mockinto-history']);
-          this.endMockintoSchedule();
+          if(this.jogIDBotQuestions.length == 0) {
+            this.endMockintoSchedule();
+
+          }
+          else{
+            this.stopMockintoSchedule();
+
+          }
         }
       });
     } else {
@@ -138,17 +146,38 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   }
 
   endMockintoSchedule() {
-    this.sharedService.endMockintoSchedule(this.jobPostingId).subscribe((res) => {
+    const payload = Object.assign({},
+      {
+      "id": this.jobPostingId,
+      "scheduleStatusId": 3
+     
+    })
+    this.sharedService.endMockintoSchedule(payload).subscribe((res) => {
       this.isMeetingProgress = false;
       this.jogIDBotQuestions = [];
       this.router.navigate(['dashboard/mockinto-history']);
     });
   }
 
+  stopMockintoSchedule(){
+    const payload = Object.assign({},
+      {
+      "id": this.jobPostingId,
+      "scheduleStatusId": 3
+     
+    })
+    this.sharedService.stopMockintoSchedule(payload).subscribe((res) => {
+      this.isMeetingProgress = false;
+      this.jogIDBotQuestions = [];
+      this.router.navigate(['dashboard/mockinto-history']);
+    });
+
+  }
+
   fetchAllMockintoQuestionsByJobPostingId() {
     this.isLoading$.next(true);
     this.sharedService.fetchAllMockintoQuestionsByJobPostingId(this.jobPostingId).subscribe((res) => {
-      this.jogIDBotQuestions = res;
+      this.jogIDBotQuestions = res?.content;
       this.isLoading$.next(false);
       if(this.jogIDBotQuestions.length > 0) {
         this.isMeetingProgress = true;
@@ -195,6 +224,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
     utterThis.onstart = (event) => {
       this.speechSynthesisInProgress = true;
+      this.botQuestion = event.utterance.text;
       this.mockintoQueAnsBank.push({
         question: event.utterance.text,
         answer: '',
@@ -262,7 +292,10 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
             this.currentFinalTanscript = this.currentFinalTanscript + finalTranscript;
           } else {
             interimTranscript += event.results[i][0].transcript;
+            this.candidateAnswers = this.currentFinalTanscript + interimTranscript;
             this.mockintoQueAnsBank[this.currentQuestionIndex].answer = this.currentFinalTanscript + interimTranscript;
+
+
           }
         }
       }
@@ -294,6 +327,33 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     this.currentQuestionIndex++;
     if(this.currentQuestionIndex < this.jogIDBotQuestions.length) {
       this.isReadyForNextQuestion = false;
+      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+      const payload = Object.assign({},
+      {
+        "active": "1",
+        "deleted": "0",
+        "responseAudioS3Path": "string",
+        "responseTranscript": this.candidateAnswers,
+        "responseVideoS3Path": "string",
+        "updatedBy": 1,
+        "botJobCandidateQuestion": {
+          "id": this.jogIDBotQuestions[this.currentQuestionIndex]?.id
+       
+       },
+          "tenant": {
+            "id": loggedInUser.tenant_id,
+          },
+          
+          "interviewSchedule": {
+            "id": this.jobPostingId
+          }
+      }
+      );
+      this.sharedService.saveCandidateAnswer(payload).subscribe(data=>{
+        if(data){
+          this.candidateAnswers = ''
+        }
+      })
       this.startWebkitSpeechRecognition(this.jogIDBotQuestions[this.currentQuestionIndex].question);
     } else {
       this.isMeetingProgress = false;
@@ -301,5 +361,6 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       this.currentQuestionIndex = 0;
     }
   }
+
 
 }

@@ -36,7 +36,7 @@ export class MockintoReportComponent implements OnInit {
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
+    this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
           if(this.paginator) {

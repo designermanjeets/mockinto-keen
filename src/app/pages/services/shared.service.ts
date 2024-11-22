@@ -434,11 +434,9 @@ export class SharedService implements OnDestroy {
     );
   }
 
-  // Live Mockinto
-
-  fetchAllMockintoQuestionsByJobPostingId(jobPostingId: any): Observable<any> {
+  stopMockintoSchedule(scheduleData: any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/jobposting/all?jobPostingId=${jobPostingId}`)
+    return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, scheduleData)
     .pipe(
       map((data: any) => {
         return data;
@@ -449,6 +447,38 @@ export class SharedService implements OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
+  // Live Mockinto
+
+  fetchAllMockintoQuestionsByJobPostingId(jobPostingId: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/schedule/all?scheduleId=${jobPostingId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+  saveCandidateAnswer(candidateAnswer: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    console.log(candidateAnswer);
+    return this.http.post<any>(`${environment.apiUrl}/botJobCandidateQuestionResponse`, candidateAnswer)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Error Save Candidate Answer'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
 
   // Misc Actions
 
