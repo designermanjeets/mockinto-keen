@@ -1,21 +1,42 @@
 <section>
 
-    <header class=" py-2">
-        <div class="container d-flex justify-content-between align-items-center nav-inner">
-            <!-- Logo -->
-            <a href="#" class="d-flex align-items-center">
-                <img src="https://mockintofrontend-theta.vercel.app/_next/static/media/company-logo2.829c47f0.svg"
-                    alt="Logo" class="img-fluid" class="fix-logo">
-                    <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid" class="def-logo">
-            </a>
-
-            <!-- Buttons -->
-            <div>
-                <button class="btn  sign-free me-5"><a href="#">SIGN IN</a></button>
-                <button class="btn btn-primary "><a href="#">SIGN UP FOR FREE</a></button>
-            </div>
+    <header class="py-2">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light pt-0">
+                <!-- Logo -->
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <img src="https://mockintofrontend-theta.vercel.app/_next/static/media/company-logo2.829c47f0.svg" 
+                        alt="Logo" class="img-fluid fix-logo">
+                    <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid def-logo">
+                </a>
+                <!-- Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" 
+                    aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Menu Items -->
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="navbar-nav mx-auto text-center mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#Features">Features</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">FAQ'S</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">All Plans</a></li>
+                    </ul>
+                    <!-- Buttons -->
+                    <div class="d-flex mt-3 mt-lg-0 toggle-bar">
+                        <button class="btn sign-free me-5">
+                            <a href="#" class="text-decoration-none">SIGN IN</a>
+                        </button>
+                        <button class="btn btn-primary">
+                            <a href="#" class="text-decoration-none text-white">SIGN UP FOR FREE</a>
+                        </button>
+                    </div>
+                </div>
+            </nav>
         </div>
     </header>
+    
+    
+    
 
 </section>
 
@@ -76,7 +97,7 @@
 
 <!-- FEATURE CARD START -->
 
-<section class="section-padd">
+<section class="section-padd" id="Features">
     <div class="feature-container container feature-section">
         <div class="feature-image">
             <img src="./assets/media/hr-img.jpg" alt="Customer Support">
@@ -167,9 +188,9 @@
             </div>
             <div class="col-lg-6">
                 <div class="col image-inner">
-                  
+
                     <img src="./assets/media/chat-bot-pana.png" alt="" class="img-fluid">
-                 
+
                 </div>
             </div>
         </div>
@@ -187,25 +208,25 @@
                 <div class="short-div tag"><span>What You often Ask</span></div>
                 <h2>Frequently Ask Question</h2>
             </div>
-    </div>
-    <div class="col-lg-12 mt-5">
-        <div class="faq-container">
-            <div class="faq-item" *ngFor="let faq of faqs; let i = index">
-              <div class="faq-question" (click)="toggleFaq(i)" [class.active]="faq.active">
-                <h3>{{ faq.question }}</h3>
-                <!-- Arrow icon -->
-                <span class="faq-arrow">
-                  <i class="fa" [ngClass]="faq.active ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                </span>
-              </div>
-              <div class="faq-answer" [class.active]="faq.active">
-                <p>{{ faq.answer }}</p>
-              </div>
+        </div>
+        <div class="col-lg-12 mt-5">
+            <div class="faq-container">
+                <div class="faq-item" *ngFor="let faq of faqs; let i = index">
+                    <div class="faq-question" (click)="toggleFaq(i)" [class.active]="faq.active">
+                        <h3>{{ faq.question }}</h3>
+                        <!-- Arrow icon -->
+                        <span class="faq-arrow">
+                            <i class="fa" [ngClass]="faq.active ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </span>
+                    </div>
+                    <div class="faq-answer" [class.active]="faq.active">
+                        <p>{{ faq.answer }}</p>
+                    </div>
+                </div>
             </div>
-          </div>
-          
-          
-    </div>
+
+
+        </div>
     </div>
 </section>
 
@@ -219,7 +240,8 @@
             <div class="text-head text-center d-flex justify-content-center flex-column align-items-center">
                 <div class="short-div tag"><span>Get Subscription Discount</span></div>
                 <h2>Choose Priceing Plan</h2>
-                <p>Affordable pricing for mock interviews, job posts, and resume management. Get interview-ready today!</p>
+                <p>Affordable pricing for mock interviews, job posts, and resume management. Get interview-ready today!
+                </p>
             </div>
         </div>
         <div class="col-lg-12 d-flex gap-5 mt-5 justify-content-between plan-card-main">
@@ -256,10 +278,10 @@
                                     </i>
                                 </span>1 Mockinterview For 30 mins</li>
                             <li><span class="check cross">
-                                <i class="ki-duotone ki-cross">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
+                                    <i class="ki-duotone ki-cross">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
                                 </span>1 Mockinterview For 30 mins</li>
                         </ul>
                     </div>
@@ -294,17 +316,17 @@
                                         <span class="path2"></span>
                                     </i>
                                 </span>5 Job Description</li>
-                                <li><span class="check cross">
+                            <li><span class="check cross">
                                     <i class="ki-duotone ki-cross">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </i>
                                 </span>Add Multiple Jobs</li>
                             <li><span class="check cross">
-                                <i class="ki-duotone ki-cross">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
+                                    <i class="ki-duotone ki-cross">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
                                 </span>Mockinto History</li>
                         </ul>
                     </div>
@@ -339,17 +361,17 @@
                                         <span class="path2"></span>
                                     </i>
                                 </span>20 Job Description</li>
-                                <li><span class="check cross">
+                            <li><span class="check cross">
                                     <i class="ki-duotone ki-double-check">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                     </i>
                                 </span>Add Multiple Jobs</li>
                             <li><span class="check cross">
-                                <i class="ki-duotone ki-double-check">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
-                                </i>
+                                    <i class="ki-duotone ki-double-check">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                    </i>
                                 </span>Mockinto History</li>
                         </ul>
                     </div>
@@ -363,11 +385,50 @@
 </section>
 
 <section>
-    
-    <footer class="footer">
-        <div class="container text-center py-3">
-          <p>© 2024 Mockinto. All rights reserved.</p>
+
+    <footer class="main-landing-footer">
+        <div class="container">
+            <div class="col-lg-12 d-flex align-items-center justify-content-center">
+                <div class="col-lg-4 inner-footer">
+                    <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid" class="def-logo">
+                    <p>Mockinto: Your AI mock interview partner—practice, prepare, and land your dream job with
+                        confidence!</p>
+                    <ul class="d-flex gap-2 ">
+                        <li><a href="#Features">Features</a></li>
+                        <li><a href="">FAQ'S</a></li>
+                        <li><a href="">All Plans</a></li>
+                    </ul>
+                    <ul class="d-flex gap-3 mt-5 social-tag">
+                        <li>
+                            <i class="ki-duotone ki-facebook">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </li>
+                        <li>
+                            <i class="ki-duotone ki-twitter">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </li>
+                        <li>
+                            <i class="ki-duotone ki-instagram">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class=" .col-lg-12 mt-5 pt-4 bottom-footer d-flex justify-content-between pb-4">
+                <div class="col">
+                    <p> © 2024 Mockinto. All Rights Reserved.</p>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <a href="">Term and Privacy</a>
+                </div>
+            </div>
         </div>
-      </footer>
-      
+    </footer>
+
 </section>

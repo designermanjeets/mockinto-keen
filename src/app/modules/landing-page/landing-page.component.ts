@@ -35,10 +35,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     // Set the first FAQ as active (open) by default
     this.faqs[0].active = true;
 
+    // Set body class for styling
     this.renderer.addClass(document.body, 'no-background');
+
+    // Set the logo visibility based on the current scroll position
+    this.updateLogoVisibility();
   }
 
   ngOnDestroy(): void {
+    // Clean up when component is destroyed
     this.renderer.removeClass(document.body, 'no-background');
   }
 
@@ -48,10 +53,16 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   @HostListener('window:scroll', [])
   onScroll(): void {
+    this.updateLogoVisibility();
+  }
+
+  private updateLogoVisibility(): void {
     const header = document.querySelector('header') as HTMLElement;
     const defaultLogo = document.querySelector('.def-logo') as HTMLElement;
     const fixedLogo = document.querySelector('.fix-logo') as HTMLElement;
+    const navLinks = document.querySelectorAll('header li a') as NodeListOf<HTMLAnchorElement>;
 
+    // Check scroll position and update styles
     if (window.scrollY >= 100) {
       // Change header background and add shadow
       this.renderer.setStyle(header, 'backgroundColor', '#ffffff');
@@ -59,6 +70,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       // Toggle logo visibility
       this.renderer.setStyle(defaultLogo, 'display', 'none'); // Hide default logo
       this.renderer.setStyle(fixedLogo, 'display', 'block');  // Show fixed logo
+      // Change the color of anchor links to black
+      navLinks.forEach((link) => this.renderer.setStyle(link, 'color', 'black'));
     } else {
       // Revert header background and shadow
       this.renderer.removeStyle(header, 'backgroundColor');
@@ -66,6 +79,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       // Toggle logo visibility
       this.renderer.setStyle(defaultLogo, 'display', 'block'); // Show default logo
       this.renderer.setStyle(fixedLogo, 'display', 'none');   // Hide fixed logo
+      // Revert the color of anchor links
+      navLinks.forEach((link) => this.renderer.removeStyle(link, 'color'));
     }
   }
 }
