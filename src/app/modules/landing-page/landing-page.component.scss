@@ -1,0 +1,836 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+h1,h2,h3,p,a{
+    font-family: "Quicksand", sans-serif;
+}
+
+.navbar-toggler-icon{
+    background-image: url(../../../assets/media/manu-bar.png) !important;
+} 
+.section-main{
+    padding-top:120px;
+    padding-bottom: 100px;
+    background: #063259;
+}
+button a{
+    color: #fff;
+    text-shadow: none;
+    font-size: 15px;
+    font-weight: 600;
+}
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 9999;
+    left: 0;
+}
+.short-div {
+    width: max-content;
+    background: #fff;
+    padding: 10px 15px 10px 15px;
+    border-radius: 30px;
+}
+.nav-inner li {
+    list-style-type: none;
+    padding-right: 40px;
+}
+.nav-inner li a {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    transition: 0.5s ease-in-out;
+}
+.nav-inner li a:hover{
+    transform: scale(1.02);
+}
+
+.tag{
+    background-color: #f2f2f2 !important;
+}
+.short-div span {
+    font-size: 14px;
+    font-weight: 500;
+}
+.section-main h1 {
+    font-size: 6rem;
+    margin: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    line-height: 80px;
+    font-weight: 700;;
+    font-weight: 500;
+    color:#fff;
+}
+.section-main h1 span{
+    color: var(--bs-primary);
+}
+.section-main p {
+    font-size: 19px;
+    line-height: 29px;
+    padding-right: 20px;
+    font-weight: 300;
+    color:#fff;
+}
+.section-main button {
+    margin-top: 20px;
+}
+.section-main img {
+    width: 100%;
+}
+.sign-free{
+    background-color: none !important;
+    border: 1px solid var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+}
+.sign-free a{
+    color: var(--bs-primary) !important;
+}
+button{
+    transition: transform 0.3s ease;
+    border: 1px solid var(--bs-primary);
+}
+ button:hover{
+    transform: scale(1.05);
+}
+.section-padd{
+    padding-top:45px;
+    padding-bottom: 40px;
+    // animation: appear linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%
+}
+@keyframes appear{
+    from{
+        opacity: 0;
+        scale: 0.5;
+    }
+    from{
+        opacity: 1;
+        scale: 01;
+    }
+}
+.padd-sec{
+    padding-top: 45px;
+}
+.feature h2 {
+    font-size: 2.5rem;
+    padding-right: 160px;
+    padding-top: 13px;
+    font-weight: 500;
+    line-height: 35px;
+}
+.feature h3 {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 600;
+    padding-bottom: 20px;
+}
+.feature p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0;
+}
+.border-right {
+    position: relative; 
+    margin-right: 20px;  }
+  
+  .border-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 4px; 
+    background-color: var(--bs-primary); 
+  }
+  
+
+  .feature-section {
+    background-color: #f8c7b933;
+    padding: 20px;
+    border-radius: 15px;
+  }
+  
+  .feature-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .feature-image {
+    flex: 1;
+    max-width: 48%;
+    height: 600px;
+  }
+  
+  .feature-image img {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    height: 100%;
+  }
+  
+  .feature-cards {
+    flex: 1;
+    max-width: 50%;
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 20px;
+  }
+  
+  .head-plan h3 {
+    font-size: 2.2rem;
+    color: var(--bs-primary) !important;
+    font-weight: 500;
+}
+
+  .feature-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+  }
+  .feature-card:hover{
+    transform: scale(1.03);
+  }
+  .feature-card:hover i{
+    color: #ffffff;
+  }
+  .feature-card:hover .icon{
+    background-color: var(--bs-primary);
+  }
+  .feature-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    color: #000;
+    font-weight: 500;
+
+  }
+  
+  .feature-card p {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .icon {
+    background-color: var(--bs-primary);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+
+  }
+  
+  .icon i{
+    color: #fff;
+  }
+  .icon img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .col.image-inner {
+    background: rgba(248, 199, 185, 0.2);
+    overflow: hidden;
+    display: flex;
+    height: 535px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-inner img{
+    object-fit: cover;
+    height: 100%;
+}
+
+.explain h2 {
+    padding-top: 40px;
+    font-size: 3.5rem;
+    line-height: 46px;
+    font-weight: 800;
+}
+
+.explain h2 span{
+    color: var(--bs-primary);
+}
+.explain p {
+    font-size: 18px;
+    padding-right: 110px;
+    line-height: 35px;
+    margin: 0;
+}
+
+.card-content-main {
+    background: #f2f2f2;
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.card-content-main h3 {
+    margin: 0;
+    font-size: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    color: var(--bs-primary);
+}
+.card-content-main p {
+    font-size: 15px;
+    margin: 0;
+    padding-bottom: 10px;
+    font-weight: 400;
+}
+.price-plan h2 {
+    margin: 0;
+    padding-top: 30px;
+    padding-bottom: 25px;
+    font-size: 3.5rem;
+    color: var(--bs-primary);
+    font-weight: 800;
+}
+.price-plan p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+}
+.plan-card{
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #f2f2f2;
+    border-radius: 18px;
+    width: 90%;
+    transition: 0.5s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+.plan-card:hover{
+    border: 1px solid var(--bs-primary);
+}
+.def-bor{
+    border-color: var(--bs-primary) !important;
+}
+.head-plan {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.plan-feature ul {
+    padding: 0;
+}
+.plan-feature li {
+    list-style-type: none;
+    padding-bottom: 15px;
+}
+.plan-feature li {
+    list-style-type: none;
+    padding-bottom: 15px;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+}
+span.check {
+    margin-right: 10px;
+    font-size: 17px;
+    border-radius: 50%;
+}
+p.cost {
+    font-size: 25px !important;
+    font-weight: 500 !important;
+}
+.faq-section h2{
+    margin: 0;
+    padding-top: 30px;
+    padding-bottom: 15px;
+    font-size: 3.5rem;
+    color: var(--bs-primary);
+    font-weight: 800;
+}
+.faq-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .faq-item {
+    border: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+  
+    .faq-question {
+        padding: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+  
+      h3 {
+        margin: 0;
+        font-size: 22px;
+        font-weight:600;
+      }
+    }
+  
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+  
+      &.active {
+        max-height: 200px; 
+        padding: 15px;
+        background: #f5eeed;
+      }
+  
+      p {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 25px;
+      }
+    }
+    .faq-question{
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        border-bottom: 1px solid #f1f1f1;
+    
+        &.active {
+          max-height: 200px; 
+          padding: 15px;
+          background: #f5eeed;
+          border-bottom: 1px solid #d4d0d0;
+        }
+    
+        p {
+          margin: 0;
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 25px;
+        }
+      }
+  }
+  .check i.ki-duotone.ki-double-check {
+    color: #009b77;
+}
+.cross i.ki-duotone.ki-cross {
+    color: var(--bs-primary);
+}
+
+@media (min-width:1000px) and (max-width:1400px){
+    .top-banner{
+        display: grid;
+        align-items: center;
+    }
+    .section-main h1{
+        font-size: 3rem;
+        line-height: 44px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .section-main p{
+        font-size: 12px;
+        line-height: 19px;
+        padding-right: 10px;
+    }
+    .section-main button{
+        margin-top: 5px;
+    }
+}
+@media(min-width:768px) and (max-width:1000px){
+    .banner-main {
+        flex-direction: column-reverse;
+        padding: 30px;
+    }
+    .section-main h1{
+        font-size: 3rem;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        line-height: 45px;
+    }
+    .feature h2{
+        font-size: 23px;
+        padding-right: 0px;
+    }
+    .feature h3{
+        font-size: 30px;
+        padding-bottom: 10px;
+    }
+    .feature p{
+        font-size: 12px;
+        line-height: 17px;
+    }
+    .feature {
+        padding: 20px;
+    }
+    .explain-main {
+        flex-direction: column-reverse;
+    }
+    section.section-padd {
+        padding: 20px;
+    }
+    .plan-card-main {
+        flex-direction: column;
+    }
+    .plan-card{
+        width: 100%;
+    }
+    .nav-inner {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+@media(max-width:768px){
+    .section-main{
+        padding-top: 85px;
+        padding-bottom: 25px;
+    }
+    .faq-container{
+        padding: 0;
+    }
+    .feature-image{
+        flex: 1;
+        max-width: 100%; 
+    }
+    .banner-main {
+        flex-direction: column;
+        padding: 30px;
+    }
+    .image-inner{
+        height: auto !important;
+    }
+    .section-main h1{
+        font-size: 25px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        line-height: 30px;
+    }
+    .feature h2{
+        font-size: 23px;
+        padding-right: 0px;
+    }
+    .feature h3{
+        font-size: 30px;
+        padding-bottom: 10px;
+    }
+    .feature p{
+        font-size: 12px;
+        line-height: 17px;
+    }
+    .feature {
+        padding: 20px;
+    }
+    .explain-main {
+        flex-direction: column-reverse;
+    }
+    section.section-padd {
+        padding: 20px;
+    }
+    .plan-card-main {
+        flex-direction: column;
+    }
+    .plan-card{
+        width: 100%;
+    }
+    .nav-inner {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    .section-main p{
+        font-size: 13px;
+        line-height: 23px;
+        padding-right: 0;
+    }
+    .section-main button{
+        margin: 0;
+    }
+    .number-sec {
+        flex-direction: column;
+    }
+    .border-right::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: transparent !important;
+    }
+    .number-lower{
+        margin-top: 10px;
+    }
+    .padd-sec{
+        padding-top: 10px;
+    }
+    .feature-container{
+        flex-direction: column;
+    }
+    .feature-cards{
+        width: 100%;
+        max-width: 100%;
+    }
+    .explain h2{
+        padding-top: 24px;
+        font-size: 25px;
+        line-height: 30px;
+    }
+    .explain p{
+        font-size: 14px;
+        padding-right: 0;
+        line-height: 23px;
+    }
+    .faq-item.faq-question h3{
+        margin: 0;
+        line-height: 20px;
+        font-size: 13px;
+    }
+    .faq-item.faq-answer  p{
+        font-size: 12px;
+        line-height: 20px;
+    }
+    .price-plan  p{
+        font-size: 13px;
+        line-height: 22px;
+    }
+}
+
+@media(max-width:320px){
+    .feature-image {
+        margin-bottom: 15px;
+    }
+    .faq-item h3 {
+        font-size: 13px !important;
+        line-height: 20px;
+    }
+    .faq-item p {
+        font-size: 11px !important;
+        line-height: 17px !important;
+    }   
+    .section-main h1{
+        font-size: 15px;
+        line-height: 24px;
+    }
+    .section-main p{
+        font-size: 12px;
+        line-height: 23px;
+    }
+    .section-main{
+        padding-top: 90px;
+        padding-bottom: 30px;
+    }
+    .banner-main{
+        padding: 10px;
+    }
+    .feature h2{
+        font-size: 20px;
+        padding-right: 0px;
+    }
+    .feature p{
+        font-size: 10px;
+        line-height: 14px;
+    }
+    .feature-section{
+        padding: 0px;
+    }
+    .feature-card h3{
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .feature-container{
+        padding: 20px;
+    }
+    .explain h2{
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .explain p{
+        font-size: 12px;
+        line-height: 21px;
+    }
+    .faq-section h2{
+        font-size: 19px;
+    }
+    .faq-item.faq-question h3{
+        font-size: 13px;
+        line-height: 22px;
+    }
+    .faq-item.faq-answer  p{
+        font-size: 11px;
+        line-height: 17px;
+    }
+    .price-plan h2{
+        font-size: 22px;
+    }
+    .plan-feature li{
+        padding-bottom: 0px;
+        font-size: 11px;
+    }
+}
+@media(min-width:400px) and (max-width:768px){
+    
+    .feature-card{
+        width: 100% !important;
+    }
+    .faq-question h3 {
+        font-size: 16px !important;
+        line-height: 20px;
+    }
+    .faq-section h2 {
+        line-height: 42px;
+    }
+}
+@media(max-width:500px){
+    .nav-inner {
+        flex-direction: column;
+    }
+    .number-lower{
+        text-align: center;
+    }
+    .faq-item.faq-question  h3{
+        font-size: 14px;
+    }
+    .plan-feature li{
+        font-size: 16px;
+    }
+}
+
+.footer {
+    background-color: #fFFFFF; /* Light gray background */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); /* Shadow at the top */
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+  .footer p {
+    margin: 0;
+    color: #6c757d; /* Subtle text color */
+    font-size: 14px;
+  }
+  footer.main-landing-footer {
+    background: #063259;
+    padding-top: 40px;
+}
+.inner-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.inner-footer p {
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 400;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.inner-footer ul {
+    margin: 0;
+}
+.inner-footer li {
+    list-style-type: none;
+    padding-right: 40px;
+}
+.inner-footer a {
+    font-size: 18px;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}   
+.inner-footer a:hover{
+    text-decoration: underline !important;
+}
+.bottom-footer {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.bottom-footer p {
+    color: #fff;
+    font-weight: 500;
+}
+.bottom-footer a{
+    color: #fff;
+}
+.bottom-footer{
+    border-top: 1px solid #f2f2f2;
+}
+
+.social-tag i:hover{
+    transform: scale(1.1) !important;
+}
+.nav-item a {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+}
+li.nav-item {
+    padding-right: 20px;
+}
+@media(min-width:321px) and (max-width:400px){
+    .faq-question h3{
+    font-size: 13px !important;
+    line-height: 20px !important;
+    margin-right: 10px !important;
+    }
+    .faq-answer p {
+        font-size: 12px !important;
+        line-height: 17px !important;
+    }
+}
+@media(max-width:768px){
+    .faq-section h2{
+        padding-top: 15px;
+        padding-bottom: 0px;
+        line-height: 38px;
+        font-size: 2.54rem;
+    }
+    .feature-image {
+        margin-bottom: 15px;
+    }
+    .feature-card h3 {
+        font-size: 12px !important;
+        line-height: 15px;
+        margin-right: 7px;
+    }
+    .inner-footer li{
+        padding-right: 16px;
+    }
+    .bottom-footer {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+@media(max-width:991px){
+    .toggle-bar {
+        align-items: center;
+        justify-content: center;
+    }
+    div#navbarMenu {
+        background: #fff;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        border-radius: 10px;
+    }
+    .nav-item a{
+        color: #000;
+    }
+    button:focus:not(:focus-visible){
+        outline: none;
+        box-shadow: none;
+    }
+}

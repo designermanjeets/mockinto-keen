@@ -34,7 +34,6 @@ export class MockintoPlanComponent implements OnInit {
   }
 
   selectplan(event: Event, plan?: string) {
-    console.log(plan);
     event.stopImmediatePropagation();
     switch (plan) {
       case 'starter':
@@ -52,7 +51,5 @@ export class MockintoPlanComponent implements OnInit {
         break;
     }
   }
-
-
 
 }

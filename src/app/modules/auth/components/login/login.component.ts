@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string;
   isLoading$: Observable<boolean>;
 
+  selectedPlan: string;
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -41,8 +43,24 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initForm();
     // get return url from route parameters or default to '/'
-    this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
+
+    this.route.queryParams.subscribe((params) => {
+      if (params.plan) {
+        this.selectedPlan = params.plan;
+        console.log('Selected plan:', this.selectedPlan);
+      }
+    });
+  }
+
+  signUp() {
+    if (this.selectedPlan) {
+      this.router.navigate(['/auth/registration'], {
+        queryParams: { plan: this.selectedPlan },
+      });
+    } else {
+      this.router.navigate(['/auth/registration']);
+    }
   }
 
   // convenience getter for easy access to form fields
@@ -79,7 +97,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel | undefined) => {
         if (user) {
-          this.router.navigate([this.returnUrl]);
+          if(this.selectedPlan && this.selectedPlan !== 'starter') {
+            this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
+          } else {
+            this.router.navigate([this.returnUrl]);
+          }
         } else {
           this.hasError = true;
         }

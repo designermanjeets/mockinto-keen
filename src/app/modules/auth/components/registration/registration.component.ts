@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { UserModel } from '../../models/user.model';
@@ -16,6 +16,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   registrationForm: FormGroup;
   hasError: boolean;
   isLoading$: Observable<boolean>;
+  selectedPlan: string;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -23,7 +24,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
@@ -34,6 +36,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.plan) {
+        this.selectedPlan = params.plan;
+        console.log('Selected plan:', this.selectedPlan);
+      }
+    });
+  }
+
+  signIn() {
+    if(this.selectedPlan) {
+      this.router.navigate(['/auth/login'], {
+        queryParams: { plan: this.selectedPlan },
+      });
+    } else {
+      this.router.navigate(['/auth/login']);
+    }
   }
 
   // convenience getter for easy access to form fields
@@ -146,7 +164,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel) => {
         if (user) {
-          this.router.navigate(['/']);
+          if(this.selectedPlan && this.selectedPlan !== 'starter') {
+            this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
+          } else {
+            this.router.navigate(['/']);
+          }
         } else {
           this.hasError = true;
         }
