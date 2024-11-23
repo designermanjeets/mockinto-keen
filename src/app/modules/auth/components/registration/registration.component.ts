@@ -164,7 +164,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel) => {
         if (user) {
-          if(this.selectedPlan) {
+          if(this.selectedPlan && this.selectedPlan !== 'starter') {
             this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           } else {
             this.router.navigate(['/']);

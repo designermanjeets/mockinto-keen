@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-create-subscription',
@@ -53,6 +54,7 @@ export class CreateSubscriptionComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
@@ -87,7 +89,10 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   collectPayment() {
-    if (this.paying() || this.checkoutForm.invalid) return;
+    if (this.paying() || this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      return;
+    };
     this.paying.set(true);
 
     const { name, email, address, zipcode, city } =
@@ -112,7 +117,7 @@ export class CreateSubscriptionComponent implements OnInit {
         redirect: 'if_required',
       })
       .subscribe({
-        next: (result) => {
+        next: (result: any) => {
           this.paying.set(false);
           if (result.error) {
             (Swal as any).fire({
@@ -127,6 +132,36 @@ export class CreateSubscriptionComponent implements OnInit {
               text: 'Payment completed successfully',
             });
             this.checkoutForm.reset();
+
+            const backendPayload = {
+              plan: {
+                id: 1, //this.selectedPlan.id,
+                name: this.selectedPlan.planname || 'Starter',
+                description: this.selectedPlan.planDescription || 'Starter Description',
+                price: result.amount / 100, // Stripe amount is in cents, convert to dollars
+                features: this.selectedPlan.features || ['Basic Feature'], // Fetch features if available
+                duration: this.selectedPlan.planDuration || 1, // e.g., 12 months
+                createdDate: new Date().toISOString(),
+                deleted: false,
+                lastUpdatedDate: new Date().toISOString(),
+              },
+              user: {
+                id: this.logginInUser.id, // Fetch from user session or database
+                active: result.status === 'succeeded' ? 'true' : 'false',
+                createdDate: result.created,
+                deleted: false,
+                lastUpdatedDate: new Date().toISOString(),
+                name: this.logginInUser.username,
+                primaryContactEmail: this.logginInUser.email_id,
+                primaryContactPhone: this.logginInUser.candidates[0].candidatePhone,
+                timezone: this.logginInUser.candidates[0].preferredTimezone || 'UTC',
+              },
+              startDate: new Date().toISOString(),
+              status: result.status === 'succeeded' ? 'true' : 'false',
+              deleted: false,
+            };
+
+            this.updateBackendForPlanChange(backendPayload);
           }
         },
         error: (err) => {
@@ -138,6 +173,22 @@ export class CreateSubscriptionComponent implements OnInit {
           });
         },
       });
+  }
+
+  updateBackendForPlanChange(updateBackendForPlanChange: any) {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
+      if(res) {
+        console.log(res);
+        this.router.navigate(['dashboard/landing']);
+      } else {
+        (Swal as any).fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong. Please try again later.',
+        });
+      }
+    });
+    
   }
 
   cancelPayment() {
@@ -168,12 +219,15 @@ export class CreateSubscriptionComponent implements OnInit {
           if (params.plan) {
             this.selectedPlan = this.allPlans.find((p: any) => {
               if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'startup') {
+                p.planname = 'Startup';
                 return p;
               }
               if(p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'advanced') {
+                p.planname = 'Advanced';
                 return p;
               }
               if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'enterprise') {
+                p.planname = 'Enterprise';
                 return p;
               }
             });

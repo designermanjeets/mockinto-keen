@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel | undefined) => {
         if (user) {
-          if(this.selectedPlan) {
+          if(this.selectedPlan && this.selectedPlan !== 'starter') {
             this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           } else {
             this.router.navigate([this.returnUrl]);
