@@ -1,4 +1,6 @@
-import { Component, Renderer2, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -29,7 +31,14 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private renderer: Renderer2) {}
+  allPlans: any = [];
+
+  constructor(
+    private renderer: Renderer2,
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private plutoService: StripeMockintoService,
+  ) {}
 
   ngOnInit(): void {
     // Set the first FAQ as active (open) by default
@@ -40,6 +49,17 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
     // Set the logo visibility based on the current scroll position
     this.updateLogoVisibility();
+
+    this.fetchAllPlans();
+  }
+
+  fetchAllPlans() {
+    this.plutoService.getAllPlans().subscribe((res) => {
+      if(res) {
+        this.allPlans = res.data;
+        this.cdRef.detectChanges();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -83,4 +103,36 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       navLinks.forEach((link) => this.renderer.removeStyle(link, 'color'));
     }
   }
+
+  selectplan(event: Event, plan?: string) {
+    event.stopImmediatePropagation();
+    switch (plan) {
+      case 'starter':
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+        break;
+
+      case 'advanced':
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'advanced' } });
+        break;
+
+      case 'enterprise':
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'enterprise' } });
+        break;
+      default:
+        break;
+    }
+  }
+
+  signIn(): void {
+    this.router.navigate(['/auth/login']);
+  }
+
+  signUp(): void {
+    this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+  }
+
+  getPlans(): void {
+
+  }
+
 }

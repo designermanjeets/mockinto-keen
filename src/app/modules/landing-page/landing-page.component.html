@@ -4,7 +4,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light pt-0">
                 <!-- Logo -->
-                <a href="#" class="navbar-brand d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center c-p">
                     <img src="https://mockintofrontend-theta.vercel.app/_next/static/media/company-logo2.829c47f0.svg" 
                         alt="Logo" class="img-fluid fix-logo">
                     <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid def-logo">
@@ -17,17 +17,17 @@
                 <!-- Menu Items -->
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="navbar-nav mx-auto text-center mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#Features">Features</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">FAQ'S</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">All Plans</a></li>
+                        <li class="nav-item"><a class="nav-link c-p">Features</a></li>
+                        <li class="nav-item"><a class="nav-link c-p">FAQ'S</a></li>
+                        <li class="nav-item"><a class="nav-link c-p">All Plans</a></li>
                     </ul>
                     <!-- Buttons -->
                     <div class="d-flex mt-3 mt-lg-0 toggle-bar">
                         <button class="btn sign-free me-5">
-                            <a href="#" class="text-decoration-none">SIGN IN</a>
+                            <a class="text-decoration-none c-p" (click)="signIn()">SIGN IN</a>
                         </button>
                         <button class="btn btn-primary">
-                            <a href="#" class="text-decoration-none text-white">SIGN UP FOR FREE</a>
+                            <a class="text-decoration-none text-white c-p" (click)="signUp()">SIGN UP FOR FREE</a>
                         </button>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     to your skills. Whether you’re looking to improve your communication or perfect your answers, our
                     AI-driven chatbot offers personalized mock interviews that help you stand out.
                 </p>
-                <button class="btn btn-primary me-2"><a href="#">START A FREE TRIAL</a></button>
+                <button class="btn btn-primary me-2"><a class="c-p" (click)="signUp()">START A FREE TRIAL</a></button>
             </div>
             <div class="col-lg-6 top-banner">
                 <img src="./assets/media/chat-bot-banner.png" alt="Mockinto-Banner-Image">
@@ -184,7 +184,7 @@
                 </p>
                 <p class="pt-4">It simplifies the interview preparation process, ensures that interviews are focused and
                     relevant, and helps hiring managers assess candidates more effectively and efficiently.</p>
-                <button class="btn btn-primary me-2 mt-5"><a href="#">START A FREE TRIAL</a></button>
+                <button class="btn btn-primary me-2 mt-5"><a class="c-p" (click)="signUp()">START A FREE TRIAL</a></button>
             </div>
             <div class="col-lg-6">
                 <div class="col image-inner">
@@ -244,12 +244,12 @@
                 </p>
             </div>
         </div>
-        <div class="col-lg-12 d-flex gap-5 mt-5 justify-content-between plan-card-main">
+        <div class="col-lg-12 d-flex gap-5 mt-5 justify-content-between plan-card-main" *ngIf="allPlans?.length">
             <div class="col-lg-4">
                 <div class="plan-card def-bor">
                     <div class="head-plan ">
-                        <h3>Free Plan</h3>
-                        <P>No Need For Credit Card</P>
+                        <h3>Starter</h3>
+                        <P class="cost">$ {{allPlans[2].amount/100}} - No Credit Card Required</P>
                     </div>
                     <div class="plan-feature">
                         <ul>
@@ -286,15 +286,15 @@
                         </ul>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button class="btn btn-primary me-2"><a href="#">Start A Free Trial</a></button>
+                        <button class="btn btn-primary me-2"><a class="c-p" (click)="selectplan($event, 'starter')">Start A Free Trial</a></button>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="plan-card">
                     <div class="head-plan">
-                        <h3>Professional Plan</h3>
-                        <P class="cost">$5.99</P>
+                        <h3>Professional</h3>
+                        <P class="cost">$ {{allPlans[1].amount/100}}/{{allPlans[1].interval}}</P>
                     </div>
                     <div class="plan-feature">
                         <ul>
@@ -331,15 +331,15 @@
                         </ul>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button class="btn  sign-free"><a href="#">Choose Plan</a></button>
+                        <button class="btn  sign-free"><a class="c-p" (click)="selectplan($event, 'advanced')">Choose Plan</a></button>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="plan-card">
                     <div class="head-plan">
-                        <h3>Premiun Plan</h3>
-                        <P class="cost">$19.99</P>
+                        <h3>Enterprise</h3>
+                        <P class="cost">$ {{allPlans[0].amount/100}}/{{allPlans[0].interval}}</P>
                     </div>
                     <div class="plan-feature">
                         <ul>
@@ -376,7 +376,7 @@
                         </ul>
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button class="btn  sign-free"><a href="#">Choose Plan</a></button>
+                        <button class="btn sign-free"><a class="c-p" (click)="selectplan($event, 'enterprise')">Choose Plan</a></button>
                     </div>
                 </div>
             </div>
@@ -394,11 +394,11 @@
                     <p>Mockinto: Your AI mock interview partner—practice, prepare, and land your dream job with
                         confidence!</p>
                     <ul class="d-flex gap-2 ">
-                        <li><a href="#Features">Features</a></li>
-                        <li><a href="">FAQ'S</a></li>
-                        <li><a href="">All Plans</a></li>
+                        <li><a class="c-p">Features</a></li>
+                        <li><a class="c-p">FAQ'S</a></li>
+                        <li><a class="c-p">All Plans</a></li>
                     </ul>
-                    <ul class="d-flex gap-3 mt-5 social-tag">
+                    <ul class="d-flex gap-3 mt-5 social-tag d-none">
                         <li>
                             <i class="ki-duotone ki-facebook">
                                 <span class="path1"></span>
@@ -420,12 +420,12 @@
                     </ul>
                 </div>
             </div>
-            <div class=" .col-lg-12 mt-5 pt-4 bottom-footer d-flex justify-content-between pb-4">
+            <div class="col-lg-12 mt-5 pt-4 bottom-footer d-flex justify-content-between pb-4">
                 <div class="col">
                     <p> © 2024 Mockinto. All Rights Reserved.</p>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <a href="">Term and Privacy</a>
+                    <a class="c-p">Term and Privacy</a>
                 </div>
             </div>
         </div>

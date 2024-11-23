@@ -61,8 +61,8 @@ export class CreateSubscriptionComponent implements OnInit {
 
   initCheckoutform() {
     this.checkoutForm = this.fb.group({
-      name: [this.logginInUser.first_name || '', [Validators.required]],
-      email: [this.logginInUser.user_email || '', [Validators.required]],
+      name: [this.logginInUser.username || '', [Validators.required]],
+      email: [this.logginInUser.email_id || '', [Validators.required]],
       address: [this.logginInUser.address || '', [Validators.required]],
       zipcode: ['', [Validators.required]],
       city: ['', [Validators.required]],
