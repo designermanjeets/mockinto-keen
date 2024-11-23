@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
-    this.sharedService.sendToRouter$.subscribe((data) => {
+    this.sharedService.sendToRouter$?.subscribe((data) => {
       if (data) {
         console.log('data', data);
         // this.router.navigate([data]);

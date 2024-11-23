@@ -34,7 +34,9 @@ export class SharedService implements OnDestroy {
     if(Object.keys(this.authUser).length === 0) {
       this.router.navigate(['/auth/login']);
     } else {
-      this.candidateId = this.authUser.candidates[0].id;
+      if(this.authUser.candidates?.length !== 0) {
+        this.candidateId = this.authUser.candidates[0].id;
+      }
       this.tenantId = this.authUser.tenant_id;
       this.isLoadingSubject = new BehaviorSubject<boolean>(false);
       this.isLoading$ = this.isLoadingSubject.asObservable();
