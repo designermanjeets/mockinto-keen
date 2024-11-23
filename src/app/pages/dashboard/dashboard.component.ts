@@ -47,7 +47,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchDashboardData();
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    if(Object.keys(loggedInUser).length === 0) {
+      this.router.navigate(['/landing-page']);
+    } else {
+      this.fetchDashboardData();
+    }
   }
 
   fetchDashboardData() {

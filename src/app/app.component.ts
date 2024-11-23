@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((event) => {
       const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
         if(Object.keys(loggedInUser).length === 0) {
-          // localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('isLoggedIn');
         }
     });
     this.router.events.subscribe((event) => {
