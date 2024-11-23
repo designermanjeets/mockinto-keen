@@ -506,6 +506,7 @@
                                                 <!--end::Input group-->
 
                                                 <!--begin::Actions-->
+                                               <div class="d-flex gap-3">
                                                 <div class="d-flex flex-stack">
                                                     <button type="button" class="btn btn-lg btn-primary"
                                                         (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)"
@@ -522,6 +523,17 @@
                                                         </ng-container>
                                                     </button>
                                                 </div>
+                                                <div class="d-flex flex-stack"> <button type="button"
+                                                        class="btn btn-lg btn-primary" (click)="closeDialog()">
+                                                        <ng-container *ngIf="isLoading$ | async"> <span
+                                                                class="indicator-progress" [style.display]="'block'">
+                                                                Please wait... <span
+                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                            </span> </ng-container> <ng-container
+                                                            *ngIf="(isLoading$ | async) === false"> <span
+                                                                class="indicator-label">Cancel</span> </ng-container>
+                                                    </button> </div>
+                                               </div>
                                                 <!--end::Actions-->
                                             </div>
                                             <!--end::Wrapper-->

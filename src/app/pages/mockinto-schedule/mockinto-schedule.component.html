@@ -119,16 +119,16 @@
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
                                     <a (click)="editMockintoSchedule(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
+                                        class="text-gray-800 text-hover-primary c-p">{{item?.jobHeader}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a class="text-gray-800 text-hover-primary c-p">{{item.schedule.scheduleStartDate |
+                                    <a class="text-gray-800 text-hover-primary c-p">{{item?.scheduleStartDate |
                                         date}}</a>
                                 </div>
                             </td>
-                            <td>{{item.schedule.createdDate | date}}</td>
+                            <td>{{item?.createdDate | date}}</td>
                             <td class="text-end" data-kt-filemanager-table="action_dropdown">
                                 <div class="d-flex justify-content-end">
                                     <!--begin::Share link-->
@@ -432,20 +432,25 @@
                                                     <!--end::Label-->
                                                     <div class="input-group">
                                                         <mat-form-field class="w-100">
-                                                            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date"
-                                                              [formControl]="dateControl" [min]="minDate" [max]="maxDate">
-                                                            <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+                                                            <input matInput [ngxMatDatetimePicker]="picker"
+                                                                placeholder="Choose a date" [formControl]="dateControl"
+                                                                [min]="minDate" [max]="maxDate">
+                                                            <ngx-mat-datepicker-toggle matSuffix
+                                                                [for]="picker"></ngx-mat-datepicker-toggle>
                                                             <ngx-mat-datetime-picker #picker>
-                                                              <ngx-mat-datepicker-actions>
-                                                                <button mat-button ngxMatDatepickerCancel>Cancel</button>
-                                                                <button mat-raised-button color="primary" ngxMatDatepickerApply>Apply</button>
-                                                              </ngx-mat-datepicker-actions>
+                                                                <ngx-mat-datepicker-actions>
+                                                                    <button mat-button
+                                                                        ngxMatDatepickerCancel>Cancel</button>
+                                                                    <button mat-raised-button color="primary"
+                                                                        ngxMatDatepickerApply>Apply</button>
+                                                                </ngx-mat-datepicker-actions>
                                                             </ngx-mat-datetime-picker>
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Actions-->
+                                               <div class="d-flex gap-3">
                                                 <div class="d-flex flex-stack">
                                                     <button type="button" class="btn btn-lg btn-primary"
                                                         (click)="addUpdateMockintoSchedule(data.mockscheduledata)"
@@ -462,6 +467,17 @@
                                                         </ng-container>
                                                     </button>
                                                 </div>
+                                                <div class="d-flex flex-stack"> <button type="button"
+                                                        class="btn btn-lg btn-primary" (click)="closeDialog()">
+                                                        <ng-container *ngIf="isLoading$ | async"> <span
+                                                                class="indicator-progress" [style.display]="'block'">
+                                                                Please wait... <span
+                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                            </span> </ng-container> <ng-container
+                                                            *ngIf="(isLoading$ | async) === false"> <span
+                                                                class="indicator-label">Cancel</span> </ng-container>
+                                                    </button> </div>
+                                               </div>
                                                 <!--end::Actions-->
                                             </div>
                                             <!--end::Wrapper-->
