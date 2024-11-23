@@ -496,7 +496,6 @@ export class SharedService implements OnDestroy {
     );
   }
 
-
   // Misc Actions
 
   showToaster() {
