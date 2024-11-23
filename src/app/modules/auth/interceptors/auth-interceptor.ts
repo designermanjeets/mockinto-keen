@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { UserModel } from '../models/user.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import * as bootstrap from 'bootstrap';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -74,16 +75,28 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         if (error.status === 417) {
-          (Swal as any).fire({
-            title: 'Something went wrong, reloding the page',
-            text: error.error.message,
-            icon: 'error',
-            showConfirmButton: false,
-            showCancelButton: true,
-            cancelButtonText: 'OK'
-          }).then(() => {
-            window.location.reload();
-          });
+          const error_417 = document.getElementById('kt_docs_toast_error_317');
+          const toast = new bootstrap.Toast(error_417 as any);
+          toast.show();
+          setTimeout(() => {
+            if(localStorage.getItem('kt_docs_error_417')) {
+              localStorage.removeItem('kt_docs_error_417');
+              this.authService.logout();
+            } else {
+              localStorage.setItem('kt_docs_error_417', 'true');
+              window.location.reload();
+            }
+          }, 2000);
+          // (Swal as any).fire({
+          //   title: 'Something went wrong, reloding the page',
+          //   text: error.error.message,
+          //   icon: 'error',
+          //   showConfirmButton: false,
+          //   showCancelButton: true,
+          //   cancelButtonText: 'OK'
+          // }).then(() => {
+          //   window.location.reload();
+          // });
         }
 
         // Other errors

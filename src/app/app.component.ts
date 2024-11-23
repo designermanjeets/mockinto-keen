@@ -21,6 +21,8 @@ import { AuthService } from './modules/auth';
 })
 export class AppComponent implements OnInit {
 
+  private authLocalStorageToken = `auth-user`;
+
   constructor(
     private translationService: TranslationService,
     private modeService: ThemeModeService,
@@ -41,9 +43,15 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.modeService.init();
     this.router.events.subscribe((event) => {
+      const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+        if(Object.keys(loggedInUser).length === 0) {
+          // localStorage.removeItem('isLoggedIn');
+        }
+    });
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-        if(loggedInUser) {
+        if(Object.keys(loggedInUser).length !== 0) {
           const jwtExpired = loggedInUser.jwtExpirationInSec;
           const currentTime = Math.floor(Date.now() / 1000);
           if (jwtExpired && currentTime > jwtExpired - 60) { // refresh token 1 minute before expiration
@@ -55,7 +63,8 @@ export class AppComponent implements OnInit {
             // });
           }
         } else {
-          this.router.navigate(['/auth/login']);
+          localStorage.removeItem(this.authLocalStorageToken);
+          localStorage.removeItem('isLoggedIn');
         }
       }
     });
