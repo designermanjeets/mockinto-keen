@@ -89,8 +89,8 @@
                             </th>
                             <th class="w-250px">Mockinto Schedule Id</th>
                             <th class="w-250px">Job Profile</th>
-                            <th>Created At</th>
-                            <th class="w-125px"></th>
+                            <th class="w-250px">Created At</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,9 +102,9 @@
                                         <!--begin::Item-->
                                         <div class="mb-5">
                                             <!--begin::Header-->
-                                            <div class="accordion-header py-3 d-flex collapse collapsed"
+                                            <div #databastarget class="accordion-header py-3 d-flex collapse collapsed"
                                                 data-bs-toggle="collapse"
-                                                [attr.data-bs-target]="'#kt_accordion_item'+idx">
+                                                [attr.data-bs-target]="'#kt_accordion_item'+idx" (click)="onAccordHeaderClicked(question, idx, databastarget)">
                                                 <section class="d-flex w-100">
                                                     <div class="w-45px">
                                                         <span class="accordion-icon">
@@ -112,10 +112,11 @@
                                                                     class="path1"></span><span class="path2"></span></i>
                                                         </span>
                                                     </div>
-                                                    <div class="w-250px">{{question.schedule.id}}</div>
-                                                    <div class="w-250px">{{question.jobHeader}}</div>
-                                                    <div class="w-450px">{{question.schedule.scheduleStartDate}}</div>
-                                                    <div class="w-125px">&nbsp;</div>
+                                                    <div class="w-250px">{{question.id}}</div>
+                                                    <div class="w-250px">{{question.jobPostingId}}</div>
+                                                    <div class="w-250px">{{question.scheduleStartDate}}</div>
+                                                    <div class="w-250px">{{question.statusDescription}}</div>
+                                                    <div class="w-250px">&nbsp;</div>
                                                 </section>
                                             </div>
                                             <!--end::Header-->
@@ -124,7 +125,7 @@
                                             <div [attr.id]="'kt_accordion_item'+idx" class="fs-6 collapse ps-10"
                                                 [attr.data-bs-parent]="'#kt_accordion'+idx">
 
-                                                <div class="card-body">
+                                                <div class="card-body w-90">
                                                     <!--begin::Table-->
                                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                                         <thead>
@@ -142,67 +143,65 @@
                                                                 <th class="w-125px"></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody class="fw-semibold text-gray-600">
+                                                        <tbody class="fw-semibold text-gray-600 w-100">
                                                             <!--  let ques of question.schedule.botJobCandidateQuestions -->
                                                             <!-- *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;" -->
                                                             <!-- *ngFor="let ques of question.schedule.botJobCandidateQuestions | slice:subQuestionsSlice[j].start:subQuestionsSlice[j].end; let j = index;" -->
-                                                            <ng-container *ngIf="subQuestionsSlice?.length">
-                                                                <tr
-                                                                    *ngFor="let ques of mockintoQuestionsFiltered(idx); let j = index;">
-                                                                    <td>
-                                                                        <div
-                                                                            class="form-check form-check-sm form-check-custom form-check-solid">
-                                                                            <input class="form-check-input"
-                                                                                type="checkbox"
-                                                                                [(ngModel)]="ques.checked"
-                                                                                (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="d-flex align-items-center">
-                                                                            <i
-                                                                                class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                                                            <a (click)="editMockintoQuestion(question, ques, idx, j)"
-                                                                                class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td class="text-end"
-                                                                        data-kt-filemanager-table="action_dropdown">
-                                                                        <div class="d-flex justify-content-end">
-                                                                            <!--begin::Share link-->
-                                                                            <div class="ms-2"
-                                                                                data-kt-filemanger-table="copy_link">
-                                                                                <button type="button"
-                                                                                    class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                    (click)="editMockintoQuestion(question, ques, idx, j)">
+                                                            <tr
+                                                                *ngFor="let ques of question.botJobCandidateQuestionsfiltered; let j = index;">
+                                                                <td>
+                                                                    <div
+                                                                        class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                        <input class="form-check-input"
+                                                                            type="checkbox"
+                                                                            [(ngModel)]="ques.checked"
+                                                                            (ngModelChange)="onRowCheckChange($event, ques, idx, j)" />
+                                                                    </div>
+                                                                </td>
+                                                                <td class="w-250px">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <i
+                                                                            class="ki-duotone ki-files fs-2x text-primary me-4"></i>
+                                                                        <a (click)="editMockintoQuestion(question, ques, idx, j)"
+                                                                            class="text-gray-800 text-hover-primary c-p">{{ques.question}}</a>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="w-250px" class="text-end"
+                                                                    data-kt-filemanager-table="action_dropdown">
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <!--begin::Share link-->
+                                                                        <div class="ms-2"
+                                                                            data-kt-filemanger-table="copy_link">
+                                                                            <button type="button"
+                                                                                class="btn btn-sm btn-icon btn-light btn-active-light-primary"
+                                                                                (click)="editMockintoQuestion(question, ques, idx, j)">
 
-                                                                                    <i class="ki-duotone ki-pencil">
-                                                                                        <span class="path1"></span>
-                                                                                        <span class="path2"></span>
-                                                                                    </i>
+                                                                                <i class="ki-duotone ki-pencil">
+                                                                                    <span class="path1"></span>
+                                                                                    <span class="path2"></span>
+                                                                                </i>
 
-                                                                                </button>
-                                                                            </div>
-                                                                            <!--end::Share link-->
-                                                                            <!--begin::More-->
-                                                                            <div class="ms-2">
-                                                                                <button type="button"
-                                                                                    class="btn btn-sm btn-icon btn-light btn-active-light-primary"
-                                                                                    (click)="deleteMockintoQuestion(ques)">
-                                                                                    <i
-                                                                                        class="ki-duotone ki-trash-square">
-                                                                                        <span class="path1"></span>
-                                                                                        <span class="path2"></span>
-                                                                                        <span class="path3"></span>
-                                                                                        <span class="path4"></span>
-                                                                                    </i>
-                                                                                </button>
-                                                                            </div>
-                                                                            <!--end::More-->
+                                                                            </button>
                                                                         </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </ng-container>
+                                                                        <!--end::Share link-->
+                                                                        <!--begin::More-->
+                                                                        <div class="ms-2">
+                                                                            <button type="button"
+                                                                                class="btn btn-sm btn-icon btn-light btn-active-light-primary"
+                                                                                (click)="deleteMockintoQuestion(ques)">
+                                                                                <i
+                                                                                    class="ki-duotone ki-trash-square">
+                                                                                    <span class="path1"></span>
+                                                                                    <span class="path2"></span>
+                                                                                    <span class="path3"></span>
+                                                                                    <span class="path4"></span>
+                                                                                </i>
+                                                                            </button>
+                                                                        </div>
+                                                                        <!--end::More-->
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                     <!--end::Table-->

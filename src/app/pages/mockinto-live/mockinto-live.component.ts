@@ -32,7 +32,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
   isMeetingProgress: boolean = false;
   mockintoSchedule: any = {};
-  jobPostingId: string = '';
+  scheduleId: string = '';
   jogIDBotQuestions: any = [];
 
   // Speech Systhesizer Functionality Starts Here
@@ -63,12 +63,12 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.jobPostingId = this.router.url.split('/')[3]; // Fixed Position Don't Change the Path in routing
+    this.scheduleId = this.router.url.split('/')[3]; // Fixed Position Don't Change the Path in routing
     this.fetchMockintoScheduleById();
   }
 
   fetchMockintoScheduleById() {
-    this.sharedService.fetchMockintoScheduleById(this.jobPostingId).subscribe((res) => {
+    this.sharedService.fetchMockintoScheduleById(this.scheduleId).subscribe((res) => {
       if(res) {
         this.mockintoSchedule = res;
         console.log(this.mockintoSchedule);
@@ -141,14 +141,14 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         this.resetRecognition();
         this.synth.cancel();
       }
-      this.fetchAllMockintoQuestionsByJobPostingId();
+      this.fetchAllMockintoQuestionsByScheduleId();
     }
   }
 
   endMockintoSchedule() {
     const payload = Object.assign({},
       {
-      "id": this.jobPostingId,
+      "id": this.scheduleId,
       "scheduleStatusId": 3
      
     })
@@ -162,7 +162,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   stopMockintoSchedule(){
     const payload = Object.assign({},
       {
-      "id": this.jobPostingId,
+      "id": this.scheduleId,
       "scheduleStatusId": 3
      
     })
@@ -174,9 +174,9 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
   }
 
-  fetchAllMockintoQuestionsByJobPostingId() {
+  fetchAllMockintoQuestionsByScheduleId() {
     this.isLoading$.next(true);
-    this.sharedService.fetchAllMockintoQuestionsByJobPostingId(this.jobPostingId).subscribe((res) => {
+    this.sharedService.fetchAllMockintoQuestionsByScheduleId(this.scheduleId).subscribe((res) => {
       this.jogIDBotQuestions = res?.content;
       this.isLoading$.next(false);
       if(this.jogIDBotQuestions.length > 0) {
@@ -345,7 +345,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
           },
           
           "interviewSchedule": {
-            "id": this.jobPostingId
+            "id": this.scheduleId
           }
       }
       );

@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { SharedService } from '../services/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -24,7 +24,6 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   mockResume: any;
 
   indicatorprogress = false;
-  isLoading$: Observable<boolean>;
 
   allJobProfiles: any = [];
   allResumes: any = [];
@@ -39,6 +38,10 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   mockQuestion: string = '';
   mockintoSchedules: any = [];
   subQuestionsSlice: any = [];
+
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoading: boolean;
+  private unsubscribe: Subscription[] = [];
 
   // Picker
   @ViewChild('picker') picker: any;
@@ -58,7 +61,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.isLoading$ = this.sharedService.isLoading$;
+    this.isLoading$.next(true);
     this.fetchAllMockintoQuestions();
     this.fetchJobProfiles();
     this.fetchAllMockintoSchedules();
@@ -92,27 +95,17 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   fetchAllMockintoQuestions(page = 0, size = 10) {
-    this.sharedService.isLoadingSubject?.next(true);
+    this.isLoading$.next(true);
     this.sharedService.fetchAllMockintoQuestions(1, page, size).subscribe(
       data => {
         if(data) {
           this.mockintoQuestions = data.content;
           this.paginator.length = data.totalElements;
-          data.content.forEach((item: any, idx: number) => {
-            setTimeout(() => {
-              if(this.paginatorSub.toArray()[idx]) {
-                this.paginatorLength[idx] = item.schedule.botJobCandidateQuestions.length;
-                const paginators = this.paginatorSub.toArray();
-                const start = paginators[idx].pageIndex * paginators[idx].pageSize;
-                const end = start + paginators[idx].pageSize;
-                this.subQuestionsSlice.splice(idx, 0, { start, end });
-                this.cdRef.detectChanges();
-              }
-            }, 100);
-          });
+          this.isLoading$.next(false);
+          this.cdRef.detectChanges();
         }
         this.resetSelection();
-        this.sharedService.isLoadingSubject?.next(false);
+        this.isLoading$.next(false);
         this.cdRef.detectChanges();
       }
     );
@@ -259,6 +252,34 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     return obj;
   }
 
+  onAccordHeaderClicked(schedule: any, idx: number, databastarget: HTMLElement) {
+    if(databastarget.getAttribute('aria-expanded') === 'true') {
+      this.fetchAllMockintoQuestionsByScheduleId(schedule, idx);
+    }
+  }
+
+  fetchAllMockintoQuestionsByScheduleId(schedule: any, idx: number) {
+    this.isLoading$.next(true);
+    this.sharedService.fetchAllMockintoQuestionsByScheduleId(schedule.id).subscribe((res) => {
+      if(res) {
+        if(res?.content.length > 0) {
+          schedule['botJobCandidateQuestions'] = res.content as any;
+          if(this.paginatorSub.toArray()[idx]) {
+            this.paginatorLength[idx] = res.content.length;
+            const paginators = this.paginatorSub.toArray();
+            const start = paginators[idx].pageIndex * paginators[idx].pageSize;
+            const end = start + paginators[idx].pageSize;
+            schedule['botJobCandidateQuestionsfiltered'] = JSON.parse(JSON.stringify(res.content)).slice(start, end);
+            this.cdRef.detectChanges();
+          }
+          
+        }
+      }
+      this.isLoading$.next(false);
+      this.cdRef.detectChanges();
+    });
+  }
+
   onSubMasterChange(event: any, idx: number) {
     this.masterCheckbox = event;
     const filteredQuestions = this.mockintoQuestionsFiltered(idx);
@@ -291,7 +312,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     const paginators = this.paginatorSub.toArray();
     const start = paginators[idx].pageIndex * paginators[idx].pageSize;
     const end = start + paginators[idx].pageSize;
-    this.subQuestionsSlice[idx] = { start, end };
+    this.mockintoQuestions[idx].botJobCandidateQuestionsfiltered = JSON.parse(JSON.stringify(this.mockintoQuestions[idx].botJobCandidateQuestions)).slice(start, end);
     this.cdRef.detectChanges();
   }
 

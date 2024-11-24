@@ -1,6 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
-import { map, catchError, switchMap, finalize } from 'rxjs/operators';
+import { map, catchError, switchMap, finalize, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import * as bootstrap from 'bootstrap';
 @Injectable({
   providedIn: 'root',
 })
-export class SharedService implements OnDestroy {
+export class SharedService implements OnInit, OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
   private authLocalStorageToken = `auth-user`;
@@ -31,6 +31,15 @@ export class SharedService implements OnDestroy {
     private router: Router,
     private http: HttpClient
   ) {
+    this.setUpAuthUser();
+  }
+
+  ngOnInit(): void {
+    this.setUpAuthUser();
+  }
+
+  setUpAuthUser() {
+    this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
     if(Object.keys(this.authUser).length === 0) {
       this.router.navigate(['/auth/login']);
     } else {
@@ -45,6 +54,8 @@ export class SharedService implements OnDestroy {
   }
 
   fetchDashboardData(): Observable<any> {
+    this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
+    this.setUpAuthUser();
     this.isLoadingSubject?.next(true);
     return this.http.get<any>(`${environment.apiUrl}/candidate/dashboard?candidateId=${this.candidateId}&tenantId=${this.tenantId}`)
     .pipe(
@@ -452,9 +463,9 @@ export class SharedService implements OnDestroy {
 
   // Live Mockinto
 
-  fetchAllMockintoQuestionsByJobPostingId(jobPostingId: any): Observable<any> {
+  fetchAllMockintoQuestionsByScheduleId(scheduleId: any, page: number = 0, pageSize: number = 99): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/schedule/all?scheduleId=${jobPostingId}`)
+    return this.http.get<any>(`${environment.apiUrl}/botJobCandidateQuestion/schedule/all?scheduleId=${scheduleId}&page=${page}&size=${pageSize}`)
     .pipe(
       map((data: any) => {
         return data;
