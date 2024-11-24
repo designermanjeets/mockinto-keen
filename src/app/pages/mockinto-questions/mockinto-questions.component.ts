@@ -204,31 +204,29 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
 
   addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
     this.isLoading$.next(true);
-    mockSchedule.botJobCandidateQuestions[j].question = this.mockQuestion;
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-    const payload = Object.assign({},
-      mockSchedule.botJobCandidateQuestions[j],
-      {
-        "question": this.mockQuestion,
-        "candidate": {
-          "id": loggedInUser.id,
-        },
-        "jobPosting": {
-          "id": mockSchedule.jobPostingId,
-        },
-        "tenant": {
-          "id": loggedInUser.tenant_id,
-        },
-        "interviewSchedule": {
-          "id": mockSchedule.id,
-        },
-    });
-
     if(mockSchedule) {
+      mockSchedule.botJobCandidateQuestions[j].question = this.mockQuestion;
+      const payload = Object.assign({},
+        mockSchedule.botJobCandidateQuestions[j],
+        {
+          "question": this.mockQuestion,
+          "candidate": {
+            "id": loggedInUser.id,
+          },
+          "jobPosting": {
+            "id": mockSchedule.jobPostingId,
+          },
+          "tenant": {
+            "id": loggedInUser.tenant_id,
+          },
+          "interviewSchedule": {
+            "id": mockSchedule.id,
+          },
+      });
       this.sharedService.updateMockintoQuestion(payload)
-      .pipe(
-        timeout({ first: 5_000 }),
-      ).subscribe(data => {
+      .pipe( timeout({ first: 5_000 }))
+      .subscribe(data => {
         this.isLoading$.next(false);
         this.closeDialog();
         this.fetchAllMockintoQuestions();
@@ -243,14 +241,35 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         this.fetchAllMockintoQuestions();
       });
     } else {
-      const payload = Object.assign({}, mockSchedule.schedule );
-      // this.sharedService.addMockintoQuestion(payload).subscribe(data => {
-      //   if(data) {
-      //     this.isLoading$.next(false);
-      //     this.closeDialog();
-      //     this.fetchAllMockintoQuestions();
-      //   }
-      // });
+      const payload = Object.assign({},
+        {
+          "question": this.mockQuestion,
+          "candidate": {
+            "id": loggedInUser.id,
+          },
+          "tenant": {
+            "id": loggedInUser.tenant_id,
+          },
+          "interviewSchedule": {
+            "id": this.mockScheduleID,
+          },
+      });
+      this.sharedService.addMockintoQuestion(payload)
+      .pipe( timeout({ first: 5_000 }))
+      .subscribe(data => {
+        this.isLoading$.next(false);
+        this.closeDialog();
+        this.fetchAllMockintoQuestions();
+      }, (error) => {
+        if (error.error instanceof ProgressEvent) {
+          console.error('Possible CORS or network issue');
+        } else {
+          console.error('Error details:', error.error);
+        }
+        this.isLoading$.next(false);
+        this.closeDialog();
+        this.fetchAllMockintoQuestions();
+      });
     }
   }
 
