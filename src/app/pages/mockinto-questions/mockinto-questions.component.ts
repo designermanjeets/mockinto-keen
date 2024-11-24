@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, timeout } from 'rxjs';
 import { SharedService } from '../services/shared.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -87,6 +87,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       data => {
         if(data) {
           this.mockintoSchedules = data.content;
+          console.log(this.mockintoSchedules)
         }
         this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
@@ -173,7 +174,8 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterOpened().subscribe(result => {
-      this.mockJobProfile = mockSchedule.jobPostingId;
+      this.mockJobProfile = mockSchedule;
+      this.mockScheduleID = mockSchedule.id;
       this.mockQuestion = mockQuestionData.question;
       this.cdRef.detectChanges();
     });
@@ -184,6 +186,9 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   addMockintoQuestionDialog() {
+    this.mockJobProfile = null;
+    this.mockScheduleID = null;
+    this.mockQuestion = '';
     const dialogRef = this.dialog.open(this.addDialogTemplate, {
       data: { },
     });
@@ -198,11 +203,11 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   }
 
   addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
-    this.sharedService.isLoadingSubject?.next(true);
-    mockSchedule.schedule.botJobCandidateQuestions[j].question = this.mockQuestion;
+    this.isLoading$.next(true);
+    mockSchedule.botJobCandidateQuestions[j].question = this.mockQuestion;
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const payload = Object.assign({},
-      mockSchedule.schedule.botJobCandidateQuestions[j],
+      mockSchedule.botJobCandidateQuestions[j],
       {
         "question": this.mockQuestion,
         "candidate": {
@@ -215,23 +220,33 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
           "id": loggedInUser.tenant_id,
         },
         "interviewSchedule": {
-          "id": mockSchedule.schedule.id,
+          "id": mockSchedule.id,
         },
     });
 
     if(mockSchedule) {
-      this.sharedService.updateMockintoQuestion(payload).subscribe(data => {
-        if(data) {
-          this.sharedService.isLoadingSubject?.next(false);
-          this.closeDialog();
-          this.fetchAllMockintoQuestions();
+      this.sharedService.updateMockintoQuestion(payload)
+      .pipe(
+        timeout({ first: 5_000 }),
+      ).subscribe(data => {
+        this.isLoading$.next(false);
+        this.closeDialog();
+        this.fetchAllMockintoQuestions();
+      }, (error) => {
+        if (error.error instanceof ProgressEvent) {
+          console.error('Possible CORS or network issue');
+        } else {
+          console.error('Error details:', error.error);
         }
+        this.isLoading$.next(false);
+        this.closeDialog();
+        this.fetchAllMockintoQuestions();
       });
     } else {
       const payload = Object.assign({}, mockSchedule.schedule );
       // this.sharedService.addMockintoQuestion(payload).subscribe(data => {
       //   if(data) {
-      //     this.sharedService.isLoadingSubject?.next(false);
+      //     this.isLoading$.next(false);
       //     this.closeDialog();
       //     this.fetchAllMockintoQuestions();
       //   }

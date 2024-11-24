@@ -383,7 +383,7 @@ export class SharedService implements OnInit, OnDestroy {
         return data;
       }),
       catchError((err) => {
-        return of(undefined);
+        return of(err);
       }),
       finalize(() => this.isLoadingSubject?.next(false))
     );

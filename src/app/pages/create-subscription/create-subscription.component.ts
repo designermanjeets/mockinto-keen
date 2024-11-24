@@ -142,14 +142,14 @@ export class CreateSubscriptionComponent implements OnInit {
                 features: this.selectedPlan.features || ['Basic Feature'], // Fetch features if available
                 duration: this.selectedPlan.planDuration || 1, // e.g., 12 months
                 createdDate: new Date().toISOString(),
-                deleted: false,
+                deleted: 0,
                 lastUpdatedDate: new Date().toISOString(),
               },
               user: {
                 id: this.logginInUser.id, // Fetch from user session or database
                 active: result.status === 'succeeded' ? 'true' : 'false',
                 createdDate: result.created,
-                deleted: false,
+                deleted: 0,
                 lastUpdatedDate: new Date().toISOString(),
                 name: this.logginInUser.username,
                 primaryContactEmail: this.logginInUser.email_id,
@@ -158,7 +158,7 @@ export class CreateSubscriptionComponent implements OnInit {
               },
               startDate: new Date().toISOString(),
               status: result.status === 'succeeded' ? 'true' : 'false',
-              deleted: false,
+              deleted: 0,
             };
 
             this.updateBackendForPlanChange(backendPayload);

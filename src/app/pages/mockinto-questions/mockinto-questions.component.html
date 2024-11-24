@@ -429,7 +429,7 @@
                                                         class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
                                                         <span class="required">Mockinto Schedule ID</span>
                                                         <span class="ms-1" data-bs-toggle="tooltip"
-                                                            title="Specify Job Profile">
+                                                            title="Specify Schedule ID">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
                                                                 <span class="path1"></span>
                                                                 <span class="path2"></span>
@@ -441,43 +441,16 @@
                                                     <!--begin::Input-->
                                                     <select class="form-select form-select-solid"
                                                         placeholder="Select Mockinto Schedule ID"
+                                                        [disabled]="data.mockQuestionData"
                                                         aria-label="Select Mockinto Schedule ID" name="mockScheduleID"
                                                         [(ngModel)]="mockScheduleID">
                                                         <option value="">--select--</option>
                                                         <option *ngFor="let opt of mockintoSchedules"
-                                                            [value]="opt.schedule.id">{{opt.schedule.id}}</option>
+                                                            [value]="opt.id">{{opt.id}}</option>
                                                     </select>
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->
-                                                <!--begin::Input group-->
-                                                <div class="fv-row mb-8">
-                                                    <!--begin::Label-->
-                                                    <label
-                                                        class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
-                                                        <span class="required">Job Profile</span>
-                                                        <span class="ms-1" data-bs-toggle="tooltip"
-                                                            title="Specify Resume">
-                                                            <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                                <span class="path3"></span>
-                                                            </i>
-                                                        </span>
-                                                    </label>
-                                                    <!--end::Label-->
-                                                    <!--begin::Input-->
-                                                    <select class="form-select form-select-solid"
-                                                        placeholder="Select Job Profile" aria-label="Select Job Profile"
-                                                        name="mockJobProfile" [(ngModel)]="mockJobProfile">
-                                                        <option value="">--select--</option>
-                                                        <option *ngFor="let job of allJobProfiles" [value]="job.id">
-                                                            {{job.jobHeader}}</option>
-                                                    </select>
-                                                    <!--end::Input-->
-                                                </div>
-                                                <!--end::Input group-->
-
                                                 <!--begin::Input group-->
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Label-->
@@ -506,32 +479,27 @@
 
                                                 <!--begin::Actions-->
                                                <div class="d-flex gap-3">
-                                                <div class="d-flex flex-stack">
-                                                    <button type="button" class="btn btn-lg btn-primary"
-                                                        (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)"
-                                                        [disabled]="!mockJobProfile || !mockQuestion">
-                                                        <ng-container *ngIf="isLoading$ | async">
-                                                            <span class="indicator-progress" [style.display]="'block'">
-                                                                Please wait...
-                                                                <span
-                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </span>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="(isLoading$ | async) === false">
-                                                            <span class="indicator-label">Submit</span>
-                                                        </ng-container>
-                                                    </button>
-                                                </div>
-                                                <div class="d-flex flex-stack"> <button type="button"
-                                                        class="btn btn-lg btn-primary" (click)="closeDialog()">
-                                                        <ng-container *ngIf="isLoading$ | async"> <span
-                                                                class="indicator-progress" [style.display]="'block'">
-                                                                Please wait... <span
-                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </span> </ng-container> <ng-container
-                                                            *ngIf="(isLoading$ | async) === false"> <span
-                                                                class="indicator-label">Cancel</span> </ng-container>
-                                                    </button> </div>
+                                                    <div class="d-flex flex-stack">
+                                                        <button type="button" class="btn btn-lg btn-primary"
+                                                            (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)"
+                                                            [disabled]="!mockJobProfile || !mockQuestion">
+                                                            <ng-container *ngIf="isLoading$ | async">
+                                                                <span class="indicator-progress" [style.display]="'block'">
+                                                                    Please wait...
+                                                                    <span
+                                                                        class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                                </span>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="(isLoading$ | async) === false">
+                                                                <span class="indicator-label">Submit</span>
+                                                            </ng-container>
+                                                        </button>
+                                                    </div>
+                                                    <div class="d-flex flex-stack">
+                                                        <button type="button" class="btn btn-lg btn-primary" (click)="closeDialog()">
+                                                            <span class="indicator-label">Cancel</span> 
+                                                        </button> 
+                                                    </div>
                                                </div>
                                                 <!--end::Actions-->
                                             </div>
