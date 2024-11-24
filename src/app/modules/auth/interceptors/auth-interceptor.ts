@@ -79,13 +79,13 @@ export class AuthInterceptor implements HttpInterceptor {
           const toast = new bootstrap.Toast(error_417 as any);
           toast.show();
           setTimeout(() => {
-            if(localStorage.getItem('kt_docs_error_417')) {
-              localStorage.removeItem('kt_docs_error_417');
-              this.authService.logout();
-            } else {
-              localStorage.setItem('kt_docs_error_417', 'true');
-              window.location.reload();
-            }
+            // if(localStorage.getItem('kt_docs_error_417')) {
+            //   localStorage.removeItem('kt_docs_error_417');
+            //   this.authService.logout();
+            // } else {
+            //   localStorage.setItem('kt_docs_error_417', 'true');
+            //   window.location.reload();
+            // }
           }, 2000);
           // (Swal as any).fire({
           //   title: 'Something went wrong, reloding the page',

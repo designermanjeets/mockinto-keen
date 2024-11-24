@@ -330,15 +330,14 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
       const payload = Object.assign({},
       {
-        "active": "1",
-        "deleted": "0",
-        "responseAudioS3Path": "string",
+        "active": 1,
+        "deleted": 0,
+        "responseAudioS3Path": "",
         "responseTranscript": this.candidateAnswers,
-        "responseVideoS3Path": "string",
+        "responseVideoS3Path": "",
         "updatedBy": 1,
         "botJobCandidateQuestion": {
           "id": this.jogIDBotQuestions[this.currentQuestionIndex]?.id
-       
        },
           "tenant": {
             "id": loggedInUser.tenant_id,
@@ -353,6 +352,14 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         if(data){
           this.candidateAnswers = ''
         }
+      }, error=>{
+        (Swal as any).fire({
+          title: 'Error',
+          text: error.error.message,
+          icon: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'OK',
+        });
       })
       this.startWebkitSpeechRecognition(this.jogIDBotQuestions[this.currentQuestionIndex].question);
     } else {

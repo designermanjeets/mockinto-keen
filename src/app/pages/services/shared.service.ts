@@ -224,6 +224,9 @@ export class SharedService implements OnInit, OnDestroy {
 
   fetchAllMockintoSchedules(status: number, page: number, size: number, sortField: string, sortDirection: string): Observable<any> {
     this.isLoadingSubject?.next(true);
+    if(!this.candidateId) {
+      return of(Error('No Candidate Found'));
+    }
     return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/candidate/all?candidateId=${this.candidateId}&status=${status}&page=${page}&size=${size}&sortField=${sortField}&sortDirection=${sortDirection}`)
     .pipe(
       map((data: any) => {
@@ -479,7 +482,6 @@ export class SharedService implements OnInit, OnDestroy {
 
   saveCandidateAnswer(candidateAnswer: any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    console.log(candidateAnswer);
     return this.http.post<any>(`${environment.apiUrl}/botJobCandidateQuestionResponse`, candidateAnswer)
     .pipe(
       map((data: any) => {
