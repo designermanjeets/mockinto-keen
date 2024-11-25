@@ -204,7 +204,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
 
   addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
     this.isLoading$.next(true);
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     if(mockSchedule) {
       mockSchedule.botJobCandidateQuestions[j].question = this.mockQuestion;
       const payload = Object.assign({},

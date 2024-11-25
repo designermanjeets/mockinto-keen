@@ -238,7 +238,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   addUpdateMockintoSchedule(patchValue?: any) {
     this.sharedService.isLoadingSubject?.next(true);
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     if(patchValue) {
       const payload = Object.assign({},
         {
@@ -254,7 +254,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
               "deleted": 0,
               "updatedBy": 0,
               "tenant": {
-                  "id": loggedInUser.tenant.id
+                  "id": loggedInUser.tenant_id
               }
           },
           "resume": {
@@ -284,7 +284,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
             "deleted": 0,
             "updatedBy": 0,
             "tenant": {
-                "id": loggedInUser.tenant.id
+                "id": loggedInUser.tenant_id
             }
         },
         "resume": {

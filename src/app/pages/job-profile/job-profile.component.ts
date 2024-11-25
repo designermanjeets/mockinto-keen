@@ -170,7 +170,7 @@ export class JobProfileComponent implements OnInit {
 
   addUpdatejobDescription(patchValue?: any) {
     const tags = this.fruits?.map((item: any) => item).join(',');
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     this.sharedService.isLoadingSubject?.next(true);
     if(Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
       const payload = {
@@ -197,7 +197,7 @@ export class JobProfileComponent implements OnInit {
         "updatedBy": "0",
         "jobTags": tags,
         "tenant": {
-            "id": loggedInUser.tenant.id
+            "id": loggedInUser.tenant_id
         }
       };
       this.sharedService.addJobProfile(payload).subscribe(

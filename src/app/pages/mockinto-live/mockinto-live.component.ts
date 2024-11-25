@@ -327,7 +327,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     this.currentQuestionIndex++;
     if(this.currentQuestionIndex < this.jogIDBotQuestions.length) {
       this.isReadyForNextQuestion = false;
-      const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+      const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
       const payload = Object.assign({},
       {
         "active": 1,
