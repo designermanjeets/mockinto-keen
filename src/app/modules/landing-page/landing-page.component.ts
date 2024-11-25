@@ -1,4 +1,4 @@
-import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
 
@@ -8,6 +8,11 @@ import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
   styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
+  @ViewChild('featuresSection') featuresSection!: ElementRef;
+  @ViewChild('faqSection') faqSection!: ElementRef;
+  @ViewChild('allPlanSection') allPlanSection!: ElementRef;
+
+
   faqs = [
     {
       question: 'Can this be used for ordinary people with the world of technology?',
@@ -133,6 +138,33 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   getPlans(): void {
 
+  }
+
+  scrollToFeatures(): void {
+    if (this.featuresSection) {
+      this.featuresSection.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start', 
+      });
+    }
+  }
+
+  scrollToFaq(): void {
+    if (this.faqSection) {
+      this.faqSection.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start', 
+      });
+    }
+  }
+
+  scrollToAllPlan(): void {
+    if (this.allPlanSection) {
+      this.allPlanSection.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start', 
+      });
+    }
   }
 
 }
