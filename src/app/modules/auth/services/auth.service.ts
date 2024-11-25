@@ -48,6 +48,9 @@ export class AuthService implements OnDestroy {
 
   login(username: string | undefined, password: string | undefined, rememberMe: boolean = true): Observable<UserType> {
     this.isLoadingSubject.next(true);
+    localStorage.removeItem('unAuthSelectededPlan');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem(this.authLocalStorageToken);
     return this.http.post<any>(`${environment.apiUrl}/authenticate`, { username, password, rememberMe })
     .pipe(
       map((auth: AuthModel) => {
