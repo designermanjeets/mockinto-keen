@@ -46,7 +46,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
   // Keep Track of Current Question
   currentQuestionIndex: number = 0;
-  candidateAnswers: any = [];
+  candidateAnswers: any;
   mockintoQueAnsBank: any = [];
   botQuestion:any ;
 

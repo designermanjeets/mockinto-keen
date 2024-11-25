@@ -17,9 +17,9 @@
                 <!-- Menu Items -->
                 <div class="collapse navbar-collapse" id="navbarMenu">
                     <ul class="navbar-nav mx-auto text-center mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link c-p">Features</a></li>
-                        <li class="nav-item"><a class="nav-link c-p">FAQ'S</a></li>
-                        <li class="nav-item"><a class="nav-link c-p">All Plans</a></li>
+                        <li class="nav-item"><a class="nav-link c-p" (click)="scrollToFeatures()">Features</a></li>
+                        <li class="nav-item"><a class="nav-link c-p" (click)="scrollToFaq()">FAQ'S</a></li>
+                        <li class="nav-item"><a class="nav-link c-p" (click)="scrollToAllPlan()">All Plans</a></li>
                     </ul>
                     <!-- Buttons -->
                     <div class="d-flex mt-3 mt-lg-0 toggle-bar">
@@ -97,7 +97,7 @@
 
 <!-- FEATURE CARD START -->
 
-<section class="section-padd" id="Features">
+<section class="section-padd" id="Features" #featuresSection>
     <div class="feature-container container feature-section">
         <div class="feature-image">
             <img src="./assets/media/hr-img.jpg" alt="Customer Support">
@@ -201,7 +201,7 @@
 <!-- EXPLATION SECTION END -->
 
 <!-- FAQ SECTION START -->
-<section class="section-padd">
+<section class="section-padd" #faqSection>
     <div class="container">
         <div class="col-lg-12 text-center">
             <div class="text-head text-center d-flex justify-content-center flex-column align-items-center faq-section">
@@ -234,7 +234,7 @@
 
 <!-- PRICING PLAN SECTION START -->
 
-<section class="section-padd">
+<section class="section-padd" #allPlanSection>
     <div class="container price-plan">
         <div class="col-lg-12 text-center">
             <div class="text-head text-center d-flex justify-content-center flex-column align-items-center">
@@ -394,9 +394,9 @@
                     <p>Mockinto: Your AI mock interview partner—practice, prepare, and land your dream job with
                         confidence!</p>
                     <ul class="d-flex gap-2 ">
-                        <li><a class="c-p">Features</a></li>
-                        <li><a class="c-p">FAQ'S</a></li>
-                        <li><a class="c-p">All Plans</a></li>
+                        <li><a class="c-p" (click)="scrollToFeatures()">Features</a></li>
+                        <li><a class="c-p" (click)="scrollToFaq()">FAQ'S</a></li>
+                        <li><a class="c-p" (click)="scrollToAllPlan()">All Plans</a></li>
                     </ul>
                     <ul class="d-flex gap-3 mt-5 social-tag d-none">
                         <li>

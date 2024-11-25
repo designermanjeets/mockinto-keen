@@ -147,7 +147,7 @@ export class CreateSubscriptionComponent implements OnInit {
               },
               user: {
                 id: this.logginInUser.id, // Fetch from user session or database
-                active: result.status === 'succeeded' ? 'true' : 'false',
+                active: result.status === 'succeeded' ? '1' : '0',
                 createdDate: result.created,
                 deleted: 0,
                 lastUpdatedDate: new Date().toISOString(),
@@ -157,7 +157,7 @@ export class CreateSubscriptionComponent implements OnInit {
                 timezone: this.logginInUser.candidates[0].preferredTimezone || 'UTC',
               },
               startDate: new Date().toISOString(),
-              status: result.status === 'succeeded' ? 'true' : 'false',
+              status: result.status === 'succeeded' ? '1' : '0',
               deleted: 0,
             };
 

@@ -481,7 +481,7 @@
                                                <div class="d-flex gap-3">
                                                     <div class="d-flex flex-stack">
                                                         <button type="button" class="btn btn-lg btn-primary"
-                                                            (click)="addUpdateMockintoQuestion(data.mockSchedule, data.mockQuestionData, data.idx, data.j)"
+                                                            (click)="addUpdateMockintoQuestion(data.mockSchedule, mockintoSchedules, data.mockQuestionData, data.idx, data.j)"
                                                             [disabled]="!mockScheduleID || !mockQuestion">
                                                             <ng-container *ngIf="isLoading$ | async">
                                                                 <span class="indicator-progress" [style.display]="'block'">
