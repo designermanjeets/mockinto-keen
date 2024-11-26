@@ -332,7 +332,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   resetSelection() {
     this.masterCheckbox = false;
     this.someChecked = [];
-    this.mockintoSchedules.forEach((item: any) => item.checked = false);
+    this.mockintoSchedules?.forEach((item: any) => item.checked = false);
   }
 
   onPageChange(event: any) {

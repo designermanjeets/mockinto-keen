@@ -182,6 +182,14 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       if(this.jogIDBotQuestions.length > 0) {
         this.isMeetingProgress = true;
         this.startWebkitSpeechRecognition(this.jogIDBotQuestions[this.currentQuestionIndex].question);
+      } else {
+        (Swal as any).fire({
+          title: 'Error',
+          text: 'No Questions Found for this Mockinto Schedule!',
+          icon: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'OK',
+        });
       }
     });
   }
