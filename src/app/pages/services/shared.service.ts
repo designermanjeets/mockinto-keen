@@ -325,6 +325,7 @@ export class SharedService implements OnInit, OnDestroy {
   editProfile(profile: any): Observable<any> {
     const payload = {
       ...profile,
+      id: this.candidateId,
       tenant: { id: this.tenantId }
     }
     this.isLoadingSubject?.next(true);
@@ -395,6 +396,20 @@ export class SharedService implements OnInit, OnDestroy {
   deleteMockintoQuestionBulk(mockintoQuestions: any): Observable<any> {
     this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/interviewSchedule/all`, { body: mockintoQuestions })
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+  
+  deleteMockintoQuestion(mockintoQuestions: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.delete<any>(`${environment.apiUrl}/botJobCandidateQuestion?botJobCandidateQuestionId=${mockintoQuestions}`)
     .pipe(
       map((data: any) => {
         return data;
@@ -504,6 +519,21 @@ export class SharedService implements OnInit, OnDestroy {
       }),
       catchError((err) => {
         return of(new Error('Error Updating Plan'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+  getConfigAll(): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=1`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
       }),
       finalize(() => this.isLoadingSubject?.next(false))
     );

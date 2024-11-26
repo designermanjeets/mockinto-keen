@@ -156,6 +156,8 @@ export class JobProfileComponent implements OnInit {
       this.jobName = '';
       this.jobDescription = '';
       this.fruits = [];
+      this.fruitInput.nativeElement.value = '';
+      this.fruitCtrl.setValue(null);
       this.cdRef.detectChanges();
     });
 

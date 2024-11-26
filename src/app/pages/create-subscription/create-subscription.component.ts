@@ -136,31 +136,20 @@ export class CreateSubscriptionComponent implements OnInit {
             const backendPayload = {
               plan: {
                 id: 1, //this.selectedPlan.id,
-                name: this.selectedPlan.planname || 'Starter',
-                description: this.selectedPlan.planDescription || 'Starter Description',
-                price: result.amount / 100, // Stripe amount is in cents, convert to dollars
-                features: this.selectedPlan.features || ['Basic Feature'], // Fetch features if available
-                duration: this.selectedPlan.planDuration || 1, // e.g., 12 months
-                createdDate: new Date().toISOString(),
-                deleted: 0,
-                lastUpdatedDate: new Date().toISOString(),
               },
-              user: {
-                id: this.logginInUser.id, // Fetch from user session or database
-                active: result.status === 'succeeded' ? '1' : '0',
-                createdDate: result.created,
-                deleted: 0,
-                lastUpdatedDate: new Date().toISOString(),
-                name: this.logginInUser.username,
-                primaryContactEmail: this.logginInUser.email_id,
-                primaryContactPhone: this.logginInUser.candidates[0].candidatePhone,
-                timezone: this.logginInUser.candidates[0].preferredTimezone || 'UTC',
-              },
-              startDate: new Date().toISOString(),
-              status: result.status === 'succeeded' ? '1' : '0',
-              deleted: 0,
-            };
 
+              tenant: {
+              id: this.logginInUser.tenant_id
+            },
+              startDate: new Date().toISOString(),
+              status: result.status === 'succeeded' ? true : false,
+              deleted: 0,
+              endDate: new Date().toISOString(),
+              lastPaymentDate: new Date().toISOString(),
+              lastPaymentAmount: this.amount,
+              renewalDate: new Date().toISOString(),
+              futureDiscount: 0,
+            };
             this.updateBackendForPlanChange(backendPayload);
           }
         },

@@ -129,7 +129,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         return;
       }
       if(result.isConfirmed) {
-        this.sharedService.deleteMockintoQuestionBulk([{ id: profile.schedule.id }]).subscribe(
+        this.sharedService.deleteMockintoQuestion(profile.id).subscribe(
           data => {
             this.fetchAllMockintoQuestions();
           }
@@ -157,7 +157,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       if(result.isConfirmed) {
         const profiles_filter = this.mockintoQuestions.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
-          return { id: item.schedule.id };
+          return { id: item?.id };
         });
         this.sharedService.deleteMockintoQuestionBulk(profiles).subscribe(
           data => {

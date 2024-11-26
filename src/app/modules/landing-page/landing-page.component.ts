@@ -1,5 +1,6 @@
 import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedService } from 'src/app/pages/services/shared.service';
 import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
 
 @Component({
@@ -43,6 +44,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private cdRef: ChangeDetectorRef,
     private plutoService: StripeMockintoService,
+    private sharedService: SharedService,
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +58,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     this.updateLogoVisibility();
 
     this.fetchAllPlans();
+    this.getConfig();
   }
+
+
+  getConfig(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getConfigAll().subscribe(
+      data => {
+        if(data) {
+          // Without Token Need Plans Data
+        }
+      }
+    ); 
+
+  }
+
+
 
   fetchAllPlans() {
     this.plutoService.getAllPlans().subscribe((res) => {

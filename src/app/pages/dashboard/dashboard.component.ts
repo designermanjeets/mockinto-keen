@@ -38,6 +38,7 @@ export class DashboardComponent implements OnInit {
   };
 
   dashboardData!: any;
+  plansData: any[] = [];
 
   constructor(
     private sharedService: SharedService,
@@ -53,6 +54,7 @@ export class DashboardComponent implements OnInit {
     } else {
       this.fetchDashboardData();
     }
+    this.getConfig();
   }
 
   fetchDashboardData() {
@@ -67,6 +69,20 @@ export class DashboardComponent implements OnInit {
         this.cdr.detectChanges();
       }
     );
+  }
+
+
+  getConfig(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getConfigAll().subscribe(
+      data => {
+        if(data) {
+         this.plansData = data.filter((item:any) => item.category === 'plan');
+         localStorage.setItem('general_config',JSON.stringify(this.plansData));
+        }
+      }
+    ); 
+
   }
 
   goToMockintoSchedule() {
