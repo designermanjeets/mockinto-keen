@@ -137,7 +137,6 @@ export class CreateSubscriptionComponent implements OnInit {
               plan: {
                 id: 1, //this.selectedPlan.id,
               },
-
               tenant: {
               id: this.logginInUser.tenant_id
             },
