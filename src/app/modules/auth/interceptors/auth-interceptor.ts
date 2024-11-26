@@ -7,6 +7,8 @@ import { UserModel } from '../models/user.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
+import { v4 as uuid } from 'uuid';
+
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -21,11 +23,21 @@ export class AuthInterceptor implements HttpInterceptor {
     const authUser = this.getAuthUser();
     const authToken = authUser?.token;
     let authReq = req;
-
+   
+    const correlationId = uuid();
     if (authToken && !req.url.includes('https://api.stripe.com/')) {
       authReq = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${authToken}`,
+          correlationId : correlationId
+        }
+      });
+    }
+
+    else {
+      authReq = req.clone({
+        setHeaders: {
+          correlationId: correlationId 
         }
       });
     }
@@ -118,7 +130,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         const authReq = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${user.token}`
+            //Authorization: `Bearer ${user.token}`
           }
         });
 

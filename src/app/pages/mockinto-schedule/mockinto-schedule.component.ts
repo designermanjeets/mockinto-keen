@@ -116,7 +116,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         return;
       }
       if(result.isConfirmed) {
-        this.sharedService.deleteMockintoScheduleBulk([{ id: profile.schedule.id }]).subscribe(
+        this.sharedService.deleteMockintoScheduleBulk([{ id: profile?.id }]).subscribe(
           data => {
             this.fetchAllMockintoSchedules();
           }
@@ -144,7 +144,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       if(result.isConfirmed) {
         const profiles_filter = this.mockintoSchedules.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
-          return { id: item.schedule.id };
+          return { id: item?.id };
         });
         this.sharedService.deleteMockintoScheduleBulk(profiles).subscribe(
           data => {
@@ -162,8 +162,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterOpened().subscribe(result => {
       this.mockJobProfile = mockscheduledata.jobPostingId;
-      this.mockResume = mockscheduledata.schedule.resume.id;
-      this.dateControl.patchValue(new Date(mockscheduledata.schedule.scheduleStartDate));
+      this.mockResume = mockscheduledata?.resumeId;
+      this.dateControl.patchValue(new Date(mockscheduledata?.scheduleStartDate));
       this.cdRef.detectChanges();
     });
 
@@ -179,6 +179,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterOpened().subscribe(result => {
       const newDate = new Date();
+      this.mockResume = "";
+      this.mockJobProfile = "";
       newDate.setMinutes(newDate.getMinutes() + 31);
       this.dateControl.patchValue(newDate);
       this.dateControl.valueChanges.subscribe((value) => {
@@ -242,6 +244,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     if(patchValue) {
       const payload = Object.assign({},
         {
+          "id": patchValue.id,
           "active": 1,
           "deleted": 0,
           "interviewPeriodMinutes": 0,

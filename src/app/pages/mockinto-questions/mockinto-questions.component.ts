@@ -129,7 +129,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         return;
       }
       if(result.isConfirmed) {
-        this.sharedService.deleteMockintoQuestionBulk([{ id: profile.schedule.id }]).subscribe(
+        this.sharedService.deleteMockintoQuestion(profile.id).subscribe(
           data => {
             this.fetchAllMockintoQuestions();
           }
@@ -157,7 +157,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       if(result.isConfirmed) {
         const profiles_filter = this.mockintoQuestions.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
-          return { id: item.schedule.id };
+          return { id: item?.id };
         });
         this.sharedService.deleteMockintoQuestionBulk(profiles).subscribe(
           data => {
@@ -202,7 +202,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     this.dialog.closeAll();
   }
 
-  addUpdateMockintoQuestion(mockSchedule: any, mockQuestionData: any, idx: number, j: number) {
+  addUpdateMockintoQuestion(mockSchedule: any, mockSchedulesdata:any, mockQuestionData: any, idx: number, j: number) {
     this.isLoading$.next(true);
     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     if(mockSchedule) {
@@ -223,6 +223,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
           "interviewSchedule": {
             "id": mockSchedule.id,
           },
+         
       });
       this.sharedService.updateMockintoQuestion(payload)
       .pipe( timeout({ first: 5_000 }))
@@ -241,11 +242,17 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         this.fetchAllMockintoQuestions();
       });
     } else {
+      let value = mockSchedulesdata.filter((x:any)=> x.id === Number(this.mockScheduleID));
       const payload = Object.assign({},
         {
+          "active":"1",
           "question": this.mockQuestion,
           "candidate": {
             "id": loggedInUser.id,
+          },
+
+          "jobPosting": {
+            "id": value[0]?.jobPostingId,
           },
           "tenant": {
             "id": loggedInUser.tenant_id,

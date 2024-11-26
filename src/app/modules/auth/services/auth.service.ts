@@ -72,6 +72,7 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem(this.authLocalStorageToken);
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('unAuthSelectededPlan');
+    localStorage.removeItem('general_config');
     (Swal as any).fire({
       title: 'Logout',
       text: 'You have been successfully logged out!',
@@ -82,6 +83,7 @@ export class AuthService implements OnDestroy {
       localStorage.removeItem(this.authLocalStorageToken);
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('unAuthSelectededPlan');
+      localStorage.removeItem('general_config');
       this.router.navigate(['/auth/login'], {
         queryParams: {},
       });

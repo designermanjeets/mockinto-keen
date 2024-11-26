@@ -10,6 +10,7 @@ export class UserModel extends AuthModel {
   roles?: number[] = [];
   phone?: string;
   address?: AddressModel;
+  tenant_id?: number;
   language?: string;
   timeZone?: string;
   communication?: {
@@ -43,4 +44,5 @@ export class UserModel extends AuthModel {
     this.isAgreed = user.isAgreed || false;
     this.user_email = user.user_email || '';
   }
+  
 }
