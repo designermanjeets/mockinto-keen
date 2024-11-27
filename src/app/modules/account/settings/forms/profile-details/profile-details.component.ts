@@ -6,8 +6,7 @@ import { SharedService } from 'src/app/pages/services/shared.service';
 interface Payload {
   first_name: string;
   last_name: string;
-  candidatePhone: string;
-  candidateEmail: string;
+  user_email: string;
   preferredTimezone: string;
   password?: string;
 }
@@ -50,35 +49,28 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const loggedInUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
-    console.log(loggedInUser);
-    this.first_name = loggedInUser.candidates[0].first_name;
-    this.last_name = loggedInUser.candidates[0].last_name;
-    this.candidatePhone = loggedInUser.candidates[0].candidatePhone;
-    this.candidateEmail = loggedInUser.candidates[0].candidateEmail;
-    this.preferredTimezone = loggedInUser.candidates[0].preferredTimezone;
     this.getCandidateDetails();
   }
 
 
   getCandidateDetails(){
+    const loggedInUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
     this.sharedService.fetchDashboardData().subscribe(
       (data) => {
         if(!data) {
-          const loggedInUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
-          this.first_name = loggedInUser.candidates[0].first_name;
-          this.last_name = loggedInUser.candidates[0].last_name;
+          this.first_name = loggedInUser.firstName;
+          this.last_name = loggedInUser.lastName;
           this.candidatePhone = loggedInUser.candidates[0].candidatePhone;
           this.candidateEmail = loggedInUser.candidates[0].candidateEmail;
           this.preferredTimezone = loggedInUser.candidates[0].preferredTimezone;
         } else {
-          this.first_name = data?.candidate?.first_name;
-          this.last_name = data?.candidate?.first_name;
+          this.first_name = loggedInUser.firstName;
+          this.last_name = loggedInUser.lastName;
           this.candidatePhone = data?.candidate?.candidatePhone;
           this.candidateEmail = data?.candidate?.candidateEmail;
           this.preferredTimezone = data?.candidate?.preferredTimezone;
         }
-       // this.cdr.detectChanges();
+       this.cdr.detectChanges();
       }
     );
   }
@@ -90,8 +82,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     const payload: Payload = {
       first_name: this.first_name,
       last_name: this.last_name,
-      candidatePhone: this.candidatePhone,
-      candidateEmail: this.candidateEmail,
+      user_email: this.candidateEmail,
       preferredTimezone: this.preferredTimezone
     };
     if (this.candidatePassword && this.confirmPassword) {
@@ -101,7 +92,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
     this.sharedService.editProfile(payload).subscribe((res) => {
       if(res) {
-        console.log('Profile updated successfully');
         this.getCandidateDetails();
       }
     });
@@ -130,6 +120,10 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   updateCandidateEmail(event: any) {
     this.candidateEmail = event;
+  }
+
+  updatePassword(event: any) {
+    this.candidatePassword = event;
   }
 
   updatePreferredTimezone(event: any) {

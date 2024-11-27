@@ -380,7 +380,7 @@
                                                     <!--begin::Input-->
                                                     <select class="form-select form-select-solid"
                                                         placeholder="Select Job Profile" aria-label="Select Job Profile"
-                                                        name="mockJobProfile" [(ngModel)]="mockJobProfile">
+                                                        name="mockJobProfile" [(ngModel)]="mockJobProfile" [disabled]="data.mockscheduledata">
                                                         <option value="">--select--</option>
                                                         <option *ngFor="let job of allJobProfiles" [value]="job.id">
                                                             {{job.jobHeader}}</option>
@@ -407,7 +407,7 @@
                                                     <!--begin::Input-->
                                                     <select class="form-select form-select-solid"
                                                         placeholder="Select Resume" aria-label="Select Resume"
-                                                        name="mockResume" [(ngModel)]="mockResume">
+                                                        name="mockResume" [(ngModel)]="mockResume" [disabled]="data.mockscheduledata">
                                                         <option value="">--select--</option>
                                                         <option *ngFor="let job of allResumes" [value]="job.id">
                                                             {{job.name}}</option>

@@ -26,6 +26,7 @@ export class SharedService implements OnInit, OnDestroy {
 
   candidateId: any;
   tenantId: any;
+  userId:any;
 
   constructor(
     private router: Router,
@@ -47,8 +48,9 @@ export class SharedService implements OnInit, OnDestroy {
         this.candidateId = this.authUser.candidates[0].id;
       }
       this.tenantId = this.authUser.tenant_id;
+      this.userId = this.authUser.user_id
       this.isLoadingSubject = new BehaviorSubject<boolean>(false);
-      this.isLoading$ = this.isLoadingSubject.asObservable();
+      this.isLoading$ = this.isLoadingSubject.asObservable()
       this.sendToRouter$ = this.sendToRouterSubject.asObservable();
     }
   }
@@ -324,12 +326,18 @@ export class SharedService implements OnInit, OnDestroy {
   // Profile Actions
   editProfile(profile: any): Observable<any> {
     const payload = {
-      ...profile,
-      id: this.candidateId,
-      tenant: { id: this.tenantId }
+      id: this.userId,
+      // ...profile,
+      candidates: [
+        {
+          id: this.candidateId,
+          candidatePhone: this.authUser.candidates[0].candidatePhone,
+          preferredTimezone : profile.preferredTimezone
+        }
+      ],
     }
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    return this.http.put<any>(`${environment.apiUrl}/register`, payload)
     .pipe(
       map((data: any) => {
         return data;
@@ -340,6 +348,7 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
 
   // Mockinto Questions
 
@@ -406,7 +415,7 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
-  
+
   deleteMockintoQuestion(mockintoQuestions: any): Observable<any> {
     this.isLoadingSubject?.next(true);
     return this.http.delete<any>(`${environment.apiUrl}/botJobCandidateQuestion?botJobCandidateQuestionId=${mockintoQuestions}`)
@@ -527,7 +536,24 @@ export class SharedService implements OnInit, OnDestroy {
 
   getConfigAll(): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=1`)
+    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=0`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+
+
+  getTenantConfig(tenantId:any):Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=${tenantId}`)
     .pipe(
       map((data: any) => {
         return data;

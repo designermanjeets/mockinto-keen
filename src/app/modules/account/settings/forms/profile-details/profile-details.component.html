@@ -441,6 +441,7 @@
               placeholder="Password"
               name="candidatePassword"
               [(ngModel)]="candidatePassword"
+              (ngModelChange)="updatePassword($event)"
               value=""
             />
           </div>

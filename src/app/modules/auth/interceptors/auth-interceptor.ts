@@ -20,16 +20,22 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const authUser = this.getAuthUser();
+    const authUser:any = this.getAuthUser();
     const authToken = authUser?.token;
     let authReq = req;
+    const tenantId = authUser?.tenant_id;       
+    const candidateId = authUser?.candidates[0]?.id;
    
     const correlationId = uuid();
     if (authToken && !req.url.includes('https://api.stripe.com/')) {
       authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${authToken}`,
-          correlationId : correlationId
+          correlationId : correlationId,
+          tenantId: tenantId ? tenantId.toString() : '',
+          candidateId: candidateId ? candidateId.toString() : ''
+        
+         
         }
       });
     }

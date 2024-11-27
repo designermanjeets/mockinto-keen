@@ -31,6 +31,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   allJobProfiles: any = [];
   allResumes: any = [];
+  generalConfig:any[]=[];
+  scheduleCount :any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
@@ -55,6 +57,10 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
+    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    const filterScheduleCount = this.generalConfig.filter(x=>x.configKey == "mockinterviewcount");
+    const plan = filterScheduleCount.filter(x=>x.type == "Starter")
+    this.scheduleCount = Number(plan[0]?.configValue)
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
     this.fetchAllResumes();
@@ -173,43 +179,69 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addMockintoScheduleDialog() {
-    const dialogRef = this.dialog.open(this.addDialogTemplate, {
-      data: { },
-    });
+  if(this.mockintoSchedules.length == this.scheduleCount){
+    (Swal as any).fire({
+    title: "Mockinto Schedule Limit Reached", 
+    text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.", 
+    icon: "warning",
+    showCancelButton: true,
+    buttonsStyling: false,
+    confirmButtonText: "Go to Subscription",
+    cancelButtonText: "Cancel",
+    customClass: {
+      confirmButton: "btn btn-primary",
+      cancelButton: "btn btn-active-light"
+    }
+  }).then((result: any) => {
+    if(result.isDismissed) {
+      return;
+    }
+    if(result.isConfirmed) {
+     this.router.navigate(['dashboard/mockinto-plan']);
+    }
+  });
+  }
 
-    dialogRef.afterOpened().subscribe(result => {
-      const newDate = new Date();
-      this.mockResume = "";
-      this.mockJobProfile = "";
-      newDate.setMinutes(newDate.getMinutes() + 31);
-      this.dateControl.patchValue(newDate);
-      this.dateControl.valueChanges.subscribe((value) => {
-        if (value) {
-          const currentTime = new Date();
-          const givenTime = new Date(value);
-          const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
-          if (timeDifference >= 30) {
-            // Proceed with your logic
-          } else {
-            // Show error
-            (Swal as any).fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'The time should be at least 30 minutes from now!',
-            }).then((result: any) => {
-              const newDate = new Date();
-              newDate.setMinutes(newDate.getMinutes() + 31);
-              this.dateControl.patchValue(newDate);
-            });
-          }
+  else{
+  const dialogRef = this.dialog.open(this.addDialogTemplate, {
+    data: { },
+  });
+
+  dialogRef.afterOpened().subscribe(result => {
+    const newDate = new Date();
+    this.mockResume = "";
+    this.mockJobProfile = "";
+    newDate.setMinutes(newDate.getMinutes() + 31);
+    this.dateControl.patchValue(newDate);
+    this.dateControl.valueChanges.subscribe((value) => {
+      if (value) {
+        const currentTime = new Date();
+        const givenTime = new Date(value);
+        const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
+        if (timeDifference >= 30) {
+          // Proceed with your logic
+        } else {
+          // Show error
+          (Swal as any).fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'The time should be at least 30 minutes from now!',
+          }).then((result: any) => {
+            const newDate = new Date();
+            newDate.setMinutes(newDate.getMinutes() + 31);
+            this.dateControl.patchValue(newDate);
+          });
         }
-        this.cdRef.detectChanges();
-      });
+      }
+      this.cdRef.detectChanges();
     });
+  });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+  });
+}
+   
   }
   
   closeDialog() {

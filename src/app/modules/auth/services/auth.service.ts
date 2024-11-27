@@ -73,6 +73,9 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('unAuthSelectededPlan');
     localStorage.removeItem('general_config');
+    localStorage.removeItem('tenant_general_config');
+    localStorage.removeItem('pagination_general_config');
+    
     (Swal as any).fire({
       title: 'Logout',
       text: 'You have been successfully logged out!',
@@ -84,6 +87,7 @@ export class AuthService implements OnDestroy {
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('unAuthSelectededPlan');
       localStorage.removeItem('general_config');
+      localStorage.removeItem('pagination_general_config');
       this.router.navigate(['/auth/login'], {
         queryParams: {},
       });
@@ -127,12 +131,31 @@ export class AuthService implements OnDestroy {
     );
   }
 
-  forgotPassword(email: string): Observable<boolean> {
-    this.isLoadingSubject.next(true);
-    return this.authHttpService
-      .forgotPassword(email)
-      .pipe(finalize(() => this.isLoadingSubject.next(false)));
+
+  forgotPassword(email: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    let payload = {
+      email : email
+    }
+    return this.http.post<any>(`${environment.apiUrl}/forgotPassword`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Error not Forgot Plan'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
   }
+
+
+  // forgotPassword(email: string): Observable<boolean> {
+  //   this.isLoadingSubject.next(true);
+  //   return this.authHttpService
+  //     .forgotPassword(email)
+  //     .pipe(finalize(() => this.isLoadingSubject.next(false)));
+  // }
 
   setAuthFromLocalStorage(auth: AuthModel): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes

@@ -8,6 +8,7 @@ import * as Swal from 'sweetalert2';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-resume',
@@ -25,6 +26,8 @@ export class ResumeComponent implements OnInit {
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
+  generalConfig:any[]=[]
+  resumeCount:any
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('previewResumeTemplate', { static: true }) previewResumeTemplate!: TemplateRef<any>;
@@ -35,11 +38,19 @@ export class ResumeComponent implements OnInit {
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
+    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    this.generalConfig = JSON.parse(localStorage.getItem('pagination_general_config') || '{}');
+    const filterResumeCount = this.generalConfig.filter(x=>x.configKey == "resumecount");
+    const plan = filterResumeCount.filter(x=>x.type == "Starter")
+    this.resumeCount = Number(plan[0]?.configValue)
+
+
     this.fetchAllResumes();
   }
 
@@ -127,6 +138,31 @@ export class ResumeComponent implements OnInit {
   }
 
   addResumeDialog() {
+  if(this.resumeCount == this.resumes.length){
+    (Swal as any).fire({
+      title: "Resume Limit Reached", 
+      text: "You have reached the maximum number of resumes. Please buy a subscription to add more resumes.", 
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Go to Subscription",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light"
+      }
+    }).then((result: any) => {
+      if(result.isDismissed) {
+        return;
+      }
+      if(result.isConfirmed) {
+       console.log("click subscr")
+       this.router.navigate(['dashboard/mockinto-plan']);
+      }
+    });
+  }
+
+  else{
     const dialogRef = this.dialog.open(this.addDialogTemplate, {
       data: { },
     });
@@ -143,6 +179,8 @@ export class ResumeComponent implements OnInit {
       console.log('The dialog was closed');
     });
   }
+  }
+  
 
   closeDialog() {
     this.dialog.closeAll();

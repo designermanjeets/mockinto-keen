@@ -12,6 +12,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job-profile',
@@ -29,6 +30,8 @@ export class JobProfileComponent implements OnInit {
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
+  generalConfig:any[]=[];
+  jobCount:any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
@@ -45,7 +48,8 @@ export class JobProfileComponent implements OnInit {
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) {
     this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
       startWith(null),
@@ -55,6 +59,10 @@ export class JobProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
+    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    const filterJobCount = this.generalConfig.filter(x=>x.configKey == "jobdescription");
+    const plan = filterJobCount.filter(x=>x.type == "Starter")
+    this.jobCount = Number(plan[0]?.configValue)
     this.fetchAlljobProfiles();
   }
 
@@ -130,7 +138,6 @@ export class JobProfileComponent implements OnInit {
   }
 
   editJobProfile(jobdescription: any) {
-    console.log('editJobProfile', jobdescription);
     const dialogRef = this.dialog.open(this.addDialogTemplate, {
       data: { jobdescription },
     });
@@ -148,23 +155,48 @@ export class JobProfileComponent implements OnInit {
   }
 
   addJobDescriptionDialog() {
-    const dialogRef = this.dialog.open(this.addDialogTemplate, {
-      data: { },
+    if(this.jobProfiles.length == this.jobCount){
+      (Swal as any).fire({
+      title: "Job Limit Reached", 
+      text: "You have reached the maximum number of Job. Please buy a subscription to add more Job.", 
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Go to Subscription",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light"
+      }
+    }).then((result: any) => {
+      if(result.isDismissed) {
+        return;
+      }
+      if(result.isConfirmed) {
+       this.router.navigate(['dashboard/mockinto-plan']);
+      }
     });
-
-    dialogRef.afterOpened().subscribe(result => {
-      this.jobName = '';
-      this.jobDescription = '';
-      this.fruits = [];
-      this.fruitInput.nativeElement.value = '';
-      this.fruitCtrl.setValue(null);
-      this.cdRef.detectChanges();
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
+    }
+    else{
+      const dialogRef = this.dialog.open(this.addDialogTemplate, {
+        data: { },
+      });
+  
+      dialogRef.afterOpened().subscribe(result => {
+        this.jobName = '';
+        this.jobDescription = '';
+        this.fruits = [];
+        this.fruitInput.nativeElement.value = '';
+        this.fruitCtrl.setValue(null);
+        this.cdRef.detectChanges();
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    }
+    }
+   
 
   closeDialog() {
     this.dialog.closeAll();

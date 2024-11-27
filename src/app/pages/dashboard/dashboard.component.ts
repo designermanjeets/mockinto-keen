@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
 
   dashboardData!: any;
   plansData: any[] = [];
+  tenantId:any;
 
   constructor(
     private sharedService: SharedService,
@@ -49,12 +50,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+   
+    this.tenantId = loggedInUser.tenant_id;
     if(Object.keys(loggedInUser).length === 0) {
       this.router.navigate(['/landing-page']);
     } else {
       this.fetchDashboardData();
     }
     this.getConfig();
+    this.getConfigByTenat();
   }
 
   fetchDashboardData() {
@@ -77,8 +81,24 @@ export class DashboardComponent implements OnInit {
     this.sharedService.getConfigAll().subscribe(
       data => {
         if(data) {
-         this.plansData = data.filter((item:any) => item.category === 'plan');
-         localStorage.setItem('general_config',JSON.stringify(this.plansData));
+         //this.plansData = data.filter((item:any) => item.category === 'plan');
+         localStorage.setItem('general_config',JSON.stringify(data));
+        }
+      }
+    ); 
+
+  }
+
+
+  getConfigByTenat(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getTenantConfig(this.tenantId).subscribe(
+      data => {
+        if(data) {
+          let paginationConfigue = data.filter((item:any) => item.category === 'pagination');
+          let Userpalns= data.filter((item:any) => item.category === 'plan');
+          localStorage.setItem('tenant_general_config',JSON.stringify(Userpalns));
+          localStorage.setItem('pagination_general_config',JSON.stringify(paginationConfigue));
         }
       }
     ); 
