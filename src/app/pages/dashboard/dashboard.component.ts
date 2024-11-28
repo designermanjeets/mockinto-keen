@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
       this.fetchDashboardData();
     }
     this.getConfig();
-    this.getConfigByTenat();
+    this.getSubscription();
   }
 
   fetchDashboardData() {
@@ -87,6 +87,18 @@ export class DashboardComponent implements OnInit {
       }
     ); 
 
+  }
+
+
+  getSubscription(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        if(data) {
+         localStorage.setItem('tenant_general_config',JSON.stringify(data[0]?.plan));
+        }
+      }
+    ); 
   }
 
 

@@ -52,16 +52,16 @@ export class MockintoPlanComponent implements OnInit {
   selectplan(event: Event, plan?: string) {
     event.stopImmediatePropagation();
     switch (plan) {
-      case 'starter':
-        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'starter' } });
+      case 'Starter':
+        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Starter' } });
         break;
 
-      case 'advanced':
-        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'advanced' } });
+      case 'Professional':
+        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Professional' } });
         break;
 
-      case 'enterprise':
-        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'enterprise' } });
+      case 'Enterprise':
+        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Enterprise' } });
         break;
       default:
         break;

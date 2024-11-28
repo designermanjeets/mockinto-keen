@@ -132,7 +132,6 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
           }
           else{
             this.stopMockintoSchedule();
-
           }
         }
       });
@@ -149,7 +148,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     const payload = Object.assign({},
       {
       "id": this.scheduleId,
-      "scheduleStatusId": 3
+      "scheduleStatusId": 4
      
     })
     this.sharedService.endMockintoSchedule(payload).subscribe((res) => {
@@ -163,7 +162,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     const payload = Object.assign({},
       {
       "id": this.scheduleId,
-      "scheduleStatusId": 3
+      "scheduleStatusId": 5
      
     })
     this.sharedService.stopMockintoSchedule(payload).subscribe((res) => {

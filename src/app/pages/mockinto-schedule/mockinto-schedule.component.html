@@ -96,6 +96,7 @@
                             <th class="min-w-250px">Job Profile</th>
                             <th class="min-w-10px">Start Date</th>
                             <th class="min-w-125px">Created At</th>
+                            <th class="min-w-125px">Status</th>
                             <th class="w-125px"></th>
                         </tr>
                     </thead>
@@ -112,7 +113,7 @@
                                     <i class="ki-duotone
                                     ki-files fs-2x text-primary me-4"></i>
                                     <!--  [disabled]="item.scheduleStatusId !== 2" -->
-                                    <button type="button" (click)="startMockintoSchedule(item)"
+                                    <button type="button" (click)="startMockintoSchedule(item)" [disabled]="item.scheduleStatusId !== 2"
                                         class="btn btn-flex btn-primary">Start Mockinto</button>
                                 </div>
                             </td>
@@ -130,6 +131,7 @@
                                 </div>
                             </td>
                             <td>{{item?.createdDate | date}}</td>
+                            <td>{{item?.statusDescription}}</td>
                             <td class="text-end" data-kt-filemanager-table="action_dropdown">
                                 <div class="d-flex justify-content-end">
                                     <!--begin::Share link-->

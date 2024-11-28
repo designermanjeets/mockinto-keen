@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/modules/auth';
 import { SharedService } from 'src/app/pages/services/shared.service';
+import * as Swal from 'sweetalert2';
 
 
 interface Payload {
@@ -40,7 +43,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private auth: AuthService,
+
   ) {
     const loadingSubscr = this.isLoading$
       .asObservable()
@@ -55,24 +60,15 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   getCandidateDetails(){
     const loggedInUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
-    this.sharedService.fetchDashboardData().subscribe(
-      (data) => {
-        if(!data) {
+        if(loggedInUser) {
           this.first_name = loggedInUser.firstName;
           this.last_name = loggedInUser.lastName;
           this.candidatePhone = loggedInUser.candidates[0].candidatePhone;
           this.candidateEmail = loggedInUser.candidates[0].candidateEmail;
           this.preferredTimezone = loggedInUser.candidates[0].preferredTimezone;
-        } else {
-          this.first_name = loggedInUser.firstName;
-          this.last_name = loggedInUser.lastName;
-          this.candidatePhone = data?.candidate?.candidatePhone;
-          this.candidateEmail = data?.candidate?.candidateEmail;
-          this.preferredTimezone = data?.candidate?.preferredTimezone;
-        }
+        } 
        this.cdr.detectChanges();
-      }
-    );
+      
   }
 
  
@@ -92,7 +88,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
     this.sharedService.editProfile(payload).subscribe((res) => {
       if(res) {
-        this.getCandidateDetails();
+       
       }
     });
 

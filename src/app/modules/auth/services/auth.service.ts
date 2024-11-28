@@ -88,7 +88,7 @@ export class AuthService implements OnDestroy {
       localStorage.removeItem('unAuthSelectededPlan');
       localStorage.removeItem('general_config');
       localStorage.removeItem('pagination_general_config');
-      this.router.navigate(['/auth/login'], {
+      this.router.navigate(['/landing-page'], {
         queryParams: {},
       });
       document.location.reload();

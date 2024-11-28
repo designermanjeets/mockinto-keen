@@ -51,7 +51,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   submit() {
-    this.errorState = ErrorStates.NotSubmitted;
+   // this.errorState = ErrorStates.NotSubmitted;
     // const forgotPasswordSubscr = this.authService
     //   .forgotPassword(this.f.email.value)
     //   .pipe(first())

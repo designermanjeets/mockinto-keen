@@ -42,7 +42,7 @@ export class SharedService implements OnInit, OnDestroy {
   setUpAuthUser() {
     this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
     if(Object.keys(this.authUser).length === 0) {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/landing-page']);
     } else {
       if(this.authUser.candidates?.length !== 0) {
         this.candidateId = this.authUser.candidates[0].id;
@@ -327,7 +327,7 @@ export class SharedService implements OnInit, OnDestroy {
   editProfile(profile: any): Observable<any> {
     const payload = {
       id: this.userId,
-      // ...profile,
+       ...profile,
       candidates: [
         {
           id: this.candidateId,
@@ -548,6 +548,20 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
+  getAllPlan(tenantId:any):Observable<any>{
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/plan/all?tenantId=${tenantId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
 
 
 
@@ -564,6 +578,37 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
+  getSubscriptionByTenantId(tenantId:any):Observable<any>{
+    let localUrl:any  = 'http://54.90.45.9:8080'
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${localUrl}/subscription/all?tenantId=${tenantId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+  deleteSubscription(tenantId: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    let localUrl :any = 'http://54.90.45.9:8080'
+    return this.http.delete<any>(`${localUrl}/subscription/all?tenantId=${tenantId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
 
   // Misc Actions
 

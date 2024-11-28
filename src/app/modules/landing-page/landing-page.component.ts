@@ -58,7 +58,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     this.updateLogoVisibility();
 
     this.fetchAllPlans();
-    this.getConfig();
   }
 
 

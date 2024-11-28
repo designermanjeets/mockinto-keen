@@ -30,6 +30,7 @@ export class JobProfileComponent implements OnInit {
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
+  tenantGeneralConfig:any;
   generalConfig:any[]=[];
   jobCount:any;
 
@@ -59,10 +60,11 @@ export class JobProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
-    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    const filterJobCount = this.generalConfig.filter(x=>x.configKey == "jobdescription");
-    const plan = filterJobCount.filter(x=>x.type == "Starter")
-    this.jobCount = Number(plan[0]?.configValue)
+    this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+    this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+    const filterJobCount = plan.filter(x=>x.configKey == "jobdescription")
+    this.jobCount = Number(filterJobCount[0]?.configValue)
     this.fetchAlljobProfiles();
   }
 

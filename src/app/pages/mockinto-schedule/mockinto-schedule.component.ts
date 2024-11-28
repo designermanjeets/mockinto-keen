@@ -32,7 +32,9 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   allJobProfiles: any = [];
   allResumes: any = [];
   generalConfig:any[]=[];
+  tenantGeneralConfig:any;
   scheduleCount :any;
+  scheduleStatusId:any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
@@ -57,10 +59,11 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
-    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    const filterScheduleCount = this.generalConfig.filter(x=>x.configKey == "mockinterviewcount");
-    const plan = filterScheduleCount.filter(x=>x.type == "Starter")
-    this.scheduleCount = Number(plan[0]?.configValue)
+    this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+    this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+    const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
+    this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
     this.fetchAllResumes();

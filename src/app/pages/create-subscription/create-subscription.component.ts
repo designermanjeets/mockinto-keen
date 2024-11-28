@@ -21,6 +21,7 @@ export class CreateSubscriptionComponent implements OnInit {
   allPlans: any = [];
   selectedPlan: any;
   checkoutForm: FormGroup;
+  selectedPlanDetails:any;
 
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
 
@@ -55,7 +56,13 @@ export class CreateSubscriptionComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private sharedService: SharedService
-  ) { }
+  ) { 
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.plan) {
+        this.selectedPlan = params.plan;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.fetchAllPlans();
@@ -132,24 +139,29 @@ export class CreateSubscriptionComponent implements OnInit {
               text: 'Payment completed successfully',
             });
             this.checkoutForm.reset();
+            this.sharedService.deleteSubscription(this.logginInUser.tenant_id).subscribe(res=>{
+              if(res){
+                const backendPayload = {
+                  plan: {
+                    id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
+                  },
+                  tenant: {
+                  id: this.logginInUser.tenant_id
+                },
+                  startDate: new Date().toISOString(),
+                  status: result.status === 'succeeded' ? true : false,
+                  deleted: 0,
+                  endDate: new Date().toISOString(),
+                  lastPaymentDate: new Date().toISOString(),
+                  lastPaymentAmount: this.amount,
+                  renewalDate: new Date().toISOString(),
+                  futureDiscount: 0,
+                };
+                this.updateBackendForPlanChange(backendPayload);
+              }
+            })
 
-            const backendPayload = {
-              plan: {
-                id: 10, //this.selectedPlan.id,
-              },
-              tenant: {
-              id: this.logginInUser.tenant_id
-            },
-              startDate: new Date().toISOString(),
-              status: result.status === 'succeeded' ? true : false,
-              deleted: 0,
-              endDate: new Date().toISOString(),
-              lastPaymentDate: new Date().toISOString(),
-              lastPaymentAmount: this.amount,
-              renewalDate: new Date().toISOString(),
-              futureDiscount: 0,
-            };
-            this.updateBackendForPlanChange(backendPayload);
+           
           }
         },
         error: (err) => {
@@ -206,19 +218,26 @@ export class CreateSubscriptionComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe((params) => {
           if (params.plan) {
             this.selectedPlan = this.allPlans.find((p: any) => {
-              if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'startup') {
-                p.planname = 'Startup';
+              if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'Starter') {
+                p.planname = 'Starter';
                 return p;
               }
-              if(p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'advanced') {
-                p.planname = 'Advanced';
+              if(p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'Professional') {
+                p.planname = 'Professional';
                 return p;
               }
-              if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'enterprise') {
+              if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'Enterprise') {
                 p.planname = 'Enterprise';
                 return p;
               }
             });
+
+            this.sharedService.getAllPlan(this.logginInUser.tenant_id).subscribe(res=>{
+              if(res){
+                let allPlan = res;
+                this.selectedPlanDetails = allPlan.filter((x:any)=>x.name == params.plan);
+              }
+            })
           }
         });
         this.initCheckoutform();

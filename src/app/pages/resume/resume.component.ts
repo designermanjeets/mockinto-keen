@@ -26,7 +26,8 @@ export class ResumeComponent implements OnInit {
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
-  generalConfig:any[]=[]
+  generalConfig:any[]=[];
+  tenantGeneralConfig:any;
   resumeCount:any
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
@@ -44,13 +45,11 @@ export class ResumeComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
-    this.generalConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    this.generalConfig = JSON.parse(localStorage.getItem('pagination_general_config') || '{}');
-    const filterResumeCount = this.generalConfig.filter(x=>x.configKey == "resumecount");
-    const plan = filterResumeCount.filter(x=>x.type == "Starter")
-    this.resumeCount = Number(plan[0]?.configValue)
-
-
+    this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+    this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+    const filterResumeCount = plan.filter(x=>x.configKey == "resumecount");
+    this.resumeCount = Number(filterResumeCount[0]?.configValue)
     this.fetchAllResumes();
   }
 

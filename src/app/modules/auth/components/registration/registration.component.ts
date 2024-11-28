@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { UserModel } from '../../models/user.model';
 import { first } from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { SharedService } from 'src/app/pages/services/shared.service';
 
 @Component({
   selector: 'app-registration',
@@ -20,12 +22,15 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private sharedService: SharedService
+
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
@@ -39,7 +44,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params.plan) {
         this.selectedPlan = params.plan;
-        console.log('Selected plan:', this.selectedPlan);
       }
     });
   }
@@ -164,10 +168,31 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe((user: UserModel) => {
         if (user) {
-          if(this.selectedPlan && this.selectedPlan !== 'starter') {
-            this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
-          } else {
-            this.router.navigate(['/']);
+          // if(this.selectedPlan && this.selectedPlan !== 'starter') {
+          //   this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
+          // } else {
+          //   this.router.navigate(['/']);
+          // }
+          if(!this.selectedPlan){
+            console.log("signup for free")
+            const backendPayload = {
+              plan: {
+                id: 9, //this.selectedPlan.id,
+              },
+              tenant: {
+              id: user.tenant_id
+            },
+              startDate: new Date().toISOString(),
+              status:  true,
+              deleted: 0,
+              endDate: new Date().toISOString(),
+              lastPaymentDate: new Date().toISOString(),
+              lastPaymentAmount: 0,
+              renewalDate: new Date().toISOString(),
+              futureDiscount: 0,
+            };
+            this.updateBackendForPlanChange(backendPayload);
+
           }
         } else {
           this.hasError = true;
@@ -179,4 +204,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
+
+  updateBackendForPlanChange(updateBackendForPlanChange: any) {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res:any) => {
+      if(res) {
+        console.log(res);
+        this.router.navigate(['dashboard/landing']);
+      } else {
+        (Swal as any).fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Something went wrong. Please try again later.',
+        });
+      }
+    });
+    
+  }
+
 }
