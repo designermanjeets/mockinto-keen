@@ -28,6 +28,14 @@ export class SharedService implements OnInit, OnDestroy {
   tenantId: any;
   userId:any;
 
+  get allTenantGeneralConfig(): any {
+    return JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+  }
+
+  get allGeneralConfig(): any {
+    return JSON.parse(localStorage.getItem('general_config') || '{}');
+  }
+
   constructor(
     private router: Router,
     private http: HttpClient
@@ -324,26 +332,35 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
   // Profile Actions
-  editProfile(profile: any): Observable<any> {
-    const payload = {
-      id: this.userId,
-       ...profile,
-      candidates: [
-        {
-          id: this.candidateId,
-          candidatePhone: this.authUser.candidates[0].candidatePhone,
-          preferredTimezone : profile.preferredTimezone
-        }
-      ],
-    }
+
+  getCandidateDetails(): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/register`, payload)
+    return this.http.get<any>(`${environment.apiUrl}/candidate?CandidateId=${this.candidateId}`)
     .pipe(
       map((data: any) => {
         return data;
       }),
       catchError((err) => {
-        return of(undefined);
+        return of(new Error('No Candidate Found'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+  editProfile(profile: any): Observable<any> {
+    const payload = {
+      id: this.userId,
+       ...profile,
+       tenant: [ { id: this.tenantId } ],
+    }
+    this.isLoadingSubject?.next(true);
+    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(err);
       }),
       finalize(() => this.isLoadingSubject?.next(false))
     );

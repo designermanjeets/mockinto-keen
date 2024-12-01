@@ -15,6 +15,8 @@ export class MockintoPlanComponent implements OnInit {
 
   upgrade_plan_radio: any;
 
+  allTenantGeneralConfig: any = [];
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private plutoService: StripeMockintoService,
@@ -25,6 +27,14 @@ export class MockintoPlanComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAllPlans();
     this.getConfig();
+    this.allTenantGeneralConfig = this.sharedService.allTenantGeneralConfig;
+    console.log(this.allTenantGeneralConfig);
+    const result = this.allTenantGeneralConfig.features[0]
+      .split("\n")
+      .map((item: any) => item.trim())
+      .filter((item: any) => item.length > 0) // Remove empty entries
+      .map((item: any, index: any) => ({ id: index + 1, description: item }));
+    console.log(result);
   }
 
 
