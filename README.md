@@ -1,4 +1,4 @@
-# Mockinto - AI Interview Schedule and Practice
+# Mockinto - AI Interview Schedule and Practice 
 
 This project, Mockinto, is an AI-powered platform designed to help users schedule and practice interviews. Built with Angular 17, Mockinto leverages advanced AI to provide personalized mock interviews, real-time feedback, and comprehensive interview scheduling.
 
