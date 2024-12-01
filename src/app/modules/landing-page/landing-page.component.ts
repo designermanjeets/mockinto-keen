@@ -1,4 +1,5 @@
-import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild, TemplateRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SharedService } from 'src/app/pages/services/shared.service';
 import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
@@ -12,6 +13,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   @ViewChild('featuresSection') featuresSection!: ElementRef;
   @ViewChild('faqSection') faqSection!: ElementRef;
   @ViewChild('allPlanSection') allPlanSection!: ElementRef;
+  @ViewChild('termsDialogTemplate', { static: true }) termsDialogTemplate!: TemplateRef<any>;
 
 
   faqs = [
@@ -39,12 +41,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   allPlans: any = [];
 
+  isDialogOpen = false;
+
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private cdRef: ChangeDetectorRef,
     private plutoService: StripeMockintoService,
     private sharedService: SharedService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -182,6 +187,26 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         block: 'start', 
       });
     }
+  }
+
+  openTermsDialog(): void {
+    const dialogRef = this.dialog.open(this.termsDialogTemplate, {
+      width: '800px',
+    });
+
+    dialogRef.afterOpened().subscribe(() => {
+      this.isDialogOpen = true;
+      this.cdRef.detectChanges();
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.isDialogOpen = false;
+      this.cdRef.detectChanges();
+    });
+  }
+
+  closeDialog(): void {
+    this.dialog.closeAll();
   }
 
 }
