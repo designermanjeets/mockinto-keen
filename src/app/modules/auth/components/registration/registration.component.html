@@ -38,7 +38,7 @@
   <ng-container *ngIf="hasError">
     <div class="mb-lg-15 alert alert-danger">
       <div class="alert-text font-weight-bold">
-        Registration Failed! Please try again.
+        {{regError || 'Registration Failed! Please try again.'}} 
       </div>
     </div>
   </ng-container>

@@ -20,6 +20,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   hasError: boolean;
   isLoading$: Observable<boolean>;
   selectedPlan: string;
+  regError: string;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -157,9 +158,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const registrationSubscr = this.authService
       .registration(payload)
       .pipe(first())
-      .subscribe((user: UserModel) => {
-        if (user) {
-          console.log(this.selectedPlan);
+      .subscribe((user: UserModel | any) => {
+        if(!user.error) {
           const backendPayload = {
             plan: {
               id: 9, //this.selectedPlan.id,
@@ -179,7 +179,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           this.updateBackendForPlanChange(backendPayload);
         } else {
           this.hasError = true;
-        }
+          this.regError = user.error.data;
+        } 
+      }, error => {
+        this.hasError = true;
+        this.regError = error.data;
       });
     this.unsubscribe.push(registrationSubscr);
   }
