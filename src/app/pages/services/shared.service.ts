@@ -447,7 +447,6 @@ export class SharedService implements OnInit, OnDestroy {
 
   endMockintoSchedule(mockintoSchedule: any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    console.log(mockintoSchedule);
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule/end`, mockintoSchedule)
     .pipe(
       map((data: any) => {
@@ -536,7 +535,7 @@ export class SharedService implements OnInit, OnDestroy {
 
   getConfigAll(): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=0`)
+    return this.http.get<any>(`${environment.apiUrl}/generalConfig/tenant/all?tenantId=${this.tenantId}`)
     .pipe(
       map((data: any) => {
         return data;
@@ -580,9 +579,8 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
   getSubscriptionByTenantId(tenantId:any):Observable<any>{
-    let localUrl:any  = 'http://54.90.45.9:8080'
     this.isLoadingSubject?.next(true);
-    return this.http.get<any>(`${localUrl}/subscription/all?tenantId=${tenantId}`)
+    return this.http.get<any>(`http://54.90.45.9:8080/subscription/all?tenantId=${tenantId}`)
     .pipe(
       map((data: any) => {
         return data;
@@ -596,8 +594,7 @@ export class SharedService implements OnInit, OnDestroy {
 
   deleteSubscription(tenantId: any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    let localUrl :any = 'http://54.90.45.9:8080'
-    return this.http.delete<any>(`${localUrl}/subscription/all?tenantId=${tenantId}`)
+    return this.http.delete<any>(`${environment.apiUrl}/subscription/all?tenantId=${tenantId}`)
     .pipe(
       map((data: any) => {
         return data;

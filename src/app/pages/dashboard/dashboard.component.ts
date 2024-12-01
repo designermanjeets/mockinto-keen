@@ -56,9 +56,9 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/landing-page']);
     } else {
       this.fetchDashboardData();
+      this.getConfig();
+      this.getSubscription();
     }
-    this.getConfig();
-    this.getSubscription();
   }
 
   fetchDashboardData() {

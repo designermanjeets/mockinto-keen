@@ -47,7 +47,7 @@
   <!--begin::Form group-->
   <div class="row fv-row mb-7">
     <section class="col-6">
-      <label class="form-label  text-dark fs-6">First Name</label>
+      <label class="form-label text-dark fs-6"><span class="required">First Name</span></label>
       <input
         class="form-control form-control-lg form-control-solid"
         type="text"
@@ -86,7 +86,7 @@
       ></ng-container>
     </section>
     <section class="col-6">
-      <label class="form-label  text-dark fs-6">Last Name</label>
+      <label class="form-label  text-dark fs-6"><span class="required">Last Name</span></label>
       <input
         class="form-control form-control-lg form-control-solid"
         type="text"
@@ -129,7 +129,7 @@
 
   <!--begin::Form group-->
   <div class="fv-row mb-7">
-    <label class="form-label  text-dark fs-6">Email</label>
+    <label class="form-label  text-dark fs-6"><span class="required">Email</span></label>
     <input
       class="form-control form-control-lg form-control-solid"
       type="email"
@@ -153,7 +153,7 @@
     <ng-container
       [ngTemplateOutlet]="formError"
       [ngTemplateOutletContext]="{
-        validation: 'user_email',
+        validation: 'email',
         message: 'Email is invalid',
         control: registrationForm.controls['user_email']
       }"
@@ -182,7 +182,7 @@
 
     <section class="col-6">
 
-      <label class="form-label  text-dark fs-6">Password</label>
+      <label class="form-label  text-dark fs-6"><span class="required">Password</span></label>
       <input
         class="form-control form-control-lg form-control-solid"
         type="password"
@@ -222,7 +222,7 @@
     </section>
     <section class="col-6">
 
-      <label class="form-label  text-dark fs-6">Confirm Password</label>
+      <label class="form-label  text-dark fs-6"><span class="required">Confirm Password</span></label>
       <input
         class="form-control form-control-lg form-control-solid"
         type="password"
@@ -291,9 +291,8 @@
         class="form-check-label  text-gray-700 fs-6"
       >
         I Agree the&nbsp;<a
-          href="#"
-          target="_blank"
-          class="ms-1 link-primary"
+          (click)="openTerms($event)"
+          class="ms-1 link-primary c-p"
           >terms and conditions</a
         >.
       </label>
@@ -353,3 +352,123 @@
     </div>
   </ng-container>
 </ng-template>
+
+
+  <!--begin::Modal - Upload File-->
+  <ng-template #termsDialogTemplate let-data>
+    <div class="modal fade show" style="display: block;">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-fullscreen p-9">
+            <!--begin::Modal content-->
+            <div class="modal-content modal-rounded">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Terms &amp; Conditions</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon" (click)="closeDialog()">
+                        <i class="ki-duotone ki-cross fs-1">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body scroll-y m-5">
+                    <!--begin::Stepper-->
+                    <div class="d-flex flex-column">
+                        <!--begin::Container-->
+                        <div class="container p-0 m-0">
+                          <h2>1. Prohibited Activities</h2>
+                          <p>You may not access or use the Services for any purpose other than those provided by us. Prohibited uses include, but are not limited to:</p>
+                          <ul>
+                              <li>Collecting data systematically to create a database without permission.</li>
+                              <li>Misleading others to gain sensitive information, such as passwords.</li>
+                              <li>Circumventing or interfering with security features.</li>
+                              <li>Harassing, harming, or misusing the Services against others.</li>
+                              <li>Uploading malicious software, such as viruses or Trojan horses.</li>
+                              <li>Using automated tools (e.g., bots or scrapers) to access the Services.</li>
+                              <li>Impersonating others or using fake identities.</li>
+                              <li>Misusing the Services for unauthorized or illegal activities.</li>
+                          </ul>
+
+                          <h2>2. User-Generated Contributions</h2>
+                          <p>While the Services may allow user submissions like text, images, or videos, users agree:</p>
+                          <ul>
+                              <li>Not to submit content violating laws or rights.</li>
+                              <li>To retain ownership of their content but grant us the rights to use it.</li>
+                              <li>To take responsibility for the content they post and ensure it doesn’t harm or mislead others.</li>
+                          </ul>
+
+                          <h2>3. Contribution License</h2>
+                          <p>By submitting feedback or suggestions, you allow us to use them for improvement without compensation. We do not claim ownership of your contributions, but you remain responsible for them.</p>
+
+                          <h2>4. Services Management</h2>
+                          <p>We reserve the right to:</p>
+                          <ul>
+                              <li>Monitor and manage Services for rule violations.</li>
+                              <li>Remove content or contributions that violate terms.</li>
+                              <li>Limit or disable access to ensure proper functioning.</li>
+                          </ul>
+
+                          <h2>5. Term and Termination</h2>
+                          <p>These terms remain effective as long as you use the Services. We may terminate access for violations at our discretion without prior notice.</p>
+
+                          <h2>6. Modifications and Interruptions</h2>
+                          <p>We may modify, suspend, or discontinue the Services at any time without notice. We are not liable for interruptions or changes.</p>
+
+                          <h2>7. Governing Law</h2>
+                          <p>These terms are governed by the laws of [Insert Governing Jurisdiction]. Disputes will be resolved under this jurisdiction.</p>
+
+                          <h2>8. Dispute Resolution</h2>
+                          <p>Efforts will be made to resolve disputes informally. If unresolved, binding arbitration will be used. Some exceptions, like intellectual property disputes, may be resolved in court.</p>
+
+                          <h2>9. Corrections</h2>
+                          <p>We may correct any errors or inaccuracies in the Services without notice.</p>
+
+                          <h2>10. Disclaimer</h2>
+                          <p>The Services are provided "as-is" without warranties. We disclaim liability for errors, interruptions, or third-party links.</p>
+
+                          <h2>11. Limitations of Liability</h2>
+                          <p>We are not liable for damages, including loss of data or profits, arising from your use of the Services. Limitations may not apply in some jurisdictions.</p>
+
+                          <h2>12. Indemnification</h2>
+                          <p>You agree to indemnify us against losses or claims arising from your use of the Services or violations of these terms.</p>
+
+                          <h2>13. User Data</h2>
+                          <p>While we maintain data for Services functionality, we are not liable for data loss or corruption. You are responsible for backing up your data.</p>
+
+                          <h2>14. Electronic Communications and Signatures</h2>
+                          <p>By using the Services, you consent to electronic communications and agree they meet legal requirements.</p>
+
+                          <h2>15. California Users</h2>
+                          <p>California residents can contact the Division of Consumer Services for unresolved complaints at (800) 952-5210 or visit Sacramento offices.</p>
+
+                          <h2>16. Miscellaneous</h2>
+                          <p>These terms represent the entire agreement. If any provision is deemed unenforceable, the remainder will still apply. These terms shall not create a partnership, joint venture, or agency relationship.</p>
+
+                          <h2>17. Contact Us</h2>
+                          <p>For questions or complaints about the Services, contact us at [Insert Contact Information].</p>
+                        </div>
+                        <!--begin::Container-->
+                    </div>
+                    <!--end::Stepper-->
+                </div>
+                <div class="p-10">
+                  <div class="d-flex flex-stack justify-content-end">
+                    <button type="button" class="btn btn-lg btn-primary" (click)="closeDialog()">
+                        <span class="indicator-label">Cancel</span> 
+                    </button> 
+                  </div>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+</ng-template>
+<!--end::Modal - Upload File-->
