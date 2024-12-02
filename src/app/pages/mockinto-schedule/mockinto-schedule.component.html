@@ -47,7 +47,7 @@
                             <span class="path1"></span>
                             <span class="path2"></span>
                         </i>
-                        <input type="text" data-kt-filemanager-table-filter="search"
+                        <input type="text" (input)="scheduleSearch($event)"
                             class="form-control form-control-solid w-250px ps-15" placeholder="Search" />
                     </div>
                     <!--end::Search-->
@@ -93,8 +93,9 @@
                                 </div>
                             </th>
                             <th class="min-w-250px">Mockinto</th>
-                            <th class="min-w-250px">Job Profile</th>
-                            <th class="min-w-10px">Start Date</th>
+                            <th class="min-w-125px">Job Profile</th>
+                            <th class="min-w-125px">Job Description</th>
+                            <th class="min-w-125px">Start Date</th>
                             <th class="min-w-125px">Created At</th>
                             <th class="min-w-125px">Status</th>
                             <th class="w-125px"></th>
@@ -122,6 +123,13 @@
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
                                     <a (click)="editMockintoSchedule(item)"
                                         class="text-gray-800 text-hover-primary c-p">{{item?.jobHeader}}</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
+                                    <a (click)="editMockintoSchedule(item)"
+                                        class="text-gray-800 text-hover-primary c-p">{{item?.jobDescription}}</a>
                                 </div>
                             </td>
                             <td>

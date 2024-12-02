@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 export class ResumeComponent implements OnInit {
 
   resumes: any = [];
+  origResumes: any = [];
   masterCheckbox: boolean = false;
   someChecked = [];
 
@@ -60,6 +61,7 @@ export class ResumeComponent implements OnInit {
         if(data) {
           this.paginator.length = data.totalElements;
           this.resumes = data.content;
+          this.origResumes = JSON.parse(JSON.stringify(this.resumes));
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -241,6 +243,19 @@ export class ResumeComponent implements OnInit {
   onPageChange(event: any) {
     console.log('event', event);
     this.fetchAllResumes(event.pageIndex, event.pageSize);
+  }
+
+  searchResume(event: any) {
+    const value = event.target.value;
+    this.sharedService.isLoadingSubject?.next(true);
+    if(value) {
+      this.resumes = this.origResumes.filter((item: any) => {
+        return item.name.toLowerCase().includes(value.toLowerCase());
+      });
+    } else {
+      this.resumes = JSON.parse(JSON.stringify(this.origResumes));
+    }
+    this.sharedService.isLoadingSubject?.next(false);
   }
 
 }

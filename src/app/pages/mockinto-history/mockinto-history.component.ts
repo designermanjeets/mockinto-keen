@@ -12,6 +12,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 export class MockintoHistoryComponent implements OnInit {
 
   allMockintoHistory: any = [];
+  origMockintoHistory: any = [];
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
 
   masterCheckbox: boolean = false;
@@ -42,6 +43,7 @@ export class MockintoHistoryComponent implements OnInit {
         if(data) {
           this.paginator.length = data.totalElements;
           this.allMockintoHistory = data.content;
+          this.origMockintoHistory = JSON.parse(JSON.stringify(this.allMockintoHistory));
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -117,6 +119,19 @@ export class MockintoHistoryComponent implements OnInit {
 
   onPageChange(event: any) {
     this.fetchAllMockintoSchedules(event.pageIndex, event.pageSize);
+  }
+
+  searchMockintoHistory(event: any) {
+    const value = event.target.value;
+    this.sharedService.isLoadingSubject?.next(true);
+    if(value) {
+      this.allMockintoHistory = this.origMockintoHistory.filter((item: any) => {
+        return item.jobHeader.toLowerCase().includes(value.toLowerCase()) || item.jobDescription.toLowerCase().includes(value.toLowerCase());
+      });
+    } else {
+      this.allMockintoHistory = JSON.parse(JSON.stringify(this.origMockintoHistory));
+    }
+    this.sharedService.isLoadingSubject?.next(false);
   }
 
 }

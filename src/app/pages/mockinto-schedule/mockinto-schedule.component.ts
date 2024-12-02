@@ -48,6 +48,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   public dateControl = new FormControl(new Date());
   public timeControlMinMax = new FormControl(new Date());
 
+  origSchedules: any = [];
+
   constructor(
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
@@ -100,6 +102,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         if(data) {
           this.paginator.length = data.totalElements;
           this.mockintoSchedules = data.content;
+          this.origSchedules = JSON.parse(JSON.stringify(this.mockintoSchedules));
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -182,69 +185,66 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addMockintoScheduleDialog() {
-  if(this.mockintoSchedules.length == this.scheduleCount){
-    (Swal as any).fire({
-    title: "Mockinto Schedule Limit Reached", 
-    text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.", 
-    icon: "warning",
-    showCancelButton: true,
-    buttonsStyling: false,
-    confirmButtonText: "Go to Subscription",
-    cancelButtonText: "Cancel",
-    customClass: {
-      confirmButton: "btn btn-primary",
-      cancelButton: "btn btn-active-light"
-    }
-  }).then((result: any) => {
-    if(result.isDismissed) {
-      return;
-    }
-    if(result.isConfirmed) {
-     this.router.navigate(['dashboard/mockinto-plan']);
-    }
-  });
-  }
-
-  else{
-  const dialogRef = this.dialog.open(this.addDialogTemplate, {
-    data: { },
-  });
-
-  dialogRef.afterOpened().subscribe(result => {
-    const newDate = new Date();
-    this.mockResume = "";
-    this.mockJobProfile = "";
-    newDate.setMinutes(newDate.getMinutes() + 31);
-    this.dateControl.patchValue(newDate);
-    this.dateControl.valueChanges.subscribe((value) => {
-      if (value) {
-        const currentTime = new Date();
-        const givenTime = new Date(value);
-        const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
-        if (timeDifference >= 30) {
-          // Proceed with your logic
-        } else {
-          // Show error
-          (Swal as any).fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'The time should be at least 30 minutes from now!',
-          }).then((result: any) => {
-            const newDate = new Date();
-            newDate.setMinutes(newDate.getMinutes() + 31);
-            this.dateControl.patchValue(newDate);
-          });
+    if(this.mockintoSchedules.length == this.scheduleCount) {
+        (Swal as any).fire({
+        title: "Mockinto Schedule Limit Reached", 
+        text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.", 
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Go to Subscription",
+        cancelButtonText: "Cancel",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
         }
-      }
-      this.cdRef.detectChanges();
-    });
-  });
+      }).then((result: any) => {
+        if(result.isDismissed) {
+          return;
+        }
+        if(result.isConfirmed) {
+        this.router.navigate(['dashboard/mockinto-plan']);
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(this.addDialogTemplate, {
+        data: { },
+      });
 
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-  });
-}
-   
+      dialogRef.afterOpened().subscribe(result => {
+        const newDate = new Date();
+        this.mockResume = "";
+        this.mockJobProfile = "";
+        newDate.setMinutes(newDate.getMinutes() + 31);
+        this.dateControl.patchValue(newDate);
+        this.dateControl.valueChanges.subscribe((value) => {
+          if (value) {
+            const currentTime = new Date();
+            const givenTime = new Date(value);
+            const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
+            if (timeDifference >= 30) {
+              // Proceed with your logic
+            } else {
+              // Show error
+              (Swal as any).fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'The time should be at least 30 minutes from now!',
+              }).then((result: any) => {
+                const newDate = new Date();
+                newDate.setMinutes(newDate.getMinutes() + 31);
+                this.dateControl.patchValue(newDate);
+              });
+            }
+          }
+          this.cdRef.detectChanges();
+        });
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    }
   }
   
   closeDialog() {
@@ -372,6 +372,19 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   onPageChange(event: any) {
     this.fetchAllMockintoSchedules(event.pageIndex, event.pageSize);
+  }
+
+  scheduleSearch(event: any) {
+    this.sharedService.isLoadingSubject?.next(true);
+    const searchValue = event.target.value;
+    if(searchValue) {
+      this.mockintoSchedules = this.origSchedules.filter((item: any) => {
+        return item.jobHeader.toLowerCase().includes(searchValue.toLowerCase()) || item.jobDescription.toLowerCase().includes(searchValue.toLowerCase());
+      });
+    } else {
+      this.mockintoSchedules = JSON.parse(JSON.stringify(this.origSchedules));
+    }
+    this.sharedService.isLoadingSubject?.next(false);
   }
 
 }
