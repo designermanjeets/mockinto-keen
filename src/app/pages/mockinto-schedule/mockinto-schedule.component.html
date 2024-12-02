@@ -470,16 +470,11 @@
                                                         </ng-container>
                                                     </button>
                                                 </div>
-                                                <div class="d-flex flex-stack"> <button type="button"
-                                                        class="btn btn-lg btn-primary" (click)="closeDialog()">
-                                                        <ng-container *ngIf="isLoading$ | async"> <span
-                                                                class="indicator-progress" [style.display]="'block'">
-                                                                Please wait... <span
-                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </span> </ng-container> <ng-container
-                                                            *ngIf="(isLoading$ | async) === false"> <span
-                                                                class="indicator-label">Cancel</span> </ng-container>
-                                                    </button> </div>
+                                                <div class="d-flex flex-stack">
+                                                    <button type="button" class="btn btn-lg btn-primary" (click)="closeDialog()">
+                                                        <span class="indicator-label">Cancel</span>
+                                                    </button>
+                                                </div>
                                                </div>
                                                 <!--end::Actions-->
                                             </div>
