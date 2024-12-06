@@ -47,6 +47,9 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   public maxDate: moment.Moment;
   public dateControl = new FormControl(new Date());
   public timeControlMinMax = new FormControl(new Date());
+  private intervalId: any;
+  allReadySchedule:any
+
 
   origSchedules: any = [];
 
@@ -69,10 +72,22 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
     this.fetchAllResumes();
+    this.intervalId = setInterval(() => {
+      if(!this.allReadySchedule)
+      this.fetchAllMockintoSchedules();
+    }, 20000);  
   }
 
   ngAfterViewInit(): void {
     
+  }
+
+  ngOnDestroy(): void {
+    // Clear the interval when the component is destroyed
+    console.log("destruy",this.intervalId)
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   fetchJobProfiles() {
@@ -103,6 +118,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
           this.paginator.length = data.totalElements;
           this.mockintoSchedules = data.content;
           this.origSchedules = JSON.parse(JSON.stringify(this.mockintoSchedules));
+         this.allReadySchedule = this.mockintoSchedules.every((schedule:any) => schedule.statusDescription === 'Ready');
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -110,6 +126,9 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
+
+
 
   deleteMockintoSchedule(profile: any) {
     (Swal as any).fire({

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { StripeMockintoService } from '../services/stripe.service';
 import { Router } from '@angular/router';
 import { SharedService } from '../services/shared.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mockinto-plan',
@@ -63,7 +64,23 @@ export class MockintoPlanComponent implements OnInit {
     // event.stopImmediatePropagation();
     switch (plan) {
       case 'Starter':
-        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Starter' } });
+       // this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Starter' } });
+     
+        (Swal as any).fire({
+          text: "You Already Use the Free plan please Choose  the another plan",
+          icon: "warning",
+          buttonsStyling: false,
+          cancelButtonText: 'Cancel',
+          customClass: {
+            confirmButton: "btn btn-primary",
+           
+          }
+        }).then((result: any) => {
+          if(result.isConfirmed) {
+          }
+        });
+      
+
         break;
 
       case 'Professional':

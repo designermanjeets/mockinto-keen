@@ -51,6 +51,7 @@ export class ResumeComponent implements OnInit {
     const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
     const filterResumeCount = plan.filter(x=>x.configKey == "resumecount");
     this.resumeCount = Number(filterResumeCount[0]?.configValue)
+    console.log("resume Count",this.resumeCount)
     this.fetchAllResumes();
   }
 

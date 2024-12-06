@@ -110,6 +110,26 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         });
       }
+      if(res) {
+        if(payload.password){
+          (Swal as any).fire({
+            title: 'Warning!',
+            text: "Please Login New Credentials",
+            icon: "warning",
+            buttonsStyling: false,
+            confirmButtonText: "Logout",
+            customClass: {
+              confirmButton: "btn btn-primary",
+             
+            }
+          }).then((result: any) => {
+            if(result.isConfirmed) {
+              this.auth.logout();
+            }
+          });
+        }
+       
+      }
     });
   }
 

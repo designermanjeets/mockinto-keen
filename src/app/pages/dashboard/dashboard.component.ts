@@ -148,7 +148,8 @@ export class DashboardComponent implements OnInit {
       data => {
         if(data) {
           this.allMockintoHistory = data.content;
-          console.log(this.allMockintoHistory);
+          this.allMockintoHistory = this.allMockintoHistory.filter((mockinto:any)=>mockinto.statusDescription === 'Ready')
+          console.log(this.allMockintoHistory.length);
         }
         this.sharedService.isLoadingSubject?.next(false);
         this.cdr.detectChanges();

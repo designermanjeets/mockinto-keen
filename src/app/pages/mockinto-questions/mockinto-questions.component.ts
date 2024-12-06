@@ -64,7 +64,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     this.isLoading$.next(true);
     this.fetchAllMockintoQuestions();
     this.fetchJobProfiles();
-    this.fetchAllMockintoSchedules();
+   // this.fetchAllMockintoSchedules();
   }
 
   ngAfterViewInit(): void {
@@ -83,11 +83,11 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
+    this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
       data => {
         if(data) {
           this.mockintoSchedules = data.content;
-          console.log(this.mockintoSchedules)
+          console.log("all Schedule",this.mockintoSchedules)
         }
         this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();

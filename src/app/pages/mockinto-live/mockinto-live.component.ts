@@ -4,6 +4,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription, timestamp } from 'rxjs';
 import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
+
 
 import noUiSlider from 'nouislider';
 import Swal from 'sweetalert2';
@@ -22,7 +24,8 @@ let speechRecognitionList: any;
 @Component({
   selector: 'app-mockinto-live',
   templateUrl: './mockinto-live.component.html',
-  styleUrls: ['./mockinto-live.component.scss']
+  styleUrls: ['./mockinto-live.component.scss'],
+  providers: [DatePipe]
 })
 export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
@@ -34,6 +37,8 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   mockintoSchedule: any = {};
   scheduleId: string = '';
   jogIDBotQuestions: any = [];
+  currentDateTime: string;
+
 
   // Speech Systhesizer Functionality Starts Here
   synth = window.speechSynthesis;
@@ -52,14 +57,19 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
 
   voicePitch: number = 0;
   voiceRate: number = 0;
+  candidateName = JSON.parse(localStorage.getItem('auth-user') || '{}')
 
   constructor(
     private cdRef: ChangeDetectorRef,
     private sharedService: SharedService,
-    private router: Router
+    private router: Router,
+    private datePipe: DatePipe
   ) {
     const loadingSubscr = this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res));
     this.unsubscribe.push(loadingSubscr);
+    const currentDate = new Date();
+    
+    this.currentDateTime = this.datePipe.transform(currentDate, 'hh:mm a MMM dd, yyyy')!;
   }
 
   ngOnInit(): void {
@@ -123,8 +133,8 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         cancelButtonText: 'No, keep it',
       }).then((result: any) => {
         if (result.isConfirmed) {
-          this.isMeetingProgress = false;
-          //this.jogIDBotQuestions = [];
+          this.isMeetingProgress = true;
+          this.jogIDBotQuestions = [];
           this.router.navigate(['dashboard/mockinto-history']);
           if(this.jogIDBotQuestions.length == 0) {
             this.endMockintoSchedule();
@@ -152,7 +162,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
      
     })
     this.sharedService.endMockintoSchedule(payload).subscribe((res) => {
-      this.isMeetingProgress = false;
+      //this.isMeetingProgress = false;
       this.jogIDBotQuestions = [];
       this.router.navigate(['dashboard/mockinto-history']);
     });
@@ -166,7 +176,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
      
     })
     this.sharedService.stopMockintoSchedule(payload).subscribe((res) => {
-      this.isMeetingProgress = false;
+     // this.isMeetingProgress = false;
       this.jogIDBotQuestions = [];
       this.router.navigate(['dashboard/mockinto-history']);
     });
@@ -370,8 +380,8 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       })
       this.startWebkitSpeechRecognition(this.jogIDBotQuestions[this.currentQuestionIndex].question);
     } else {
-      this.isMeetingProgress = false;
-      this.jogIDBotQuestions = [];
+      this.isMeetingProgress = true;
+      //this.jogIDBotQuestions = [];
       this.currentQuestionIndex = 0;
     }
   }

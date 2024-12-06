@@ -158,28 +158,37 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const registrationSubscr = this.authService
       .registration(payload)
       .pipe(first())
-      .subscribe((user: UserModel | any) => {
-        if(!user.error) {
-          const backendPayload = {
-            plan: {
-              id: 9, //this.selectedPlan.id,
+      .subscribe((user: UserModel) => {
+        if (user) {
+          // if(this.selectedPlan && this.selectedPlan !== 'starter') {
+          //   this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
+          // } else {
+          //   this.router.navigate(['/']);
+          // }
+          if(!this.selectedPlan){
+            console.log("signup for free")
+            const backendPayload = {
+              plan: {
+                id: 9, //this.selectedPlan.id,
+              },
+              tenant: {
+              id: user.tenant_id
             },
-            tenant: {
-            id: user.tenant_id
-          },
-            startDate: new Date().toISOString(),
-            status:  true,
-            deleted: 0,
-            endDate: new Date().toISOString(),
-            lastPaymentDate: new Date().toISOString(),
-            lastPaymentAmount: 0,
-            renewalDate: new Date().toISOString(),
-            futureDiscount: 0,
-          };
-          this.updateBackendForPlanChange(backendPayload);
+              startDate: new Date().toISOString(),
+              status:  true,
+              deleted: 0,
+              endDate: new Date().toISOString(),
+              lastPaymentDate: new Date().toISOString(),
+              lastPaymentAmount: 0,
+              renewalDate: new Date().toISOString(),
+              futureDiscount: 0,
+            };
+            this.updateBackendForPlanChange(backendPayload);
+
+          }
         } else {
           this.hasError = true;
-          this.regError = user.error.data;
+          //this.regError = user.error.data;
         } 
       }, error => {
         this.hasError = true;
