@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 export class JobProfileComponent implements OnInit {
 
   jobProfiles: any = [];
+  origJobProfiles: any = [];
   masterCheckbox: boolean = false;
   someChecked = [];
 
@@ -75,6 +76,7 @@ export class JobProfileComponent implements OnInit {
         if(data) {
           this.paginator.length = data.totalElements;
           this.jobProfiles = data.content;
+          this.origJobProfiles = JSON.parse(JSON.stringify(this.jobProfiles));
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -305,6 +307,19 @@ export class JobProfileComponent implements OnInit {
     const filterValue = value.toLowerCase();
 
     return this.allFruits.filter(fruit => fruit.toLowerCase().includes(filterValue));
+  }
+
+  searchJobProfile(event: any) {
+    const value = event.target.value;
+    this.sharedService.isLoadingSubject?.next(true);
+    if(value) {
+      this.jobProfiles = this.origJobProfiles.filter((item: any) => {
+        return item.jobHeader.toLowerCase().includes(value.toLowerCase());
+      });
+    } else {
+      this.jobProfiles = JSON.parse(JSON.stringify(this.origJobProfiles));
+    }
+    this.sharedService.isLoadingSubject?.next(false);
   }
 
 }

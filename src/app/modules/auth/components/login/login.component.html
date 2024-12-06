@@ -27,7 +27,7 @@
   <ng-container *ngIf="hasError">
     <div class="mb-lg-15 alert alert-danger">
       <div class="alert-text font-weight-bold">
-        The login details are incorrect
+        {{logError || 'The login details are incorrect'}}
       </div>
     </div>
   </ng-container>
@@ -35,7 +35,7 @@
 
   <!--begin::Form group-->
   <div class="fv-row mb-10">
-    <label class="form-label fs-6  text-dark">Username</label>
+    <label class="form-label fs-6  text-dark"><span class="required">Username</span></label>
     <input class="form-control form-control-lg form-control-solid" type="email" name="email" formControlName="username"
       autocomplete="off" [ngClass]="{
         'is-invalid': loginForm.controls['username'].invalid && loginForm.controls['username'].touched,
@@ -68,7 +68,7 @@
   <div class="fv-row mb-10">
     <div class="d-flex justify-content-between mt-n5">
       <div class="d-flex flex-stack mb-2">
-        <label class="form-label  text-dark fs-6 mb-0">Password</label>
+        <label class="form-label  text-dark fs-6 mb-0"><span class="required">Password</span></label>
         <a routerLink="/auth/forgot-password" class="link-primary fs-6" id="kt_login_forgot"
           [style.margin-left]="'5px'">
           Forgot Password ?
@@ -138,9 +138,11 @@
 <ng-template #formError let-control="control" let-message="message" let-validation="validation">
   <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
     <div class="fv-plugins-message-container">
-      <span role="alert">
-        {{ message }}
-      </span>
+      <div class="fv-help-block">
+        <span role="alert">
+          {{ message }}
+        </span>
+      </div>
     </div>
   </ng-container>
 </ng-template>

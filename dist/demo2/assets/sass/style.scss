@@ -7044,3 +7044,29 @@ body:not([data-kt-sticky-header=on]) .header .header-menu .menu > .menu-item > .
     top: auto;
     right: 28px
 }
+
+
+:root {
+    --bs-primary: #FF3D00;
+    --bs-link-color: #FF3D00;
+    --bs-primary-active: #FF3D00;
+    --bs-progress-bar-bg: #ff3d00;
+}
+
+.link-primary:hover, .link-primary:focus, .link-primary {
+    color: #FF3D00 !important
+}
+.form-check-input:checked {
+    background-color: #FF3D00 !important;
+    border-color: #FF3D00 !important;
+}
+.border-primary{
+    border:2px solid #ff3d00 !important;
+}
+.progress-bar{
+    background-color: #ff3d00 !important;
+}
+body.no-background {
+    background-image: none !important;
+    background-color: #fff;
+}

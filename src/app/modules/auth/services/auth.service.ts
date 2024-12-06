@@ -59,7 +59,7 @@ export class AuthService implements OnDestroy {
       }),
       switchMap(() => this.getUserByToken()),
       catchError((err) => {
-        return of(undefined);
+        return of(err);
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -125,7 +125,7 @@ export class AuthService implements OnDestroy {
       }),
       switchMap(() => this.login(user.user_email, user.password)),
       catchError((err) => {
-        return of(undefined);
+        return of(err);
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );

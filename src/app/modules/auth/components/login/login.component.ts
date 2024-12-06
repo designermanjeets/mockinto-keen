@@ -24,6 +24,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   selectedPlan: string;
 
+  logError = '';
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -95,8 +97,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     const loginSubscr = this.authService
       .login(this.f.username.value, this.f.password.value, true)
       .pipe(first())
-      .subscribe((user: UserModel | undefined) => {
-        if (user) {
+      .subscribe((user: UserModel | undefined | any) => {
+        if (!user.error) {
           if(this.selectedPlan && this.selectedPlan !== 'starter') {
             this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           } else {
@@ -104,6 +106,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         } else {
           this.hasError = true;
+          this.logError = user.error.data;
         }
       });
     this.unsubscribe.push(loginSubscr);

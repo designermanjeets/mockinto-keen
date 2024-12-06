@@ -9,8 +9,6 @@ import * as Swal from 'sweetalert2';
 interface Payload {
   first_name: string;
   last_name: string;
-  user_email: string;
-  preferredTimezone: string;
   password?: string;
 }
 
@@ -35,9 +33,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   preferredTimezone: string = '';
   candidatePassword: string = '';
   confirmPassword: string = '';
-  passwordMismatch: boolean = false;
-
-
+  passwordMismatch: boolean = true;
 
   private authLocalStorageToken = `auth-user`;
 
@@ -57,48 +53,68 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     this.getCandidateDetails();
   }
 
-
   getCandidateDetails(){
-    const loggedInUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
-        if(loggedInUser) {
-          this.first_name = loggedInUser.firstName;
-          this.last_name = loggedInUser.lastName;
-          this.candidatePhone = loggedInUser.candidates[0].candidatePhone;
-          this.candidateEmail = loggedInUser.candidates[0].candidateEmail;
-          this.preferredTimezone = loggedInUser.candidates[0].preferredTimezone;
-        } 
-       this.cdr.detectChanges();
-      
+    this.sharedService.getCandidateDetails().subscribe((res) => {
+      if(res) {
+        this.first_name = res.first_name;
+        this.last_name = res.last_name;
+        this.candidatePhone = res.candidatePhone;
+        this.candidateEmail = res.candidateEmail;
+        this.preferredTimezone = res.preferredTimezone;
+        this.cdr.markForCheck();
+      }
+    });      
   }
 
- 
-
   saveSettings() {
+
+    if(this.passwordMismatch || !this.first_name || !this.last_name) {
+      (Swal as any).fire({
+        title: 'Error!',
+        text: 'Please fill in all required fields',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      return;
+    }
+
     this.isLoading$.next(true);
     const payload: Payload = {
       first_name: this.first_name,
       last_name: this.last_name,
-      user_email: this.candidateEmail,
-      preferredTimezone: this.preferredTimezone
+      password: this.candidatePassword,
     };
     if (this.candidatePassword && this.confirmPassword) {
       payload.password = this.candidatePassword;
-
     }
 
     this.sharedService.editProfile(payload).subscribe((res) => {
-      if(res) {
-       
+      if(!res.error){
+        (Swal as any).fire({
+          title: 'Success!',
+          text: 'Profile updated successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          this.isLoading$.next(false);
+          this.cdr.detectChanges();
+        });
+      } else {
+        (Swal as any).fire({
+          title: 'Error!',
+          text: res.error.data,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          this.isLoading$.next(false);
+          this.cdr.detectChanges();
+        });
       }
     });
-
-    setTimeout(() => {
-      this.isLoading$.next(false);
-      this.cdr.detectChanges();
-    }, 1500);
   }
 
-  checkPasswordsMatch(): void {
+  checkPasswordsMatch(event: any): void {
+    this.confirmPassword = event;
     this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
   }
 
@@ -120,6 +136,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   updatePassword(event: any) {
     this.candidatePassword = event;
+    this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
   }
 
   updatePreferredTimezone(event: any) {

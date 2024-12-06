@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { UserModel } from '../../models/user.model';
 import { first } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { SharedService } from 'src/app/pages/services/shared.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-registration',
@@ -19,17 +20,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   hasError: boolean;
   isLoading$: Observable<boolean>;
   selectedPlan: string;
+  regError: string;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
+  @ViewChild('termsDialogTemplate', { static: true }) termsDialogTemplate!: TemplateRef<any>;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private cdRef: ChangeDetectorRef,
+    public dialog: MatDialog,
 
   ) {
     this.isLoading$ = this.authService.isLoading$;
@@ -107,7 +112,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             Validators.maxLength(100),
           ]),
         ],
-        isAgreed: [false, Validators.compose([Validators.required])],
+        isAgreed: [false],
       },
       {
         validator: ConfirmPasswordValidator.MatchPassword,
@@ -117,14 +122,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   submit() {
     this.hasError = false;
-    const data: {
-      [key: string]: string;
-    } = {};
-    Object.keys(this.f).forEach((key) => {
-      data[key] = this.f[key].value;
-    });
-    // const newUser = new UserModel();
-    // newUser.setUser(result);
+    const data: { [key: string]: string; } = {};
+    
+    Object.keys(this.f).forEach((key) => { data[key] = this.f[key].value });
 
     let payload = {
       first_name: data.first_name,
@@ -136,25 +136,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         {
           active: "1",
           candidateEmail: data.user_email,
-          candidatePhone: "2343567",
+          candidatePhone: "",
           deleted: "0",
           preferredTimezone: "CST",
           resumeS3Path: null,
           updatedBy: "1",
-          tenant: {
-            id: "0"
-          }
         }
       ],
       active: 1,
       deleted: 0,
       updated_by: "1",
-      tenant_id: 0,
-      roles: [
-        {
-          role: "admin"
-        }
-      ],
+      roles: [ { role: "admin" } ],
       enabled: 1,
       username: data.username,
       user_email: data.user_email,
@@ -166,37 +158,32 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const registrationSubscr = this.authService
       .registration(payload)
       .pipe(first())
-      .subscribe((user: UserModel) => {
-        if (user) {
-          // if(this.selectedPlan && this.selectedPlan !== 'starter') {
-          //   this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
-          // } else {
-          //   this.router.navigate(['/']);
-          // }
-          if(!this.selectedPlan){
-            console.log("signup for free")
-            const backendPayload = {
-              plan: {
-                id: 9, //this.selectedPlan.id,
-              },
-              tenant: {
-              id: user.tenant_id
+      .subscribe((user: UserModel | any) => {
+        if(!user.error) {
+          const backendPayload = {
+            plan: {
+              id: 9, //this.selectedPlan.id,
             },
-              startDate: new Date().toISOString(),
-              status:  true,
-              deleted: 0,
-              endDate: new Date().toISOString(),
-              lastPaymentDate: new Date().toISOString(),
-              lastPaymentAmount: 0,
-              renewalDate: new Date().toISOString(),
-              futureDiscount: 0,
-            };
-            this.updateBackendForPlanChange(backendPayload);
-
-          }
+            tenant: {
+            id: user.tenant_id
+          },
+            startDate: new Date().toISOString(),
+            status:  true,
+            deleted: 0,
+            endDate: new Date().toISOString(),
+            lastPaymentDate: new Date().toISOString(),
+            lastPaymentAmount: 0,
+            renewalDate: new Date().toISOString(),
+            futureDiscount: 0,
+          };
+          this.updateBackendForPlanChange(backendPayload);
         } else {
           this.hasError = true;
-        }
+          this.regError = user.error.data;
+        } 
+      }, error => {
+        this.hasError = true;
+        this.regError = error.data;
       });
     this.unsubscribe.push(registrationSubscr);
   }
@@ -208,17 +195,38 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res:any) => {
       if(res) {
-        console.log(res);
-        this.router.navigate(['dashboard/landing']);
+        (Swal as any).fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Registration successful.',
+        }).then(() => {
+          this.router.navigate(['/']);
+        });
       } else {
         (Swal as any).fire({
           icon: 'error',
           title: 'Error',
           text: 'Something went wrong. Please try again later.',
+        }).then(() => {
+          this.router.navigate(['/landing-page']);
         });
       }
     });
     
+  }
+
+  openTerms(event: Event) {
+    event.preventDefault();
+    const dialogRef = this.dialog.open(this.termsDialogTemplate, {
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  closeDialog() {
+    this.dialog.closeAll();
   }
 
 }

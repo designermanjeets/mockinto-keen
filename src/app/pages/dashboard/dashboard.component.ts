@@ -41,6 +41,10 @@ export class DashboardComponent implements OnInit {
   plansData: any[] = [];
   tenantId:any;
 
+  jobProfiles: any = [];
+  isLoaded = false;
+  allMockintoHistory: any = [];
+
   constructor(
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef,
@@ -56,9 +60,11 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/landing-page']);
     } else {
       this.fetchDashboardData();
+      this.getConfig();
+      this.getSubscription();
+      this.fetchAlljobProfiles();
+      this.fetchAllMockintoSchedules();
     }
-    this.getConfig();
-    this.getSubscription();
   }
 
   fetchDashboardData() {
@@ -86,9 +92,7 @@ export class DashboardComponent implements OnInit {
         }
       }
     ); 
-
   }
-
 
   getSubscription(){
     this.sharedService.isLoadingSubject?.next(true);
@@ -100,7 +104,6 @@ export class DashboardComponent implements OnInit {
       }
     ); 
   }
-
 
   getConfigByTenat(){
     this.sharedService.isLoadingSubject?.next(true);
@@ -114,12 +117,43 @@ export class DashboardComponent implements OnInit {
         }
       }
     ); 
-
   }
 
   goToMockintoSchedule() {
     this.router.navigateByUrl('/dashboard/mockinto-schedule');
     // this.sharedService.sendToRouterSubject.next('mockinto-schedule');
+  }
+
+  goToJobProfiles() {
+    this.router.navigateByUrl('/dashboard/job-profile');
+  }
+
+  fetchAlljobProfiles(page = 0, size = 10) {
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.fetchAllJobProfiles(page, size).subscribe(
+      data => {
+        if(data) {
+          this.jobProfiles = data.content;
+          this.isLoaded = true;
+        }
+        this.sharedService.isLoadingSubject?.next(false);
+        this.cdr.detectChanges();
+      }
+    );
+  }
+
+  fetchAllMockintoSchedules(page = 0, size = 10) {
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
+      data => {
+        if(data) {
+          this.allMockintoHistory = data.content;
+          console.log(this.allMockintoHistory);
+        }
+        this.sharedService.isLoadingSubject?.next(false);
+        this.cdr.detectChanges();
+      }
+    );
   }
 
   async openModal() {
