@@ -33,7 +33,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   preferredTimezone: string = '';
   candidatePassword: string = '';
   confirmPassword: string = '';
-  passwordMismatch: boolean = true;
+  passwordMismatch: boolean = false;
 
   private authLocalStorageToken = `auth-user`;
 
@@ -134,6 +134,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkPasswordsMatch(event: any): void {
+    console.log("call")
     this.confirmPassword = event;
     this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
   }
@@ -156,7 +157,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   updatePassword(event: any) {
     this.candidatePassword = event;
-    this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
+    //this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
   }
 
   updatePreferredTimezone(event: any) {

@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../_metronic/partials';
 import { SharedService } from '../services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dashboard',
@@ -155,6 +156,28 @@ export class DashboardComponent implements OnInit {
         this.cdr.detectChanges();
       }
     );
+  }
+
+  startMockintoSchedule(schedule: any) {
+    (Swal as any).fire({
+      text: "Are you sure you would like to Start? This will start the Mock Interview and the minutes will start counting down.",
+      icon: "warning",
+      showCancelButton: true,
+      buttonsStyling: false,
+      confirmButtonText: "Yes, Start it!",
+      cancelButtonText: "No",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-active-light"
+      }
+    }).then((result: any) => {
+      if(result.isDismissed) {
+        return;
+      }
+      if(result.isConfirmed) {
+        this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
+      }
+    });
   }
 
   async openModal() {
