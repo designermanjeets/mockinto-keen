@@ -64,7 +64,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     this.isLoading$.next(true);
     this.fetchAllMockintoQuestions();
     this.fetchJobProfiles();
-   // this.fetchAllMockintoSchedules();
+   this.fetchAllMockintoSchedules();
   }
 
   ngAfterViewInit(): void {
@@ -362,7 +362,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       const paginators = this.paginatorSub.toArray();
       const start = paginators[idx].pageIndex * paginators[idx].pageSize;
       const end = start + paginators[idx].pageSize;
-      return this.mockintoQuestions[idx].schedule.botJobCandidateQuestions.slice(start, end);
+      return this.mockintoQuestions[idx]?.schedule?.botJobCandidateQuestions.slice(start, end);
     }
   }
 

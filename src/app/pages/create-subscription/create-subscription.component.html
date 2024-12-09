@@ -126,10 +126,19 @@
                                                         <div style="display: flex; flex-direction: row; gap: 10px">
                                                             <mat-form-field appearance="outline" style="flex: 1">
                                                                 <mat-label>ZIP Code</mat-label>
-                                                                <input matInput formControlName="zipcode" />
-                                                                <mat-error *ngIf="checkoutForm.controls['zipcode'].invalid">
+                                                                <input  matInput formControlName="zipcode"  maxlength="6" (input)="allowOnlyNumbers($event)" />
+                                                                 <mat-error *ngIf="checkoutForm.controls['zipcode'].hasError('required')">
                                                                     ZIP Code is required
                                                                 </mat-error>
+                                                            <mat-error *ngIf="checkoutForm.controls['zipcode'].hasError('pattern')">
+                                                                Only numeric values are allowed
+                                                            </mat-error>
+                                                            <mat-error *ngIf="checkoutForm.controls['zipcode'].hasError('maxlength')">
+                                                                ZIP Code cannot exceed 6 digits
+                                                              </mat-error>
+                                                              <mat-error *ngIf="checkoutForm.controls['zipcode'].hasError('minlength')">
+                                                                ZIP Code must be exactly 6 digits
+                                                              </mat-error>
                                                             </mat-form-field>
                                                             <mat-form-field appearance="outline" style="flex: 1">
                                                                 <mat-label>City</mat-label>

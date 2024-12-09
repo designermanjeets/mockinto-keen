@@ -58,7 +58,7 @@
                     <div class="d-flex justify-content-end">
                         <!--begin::Add customer-->
                         <button type="button" class="btn btn-flex btn-primary" *ngIf="!someChecked?.length"
-                            (click)="addMockintoQuestionDialog()" data-bs-toggle="modal"
+                            (click)="addMockintoQuestionDialog()"
                             data-bs-target="#kt_modal_upload">
                             <i class="ki-duotone ki-folder-up fs-2">
                                 <span class="path1"></span>
@@ -445,7 +445,7 @@
                                                         aria-label="Select Mockinto Schedule ID" name="mockScheduleID"
                                                         [(ngModel)]="mockScheduleID">
                                                         <option value="">--select--</option>
-                                                        <option *ngFor="let opt of mockintoSchedules"
+                                                        <option *ngFor="let opt of mockintoSchedules" 
                                                             [value]="opt.id">{{opt.id}}</option>
                                                     </select>
                                                     <!--end::Input-->

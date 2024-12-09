@@ -165,7 +165,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           // } else {
           //   this.router.navigate(['/']);
           // }
-          if(!this.selectedPlan){
+          if(this.selectedPlan){
             console.log("signup for free")
             const backendPayload = {
               plan: {

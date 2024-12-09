@@ -7,8 +7,8 @@ import * as Swal from 'sweetalert2';
 
 
 interface Payload {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password?: string;
 }
 
@@ -36,6 +36,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   passwordMismatch: boolean = false;
 
   private authLocalStorageToken = `auth-user`;
+  authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -50,14 +51,15 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+   console.log("auth user",this.authUser);
+   this.first_name = this.authUser.firstName;
+   this.last_name = this.authUser.lastName;
     this.getCandidateDetails();
   }
 
   getCandidateDetails(){
     this.sharedService.getCandidateDetails().subscribe((res) => {
       if(res) {
-        this.first_name = res.first_name;
-        this.last_name = res.last_name;
         this.candidatePhone = res.candidatePhone;
         this.candidateEmail = res.candidateEmail;
         this.preferredTimezone = res.preferredTimezone;
@@ -80,9 +82,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
     this.isLoading$.next(true);
     const payload: Payload = {
-      first_name: this.first_name,
-      last_name: this.last_name,
-      password: this.candidatePassword,
+      firstName: this.first_name,
+      lastName: this.last_name,
+      //password: this.candidatePassword,
     };
     if (this.candidatePassword && this.confirmPassword) {
       payload.password = this.candidatePassword;

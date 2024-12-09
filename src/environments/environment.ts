@@ -6,9 +6,11 @@ export const environment = {
   production: false,
   appVersion: 'v1.0.0',
   isMockEnabled: false,
-  apiUrl: 'https://app.mockinto.com',
+  apiUrl: 'https://app.mockinto.com/api',
   STRIPE_PUBLIC_KEY: "pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0"
 };
+
+// https://app.mockinto.com/api/authenticate
 
 /*
  * For easier debugging in development mode, you can import the following file

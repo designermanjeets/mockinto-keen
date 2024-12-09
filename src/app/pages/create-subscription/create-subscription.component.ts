@@ -73,7 +73,7 @@ export class CreateSubscriptionComponent implements OnInit {
       name: [this.logginInUser.username || '', [Validators.required]],
       email: [this.logginInUser.email_id || '', [Validators.required]],
       address: [this.logginInUser.address || '', [Validators.required]],
-      zipcode: ['', [Validators.required]],
+      zipcode: ['', [Validators.required, Validators.maxLength(6),  Validators.minLength(6),Validators.pattern('^[0-9]*$'),]],
       city: ['', [Validators.required]],
       amount: [this.selectedPlan.amount, [Validators.required, Validators.pattern(/\d+/)]],
     });
@@ -82,6 +82,8 @@ export class CreateSubscriptionComponent implements OnInit {
     if (this.selectedPlan) {
       this.checkoutForm.get('amount')?.setValue(this.selectedPlan.amount);
     }
+
+    
 
     const amount = this.checkoutForm.get('amount')?.value;
     this.plutoService
@@ -94,6 +96,13 @@ export class CreateSubscriptionComponent implements OnInit {
         this.cdRef.detectChanges();
       });
   }
+
+  allowOnlyNumbers(event: any): void {
+    const input = event.target.value;
+    event.target.value = input.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    this.checkoutForm.controls['zipcode'].setValue(event.target.value);
+  }
+
 
   collectPayment() {
     if (this.paying() || this.checkoutForm.invalid) {
