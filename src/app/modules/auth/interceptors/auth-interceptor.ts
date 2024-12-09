@@ -53,6 +53,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         // Handle CORS error (status code 0)
         if (error.status === 0) {
+          this.router.navigate(['auth/login']);
           // Return an empty observable to stop further processing
           return throwError(() => new Error('CORS error: Please check your server CORS configuration.'));
         }
