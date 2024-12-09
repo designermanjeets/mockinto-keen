@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { first } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 enum ErrorStates {
   NotSubmitted,
@@ -23,7 +25,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,private router: Router) {
     this.isLoading$ = this.authService.isLoading$;
   }
 
@@ -38,8 +40,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   initForm() {
     this.forgotPasswordForm = this.fb.group({
-      email: [
-        'admin@demo.com',
+      email: ['',
         Validators.compose([
           Validators.required,
           Validators.email,
@@ -51,18 +52,20 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   submit() {
-   // this.errorState = ErrorStates.NotSubmitted;
-    // const forgotPasswordSubscr = this.authService
-    //   .forgotPassword(this.f.email.value)
-    //   .pipe(first())
-    //   .subscribe((result: boolean) => {
-    //     this.errorState = result ? ErrorStates.NoError : ErrorStates.HasError;
-    //   });
-    const forgotPasswordSubscr = this.authService.forgotPassword(this.f.email.value).subscribe(res=>{
-      if(res){
+    const forgotPasswordSubscr = this.authService.forgotPassword(this.f.email.value).subscribe((res) => {
+      if (res) {
         this.errorState = res ? ErrorStates.NoError : ErrorStates.HasError;
+        Swal.fire({
+          title: 'Success',
+          text: 'Sent new Password Please check the entered email!',
+          icon: 'success',
+          timer: 5000,
+          showConfirmButton: false,
+        });
+        this.router.navigate(['auth/login']); 
       }
-    })
+    });
+  
     this.unsubscribe.push(forgotPasswordSubscr);
   }
 }

@@ -496,6 +496,21 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
+  fetchMockintoSummaryByScheduleId(scheduleId: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/interviewSchedule/summary?InterviewScheduleId=${scheduleId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('No Report Found'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
   stopMockintoSchedule(scheduleData: any): Observable<any> {
     this.isLoadingSubject?.next(true);
     return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, scheduleData)

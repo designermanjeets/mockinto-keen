@@ -54,7 +54,7 @@ export class MockintoHistoryComponent implements OnInit {
 
   reportMockintoSchedule(mockintoSchedule: any) {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchMockintoReportByScheduleId(mockintoSchedule.id).subscribe(
+    this.sharedService.fetchMockintoSummaryByScheduleId(mockintoSchedule.id).subscribe(
       data => {
         if(data) {
           this.sharedService.isLoadingSubject?.next(false);

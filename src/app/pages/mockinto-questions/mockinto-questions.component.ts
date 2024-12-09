@@ -97,7 +97,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
 
   fetchAllMockintoQuestions(page = 0, size = 10) {
     this.isLoading$.next(true);
-    this.sharedService.fetchAllMockintoQuestions(1, page, size).subscribe(
+    this.sharedService.fetchAllMockintoQuestions(0, page, size).subscribe(
       data => {
         if(data) {
           this.mockintoQuestions = data.content;
