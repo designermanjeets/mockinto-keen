@@ -154,7 +154,6 @@ export class JobProfileComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -196,7 +195,6 @@ export class JobProfileComponent implements OnInit {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
       });
     }
     }

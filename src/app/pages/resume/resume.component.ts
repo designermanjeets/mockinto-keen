@@ -51,7 +51,6 @@ export class ResumeComponent implements OnInit {
     const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
     const filterResumeCount = plan.filter(x=>x.configKey == "resumecount");
     this.resumeCount = Number(filterResumeCount[0]?.configValue)
-    console.log("resume Count",this.resumeCount)
     this.fetchAllResumes();
   }
 
@@ -158,7 +157,6 @@ export class ResumeComponent implements OnInit {
         return;
       }
       if(result.isConfirmed) {
-       console.log("click subscr")
        this.router.navigate(['dashboard/mockinto-plan']);
       }
     });
@@ -178,7 +176,6 @@ export class ResumeComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
   }
@@ -199,7 +196,6 @@ export class ResumeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -242,7 +238,6 @@ export class ResumeComponent implements OnInit {
   }
 
   onPageChange(event: any) {
-    console.log('event', event);
     this.fetchAllResumes(event.pageIndex, event.pageSize);
   }
 

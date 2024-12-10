@@ -187,7 +187,6 @@ export class CreateSubscriptionComponent implements OnInit {
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
-        console.log(res);
         this.router.navigate(['dashboard/landing']);
       } else {
         (Swal as any).fire({

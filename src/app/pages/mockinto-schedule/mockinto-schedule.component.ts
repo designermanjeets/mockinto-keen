@@ -83,8 +83,6 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    // Clear the interval when the component is destroyed
-    console.log("destruy",this.intervalId)
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
@@ -199,7 +197,6 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -261,7 +258,6 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
       });
     }
   }

@@ -53,8 +53,16 @@ export class ForgotPasswordComponent implements OnInit {
 
   submit() {
     const forgotPasswordSubscr = this.authService.forgotPassword(this.f.email.value).subscribe((res) => {
-      if (res) {
-        this.errorState = res ? ErrorStates.NoError : ErrorStates.HasError;
+       //this.errorState = res ? ErrorStates.NoError : ErrorStates.HasError;
+        if(res.success == false){
+          (Swal as any ).fire({
+            title: 'Warning',
+            text: res?.data ? res?.data : 'Please enter the Correct email',
+            icon: 'warning',
+            showConfirmButton:"ok",
+          });
+        }
+       else{
         Swal.fire({
           title: 'Success',
           text: 'Sent new Password Please check the entered email!',
@@ -64,6 +72,8 @@ export class ForgotPasswordComponent implements OnInit {
         });
         this.router.navigate(['auth/login']); 
       }
+     
+       
     });
   
     this.unsubscribe.push(forgotPasswordSubscr);

@@ -51,7 +51,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   console.log("auth user",this.authUser);
    this.first_name = this.authUser.firstName;
    this.last_name = this.authUser.lastName;
     this.getCandidateDetails();
@@ -136,7 +135,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkPasswordsMatch(event: any): void {
-    console.log("call")
     this.confirmPassword = event;
     this.passwordMismatch = this.candidatePassword !== this.confirmPassword;
   }

@@ -21,6 +21,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   selectedPlan: string;
   regError: string;
+  passwordMismatch: boolean = false;
+
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -77,6 +79,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.minLength(3),
             Validators.maxLength(100),
+            Validators.pattern('^[a-zA-Z ]*$')
           ]),
         ],
         last_name: [
@@ -85,6 +88,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.minLength(3),
             Validators.maxLength(100),
+            Validators.pattern('^[a-zA-Z ]*$')
           ]),
         ],
         user_email: [
@@ -165,8 +169,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           // } else {
           //   this.router.navigate(['/']);
           // }
+          if(this.selectedPlan == undefined){
+            this.selectedPlan = 'starter'
+          }
           if(this.selectedPlan){
-            console.log("signup for free")
             const backendPayload = {
               plan: {
                 id: 9, //this.selectedPlan.id,
@@ -201,6 +207,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
+
+  checkPasswordsMatch(event: any): void {
+   this.registrationForm.get('confirmPassword')?.value
+    this.passwordMismatch = this.registrationForm.get('password')?.value !== this.registrationForm.get('confirmPassword')?.value;
+  }
+
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res:any) => {
       if(res) {
@@ -230,7 +242,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 

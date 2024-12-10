@@ -81,7 +81,6 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     this.sharedService.fetchMockintoScheduleById(this.scheduleId).subscribe((res) => {
       if(res) {
         this.mockintoSchedule = res;
-        console.log(this.mockintoSchedule);
       }
     });
   }

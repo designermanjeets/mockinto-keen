@@ -67,7 +67,7 @@
                 <!--end::Description-->
                 <!--begin::Action-->
                 <div class="d-flex justify-content-end pb-0 px-0">
-                    <a href="#" class="btn btn-light btn-active-light-primary me-2"
+                    <a (click)="cancelSubscription()" class="btn btn-light btn-active-light-primary me-2"
                         id="kt_account_billing_cancel_subscription_btn">Cancel Subscription</a>
                     <button class="btn btn-primary" data-bs-toggle="modal"
                         data-bs-target="#kt_modal_upgrade_plan">Upgrade Plan</button>
@@ -114,7 +114,7 @@
                             <div class="d-flex h-100 align-items-center">
                                 <!--begin::Option-->
                                 <div
-                                    class="w-100 d-flex flex-column flex-center rounded-3  py-15 px-10 border-primary plancard">
+                                    class="w-100 d-flex flex-column flex-center rounded-3  py-15 px-10  plancard"  [ngClass]="{ 'active': selectedPlanName === 'Starter' }">
                                     <!--begin::Heading-->
                                     <div class="mb-7 text-center">
                                         <!--begin::Title-->
@@ -223,7 +223,7 @@
                             <div class="d-flex h-100 align-items-center">
                                 <!--begin::Option-->
                                 <div
-                                    class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-20 px-10 plancard">
+                                    class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-20 px-10 plancard" [ngClass]="{ 'active': selectedPlanName === 'Professional' }">
                                     <!--begin::Heading-->
                                     <div class="mb-7 text-center">
                                         <!--begin::Title-->
@@ -332,7 +332,7 @@
                             <div class="d-flex h-100 align-items-center">
                                 <!--begin::Option-->
                                 <div
-                                    class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 plancard">
+                                    class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 plancard" [ngClass]="{ 'active': selectedPlanName === 'Enterprise' }">
                                     <!--begin::Heading-->
                                     <div class="mb-7 text-center">
                                         <!--begin::Title-->

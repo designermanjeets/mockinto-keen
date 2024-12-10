@@ -87,7 +87,6 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       data => {
         if(data) {
           this.mockintoSchedules = data.content;
-          console.log("all Schedule",this.mockintoSchedules)
         }
         this.sharedService.isLoadingSubject?.next(false);
         this.cdRef.detectChanges();
@@ -181,7 +180,6 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -194,7 +192,6 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -330,7 +327,6 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         item.checked = event;
       }
     });
-    console.log(filteredQuestions)
   }
 
   onRowCheckChange(event: any, ques: string, idx: any, ijx: any) {

@@ -50,7 +50,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       if (params.plan) {
         this.selectedPlan = params.plan;
-        console.log('Selected plan:', this.selectedPlan);
       }
     });
   }

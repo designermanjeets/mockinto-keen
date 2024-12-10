@@ -57,7 +57,13 @@ export class AuthService implements OnDestroy {
         const result = this.setAuthFromLocalStorage(auth);
         return result;
       }),
-      switchMap(() => this.getUserByToken()),
+      switchMap((res: boolean) => {
+        if(res) {
+          return this.getUserByToken()
+        } else {
+          return of({ error: 'User Data Incorrect!'})
+        }
+      }),
       catchError((err) => {
         return of(err);
       }),
@@ -81,7 +87,7 @@ export class AuthService implements OnDestroy {
       text: 'You have been successfully logged out!',
       icon: 'success',
       showConfirmButton: false,
-      timer: 1500,
+      timer: 3000,
     }).then(() => {
       localStorage.removeItem(this.authLocalStorageToken);
       localStorage.removeItem('isLoggedIn');
@@ -91,7 +97,7 @@ export class AuthService implements OnDestroy {
       this.router.navigate(['/landing-page'], {
         queryParams: {},
       });
-      document.location.reload();
+      //document.location.reload();
     });
   }
 

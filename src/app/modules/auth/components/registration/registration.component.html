@@ -84,6 +84,14 @@
           control: registrationForm.controls['first_name']
         }"
       ></ng-container>
+      <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'pattern',
+        message: 'First Name cannot contain numbers',
+        control: registrationForm.controls['first_name']
+      }"
+    ></ng-container>
     </section>
     <section class="col-6">
       <label class="form-label  text-dark fs-6"><span class="required">Last Name</span></label>
@@ -123,6 +131,14 @@
           control: registrationForm.controls['last_name']
         }"
       ></ng-container>
+      <ng-container
+      [ngTemplateOutlet]="formError"
+      [ngTemplateOutletContext]="{
+        validation: 'pattern',
+        message: 'last Name cannot contain numbers',
+        control: registrationForm.controls['last_name']
+      }"
+    ></ng-container>
     </section>
   </div>
   <!--end::Form group-->
@@ -230,6 +246,7 @@
         name="confirmPassword"
         autocomplete="off"
         formControlName="confirmPassword"
+        (ngModelChange)="checkPasswordsMatch($event)"
         [ngClass]="{
           'is-invalid': registrationForm.controls['confirmPassword'].invalid && registrationForm.controls['confirmPassword'].touched,
           'is-valid': registrationForm.controls['confirmPassword'].valid
@@ -259,7 +276,10 @@
           control: registrationForm.controls['confirmPassword']
         }"
       ></ng-container>
-      <ng-container
+      <div *ngIf="passwordMismatch">
+        <small class="text-danger">Passwords do not match.</small>
+      </div>
+      <!-- <ng-container
         *ngIf="
           registrationForm.controls['confirmPassword'].errors &&
           registrationForm.controls['confirmPassword'].errors.ConfirmPassword
@@ -270,7 +290,7 @@
             'Passsword' and 'Confirm Password' didn't match.
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
     </section>
   </div>
   <!--end::Form group-->

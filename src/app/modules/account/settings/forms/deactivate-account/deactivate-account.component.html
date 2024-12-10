@@ -46,7 +46,9 @@
             class="form-check-input"
             type="checkbox"
             name="confirm"
-            value="false"
+            [value]=isCheckdeactiveAccount
+            [(ngModel)]="isCheckdeactiveAccount"
+           
           /><label class="form-check-label fw-bold ps-2 fs-6" for="deactivate"
             >I confirm my account deactivation</label
           >

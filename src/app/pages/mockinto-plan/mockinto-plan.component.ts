@@ -17,6 +17,8 @@ export class MockintoPlanComponent implements OnInit {
   upgrade_plan_radio: any;
 
   allTenantGeneralConfig: any = [];
+  tenantId:any;
+  selectedPlanName :any
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -26,16 +28,13 @@ export class MockintoPlanComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+   
+    this.tenantId = loggedInUser.tenant_id;
     this.fetchAllPlans();
     this.getConfig();
-    this.allTenantGeneralConfig = this.sharedService.allTenantGeneralConfig;
-    console.log(this.allTenantGeneralConfig);
-    const result = this.allTenantGeneralConfig.features[0]
-      .split("\n")
-      .map((item: any) => item.trim())
-      .filter((item: any) => item.length > 0) // Remove empty entries
-      .map((item: any, index: any) => ({ id: index + 1, description: item }));
-    console.log(result);
+    this.getSubscription();
+   
   }
 
 
@@ -49,6 +48,17 @@ export class MockintoPlanComponent implements OnInit {
       }
     ); 
 
+  }
+
+  getSubscription(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        this.selectedPlanName = data[0]?.plan?.name;
+        this.cdRef.detectChanges();
+        
+      }
+    ); 
   }
 
   fetchAllPlans() {
@@ -93,6 +103,11 @@ export class MockintoPlanComponent implements OnInit {
       default:
         break;
     }
+  }
+
+
+  cancelSubscription(){
+
   }
 
 }

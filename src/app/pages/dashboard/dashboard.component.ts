@@ -3,6 +3,7 @@ import { ModalConfig, ModalComponent } from '../../_metronic/partials';
 import { SharedService } from '../services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from 'src/app/modules/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -50,7 +51,8 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private auth: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +73,6 @@ export class DashboardComponent implements OnInit {
   fetchDashboardData() {
     this.sharedService.fetchDashboardData().subscribe(
       (data) => {
-        console.log('data', data);
         if(!data) {
           // this.dashboardData = this.mockData;
         } else {
@@ -89,6 +90,7 @@ export class DashboardComponent implements OnInit {
       data => {
         if(data) {
          //this.plansData = data.filter((item:any) => item.category === 'plan');
+         
          localStorage.setItem('general_config',JSON.stringify(data));
         }
       }
@@ -99,8 +101,21 @@ export class DashboardComponent implements OnInit {
     this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
       data => {
-        if(data) {
-         localStorage.setItem('tenant_general_config',JSON.stringify(data[0]?.plan));
+        if(data.length <= 0) {
+          (Swal as any).fire({
+            title: 'Warning',
+            text: 'Some technical issue occur Please Contact Customer Support',
+            icon: 'warning',
+            confirmButtonText: "Ok",
+          }).then((result: any) => {
+            if(result.isConfirmed) {
+              this.auth.logout();
+            }
+          });
+        }
+        else{
+          localStorage.setItem('tenant_general_config',JSON.stringify(data[0]?.plan));
+
         }
       }
     ); 
@@ -150,7 +165,6 @@ export class DashboardComponent implements OnInit {
         if(data) {
           this.allMockintoHistory = data.content;
           this.allMockintoHistory = this.allMockintoHistory.filter((mockinto:any)=>mockinto.statusDescription === 'Ready')
-          console.log(this.allMockintoHistory.length);
         }
         this.sharedService.isLoadingSubject?.next(false);
         this.cdr.detectChanges();
