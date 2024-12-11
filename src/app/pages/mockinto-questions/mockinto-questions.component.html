@@ -48,7 +48,7 @@
                             <span class="path2"></span>
                         </i>
                         <input type="text" data-kt-filemanager-table-filter="search"
-                            class="form-control form-control-solid w-250px ps-15" placeholder="Search" />
+                            class="form-control form-control-solid w-250px ps-15" placeholder="Search"  (input)="searchQuestions($event)"/>
                     </div>
                     <!--end::Search-->
                 </div>
@@ -113,7 +113,7 @@
                                                         </span>
                                                     </div>
                                                     <div class="w-250px">{{question.id}}</div>
-                                                    <div class="w-250px">{{question.jobPostingId}}</div>
+                                                    <div class="w-250px">{{question.jobHeader}}</div>
                                                     <div class="w-250px">{{question.scheduleStartDate | date}}</div>
                                                     <div class="w-250px">{{question.statusDescription}}</div>
                                                     <div class="w-250px">&nbsp;</div>

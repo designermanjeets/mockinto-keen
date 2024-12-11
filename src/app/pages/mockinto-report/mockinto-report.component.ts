@@ -20,6 +20,7 @@ export class MockintoReportComponent implements OnInit {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
+  interviewSummary:any[]=[]
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -51,11 +52,14 @@ export class MockintoReportComponent implements OnInit {
     );
   }
 
+
+
   reportMockintoSchedule(mockintoSchedule: any) {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchMockintoReportByScheduleId(mockintoSchedule.id).subscribe(
+    this.sharedService.fetchMockintoSummaryByScheduleId(mockintoSchedule.id).subscribe(
       data => {
         if(data) {
+          this.interviewSummary = data;
           this.sharedService.isLoadingSubject?.next(false);
           this.router.navigate([`/dashboard/mockinto-report/${mockintoSchedule.id || 99}`]);
         }

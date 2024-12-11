@@ -360,7 +360,7 @@ export class SharedService implements OnInit, OnDestroy {
     }
 
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    return this.http.put<any>(`${environment.apiUrl}/register`, payload)
     .pipe(
       map((data: any) => {
         return data;
@@ -644,6 +644,24 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
+  deactivateCandidateAccount(accoutDeatils: any): Observable<any> {
+    const payload = {
+      id: this.candidateId,
+      active: accoutDeatils,
+      tenant: { id: this.tenantId}
+    }
+    this.isLoadingSubject?.next(true);
+    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
 
   // Misc Actions
 

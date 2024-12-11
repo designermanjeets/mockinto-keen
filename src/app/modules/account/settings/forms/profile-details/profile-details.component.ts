@@ -10,6 +10,7 @@ interface Payload {
   firstName: string;
   lastName: string;
   password?: string;
+  user_email:string;
 }
 
 @Component({
@@ -51,9 +52,10 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+   this.getCandidateDetails();
    this.first_name = this.authUser.firstName;
    this.last_name = this.authUser.lastName;
-    this.getCandidateDetails();
+   
   }
 
   getCandidateDetails(){
@@ -83,6 +85,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     const payload: Payload = {
       firstName: this.first_name,
       lastName: this.last_name,
+      user_email: this.candidateEmail
       //password: this.candidatePassword,
     };
     if (this.candidatePassword && this.confirmPassword) {

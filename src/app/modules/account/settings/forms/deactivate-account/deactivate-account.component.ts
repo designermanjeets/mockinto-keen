@@ -38,7 +38,7 @@ export class DeactivateAccountComponent implements OnInit{
     const payload: any = {
       active: "0"
     };
-    this.sharedService.editProfile(payload).subscribe((res) => {
+    this.sharedService.deactivateCandidateAccount(payload).subscribe((res) => {
       if(!res.error){
         (Swal as any).fire({
           title: 'Success!',

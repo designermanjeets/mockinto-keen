@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { first } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -21,12 +21,16 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
   errorState: ErrorStates = ErrorStates.NotSubmitted;
   errorStates = ErrorStates;
-  isLoading$: Observable<boolean>;
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoading: boolean;
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
   constructor(private fb: FormBuilder, private authService: AuthService,private router: Router) {
-    this.isLoading$ = this.authService.isLoading$;
+    const loadingSubscr = this.isLoading$
+      .asObservable()
+      .subscribe((res) => (this.isLoading = res));
+    this.unsubscribe.push(loadingSubscr);
   }
 
   ngOnInit(): void {
@@ -52,24 +56,29 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   submit() {
+    this.isLoading$.next(true);
     const forgotPasswordSubscr = this.authService.forgotPassword(this.f.email.value).subscribe((res) => {
        //this.errorState = res ? ErrorStates.NoError : ErrorStates.HasError;
         if(res.success == false){
+          
           (Swal as any ).fire({
             title: 'Warning',
             text: res?.data ? res?.data : 'Please enter the Correct email',
             icon: 'warning',
             showConfirmButton:"ok",
           });
+          this.isLoading$.next(false);
         }
        else{
+       
         Swal.fire({
           title: 'Success',
           text: 'Sent new Password Please check the entered email!',
           icon: 'success',
-          timer: 5000,
+          timer: 4000,
           showConfirmButton: false,
         });
+        this.isLoading$.next(false);
         this.router.navigate(['auth/login']); 
       }
      

@@ -37,12 +37,12 @@
                 <!--end::Heading-->
                 <!--begin::Info-->
                 <div class="fs-5 mb-2">
-                    <span class="text-gray-800 fw-bold me-1">${{allPlans[2].amount/100}}</span>
-                    <span class="text-gray-600 fw-semibold">Per {{allPlans[2].interval}}</span>
+                    <span class="text-gray-800 fw-bold me-1">{{selectedPlan?.description}}</span>
+                    <!-- <span class="text-gray-600 fw-semibold">Per Month</span> -->
                 </div>
                 <!--end::Info-->
                 <!--begin::Notice-->
-                <div class="fs-6 text-gray-600 fw-semibold">Starter plan for upto 10 Mockinto schedules</div>
+                <div class="fs-6 text-gray-600 fw-semibold">{{selectedPlanName}} plan for upto {{selectedPlan?.features[0].split(',')[0]}}</div>
                 <!--end::Notice-->
             </div>
             <!--end::Col-->

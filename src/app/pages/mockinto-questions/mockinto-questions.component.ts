@@ -38,6 +38,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
   mockQuestion: string = '';
   mockintoSchedules: any = [];
   subQuestionsSlice: any = [];
+  origMockintoQuestions:any = [];
 
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
@@ -101,6 +102,7 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
         if(data) {
           this.mockintoQuestions = data.content;
           this.paginator.length = data.totalElements;
+          this.origMockintoQuestions = JSON.parse(JSON.stringify(this.mockintoQuestions));
           this.isLoading$.next(false);
           this.cdRef.detectChanges();
         }
@@ -360,6 +362,21 @@ export class MockintoQuestionsComponent  implements OnInit, AfterViewInit {
       const end = start + paginators[idx].pageSize;
       return this.mockintoQuestions[idx]?.schedule?.botJobCandidateQuestions.slice(start, end);
     }
+  }
+
+
+  
+  searchQuestions(event: any) {
+    const value = event.target.value;
+    this.sharedService.isLoadingSubject?.next(true);
+    if(value) {
+      this.mockintoQuestions = this.origMockintoQuestions.filter((item: any) => {
+        return item.jobHeader.toLowerCase().includes(value.toLowerCase());
+      });
+    } else {
+      this.mockintoQuestions = JSON.parse(JSON.stringify(this.origMockintoQuestions));
+    }
+    this.sharedService.isLoadingSubject?.next(false);
   }
 
 }

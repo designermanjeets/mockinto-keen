@@ -19,6 +19,7 @@ export class MockintoPlanComponent implements OnInit {
   allTenantGeneralConfig: any = [];
   tenantId:any;
   selectedPlanName :any
+  selectedPlan:any;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -55,6 +56,7 @@ export class MockintoPlanComponent implements OnInit {
     this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
       data => {
         this.selectedPlanName = data[0]?.plan?.name;
+        this.selectedPlan = data[0]?.plan;
         this.cdRef.detectChanges();
         
       }
