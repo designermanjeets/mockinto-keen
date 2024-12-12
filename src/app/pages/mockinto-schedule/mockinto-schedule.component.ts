@@ -49,6 +49,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   public timeControlMinMax = new FormControl(new Date());
   private intervalId: any;
   allReadySchedule:any
+  dashboardData:any;
 
 
   origSchedules: any = [];
@@ -69,6 +70,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
     const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
     this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
+    this.fetchDashboardData();
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
     this.fetchAllResumes();
@@ -86,6 +88,19 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  }
+
+
+  
+  fetchDashboardData() {
+    this.sharedService.fetchDashboardData().subscribe(
+      (data) => {
+        if(data) {
+          this.dashboardData = data;
+        } 
+      
+      }
+    );
   }
 
   fetchJobProfiles() {
@@ -201,7 +216,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addMockintoScheduleDialog() {
-    if(this.mockintoSchedules.length == this.scheduleCount) {
+    if(this.dashboardData.totalSchedules == this.scheduleCount) {
         (Swal as any).fire({
         title: "Mockinto Schedule Limit Reached", 
         text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.", 

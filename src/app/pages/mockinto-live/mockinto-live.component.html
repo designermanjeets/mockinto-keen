@@ -24,7 +24,7 @@
                     <div class="d-flex flex-column">
                         <h2 class="mb-1">Live Mockinto</h2>
                         <div class="text-muted">
-                            Data Analyst@Google LLC (Alphabet Inc.) {{ currentDateTime }}
+                           {{mockintoSchedules[0]?.jobHeader}} {{ currentDateTime }}
                         </div>
                     </div>
                     <!--end::Title-->
@@ -179,8 +179,8 @@
                                         <a href="javascript:void(0)" class="text-gray-800 text-hover-primary fs-6 fw-bolder">
                                      {{candidateName.firstName}} {{ candidateName.lastName }}
                                         </a>
-                                        <span class="text-gray-400 ">Aspiring Data Analyst@Google LLC (Alphabet
-                                            Inc.) </span>
+                                        <span class="text-gray-400 "> {{mockintoSchedules[0]?.jobHeader}}
+                                         </span>
                                     </div>
                                     <!--end::Info -->
                                 </div>

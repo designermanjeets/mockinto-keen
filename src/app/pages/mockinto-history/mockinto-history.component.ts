@@ -73,6 +73,8 @@ export class MockintoHistoryComponent implements OnInit {
     //       this.router.navigate([`/dashboard/mockinto-schedule/${mockintoSchedule.id || 99}`]);
     //     }
     //   }
+   // this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
+
     // );
   }
 

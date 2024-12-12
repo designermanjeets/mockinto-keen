@@ -7,8 +7,8 @@ import * as Swal from 'sweetalert2';
 
 
 interface Payload {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   password?: string;
   user_email:string;
 }
@@ -83,8 +83,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
     this.isLoading$.next(true);
     const payload: Payload = {
-      firstName: this.first_name,
-      lastName: this.last_name,
+      first_name: this.first_name,
+      last_name: this.last_name,
       user_email: this.candidateEmail
       //password: this.candidatePassword,
     };
@@ -94,6 +94,11 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
     this.sharedService.editProfile(payload).subscribe((res) => {
       if(!res.error){
+        if (this.authUser) {
+          this.authUser.firstName = this.first_name;
+          this.authUser.lastName = this.last_name;
+          localStorage.setItem('auth-user', JSON.stringify(this.authUser));
+        }
         (Swal as any).fire({
           title: 'Success!',
           text: 'Profile updated successfully',

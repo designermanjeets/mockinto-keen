@@ -1,4 +1,4 @@
-import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild, TemplateRef } from '@angular/core';
+import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild, TemplateRef, NgZone } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SharedService } from 'src/app/pages/services/shared.service';
@@ -14,30 +14,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   @ViewChild('faqSection') faqSection!: ElementRef;
   @ViewChild('allPlanSection') allPlanSection!: ElementRef;
   @ViewChild('termsDialogTemplate', { static: true }) termsDialogTemplate!: TemplateRef<any>;
-
-
-  // faqs = [
-  //   {
-  //     question: 'Can this be used for ordinary people with the world of technology?',
-  //     answer: 'Our products are very easy to understand even by everyone because they are easy to drag and drop, making them comfortable to use by all people.',
-  //     active: false
-  //   },
-  //   {
-  //     question: 'Can it be connected using the WhatsApp application and other social media?',
-  //     answer: 'Yes, this product can seamlessly connect with WhatsApp and other popular social media platforms.',
-  //     active: false
-  //   },
-  //   {
-  //     question: 'Is there a special rule to make a rule?',
-  //     answer: 'No special rules are required. You can customize the rules as per your preferences.',
-  //     active: false
-  //   },
-  //   {
-  //     question: 'Can this product be subscribed to every month?',
-  //     answer: 'Yes, our subscription model allows for monthly subscriptions, making it flexible for users.',
-  //     active: false
-  //   }
-  // ];
+  @ViewChild('supprtDialogTemplate', { static: true }) supprtDialogTemplate!: TemplateRef<any>;
 
 
   faqs = [
@@ -128,7 +105,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     private cdRef: ChangeDetectorRef,
     private plutoService: StripeMockintoService,
     private sharedService: SharedService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -229,12 +207,19 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  
+
   signIn(): void {
-    this.router.navigate(['/auth/login']);
+    this.zone.run(() => {
+      this.router.navigate(['/auth/login']);
+    });
   }
 
   signUp(): void {
-    this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+    // this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+    this.zone.run(() => {
+      this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+    });
   }
 
   getPlans(): void {
@@ -286,6 +271,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   closeDialog(): void {
     this.dialog.closeAll();
+  }
+  
+  openSupportDialog(){
+    const dialogRef = this.dialog.open(this.supprtDialogTemplate, {
+      width: '800px',
+    });
+
+    dialogRef.afterOpened().subscribe(() => {
+      this.isDialogOpen = true;
+      this.cdRef.detectChanges();
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.isDialogOpen = false;
+      this.cdRef.detectChanges();
+    });
+
   }
 
 }

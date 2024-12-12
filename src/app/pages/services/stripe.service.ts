@@ -39,4 +39,11 @@ export class StripeMockintoService {
         );
     }
 
+    createCustomer(params: any):Observable<any>{
+        const payload = new URLSearchParams(params);
+        return this.http.post<any>(
+            `${StripeMockintoService.STRIPE_BASE_URL}/customers`, payload.toString(), { headers: this.HEADERS }
+        );
+    }
+
 }

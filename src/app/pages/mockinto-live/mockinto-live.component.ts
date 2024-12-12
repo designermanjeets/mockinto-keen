@@ -54,6 +54,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   candidateAnswers: any;
   mockintoQueAnsBank: any = [];
   botQuestion:any ;
+  mockintoSchedules:any[]=[];
 
   voicePitch: number = 0;
   voiceRate: number = 0;
@@ -75,6 +76,8 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   ngOnInit(): void {
     this.scheduleId = this.router.url.split('/')[3]; // Fixed Position Don't Change the Path in routing
     this.fetchMockintoScheduleById();
+    this.fetchAllMockintoSchedules();
+    
   }
 
   fetchMockintoScheduleById() {
@@ -83,6 +86,30 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         this.mockintoSchedule = res;
       }
     });
+  }
+
+
+
+  fetchAllMockintoSchedules(page = 0, size = 10) {
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
+      data => {
+        if (data) {
+          this.mockintoSchedules = data.content;
+          const filteredSchedules = this.mockintoSchedules.filter(
+            (x: any) => x.id === Number(this.scheduleId)
+          );
+
+          this.mockintoSchedules = filteredSchedules;
+        }
+        this.sharedService.isLoadingSubject?.next(false);
+        this.cdRef.detectChanges();
+      },
+      error => {
+        console.error("Error fetching schedules:", error);
+        this.sharedService.isLoadingSubject?.next(false);
+      }
+    );
   }
 
   ngAfterContentInit(): void {

@@ -646,18 +646,27 @@ export class SharedService implements OnInit, OnDestroy {
 
   deactivateCandidateAccount(accoutDeatils: any): Observable<any> {
     const payload = {
-      id: this.candidateId,
-      active: accoutDeatils,
-      tenant: { id: this.tenantId}
+      id: this.userId,
+     user_email: accoutDeatils.user_email,
+     active: accoutDeatils.active,
+     deleted: accoutDeatils.deleted,
+       tenant: [ { id: this.tenantId } ],
+       candidates: [
+        {
+          id:this.candidateId,
+          
+        }
+      ]
     }
+
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/candidate`, payload)
+    return this.http.put<any>(`${environment.apiUrl}/register`, payload)
     .pipe(
       map((data: any) => {
         return data;
       }),
       catchError((err) => {
-        return of(undefined);
+        return of(err);
       }),
       finalize(() => this.isLoadingSubject?.next(false))
     );

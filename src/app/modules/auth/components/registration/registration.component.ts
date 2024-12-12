@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +9,8 @@ import { first } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { SharedService } from 'src/app/pages/services/shared.service';
 import { MatDialog } from '@angular/material/dialog';
+import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
+
 
 @Component({
   selector: 'app-registration',
@@ -22,10 +24,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   selectedPlan: string;
   regError: string;
   passwordMismatch: boolean = false;
+  stripeCustomerId:any;
 
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  private readonly plutoService = inject(StripeMockintoService);
+
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
   @ViewChild('termsDialogTemplate', { static: true }) termsDialogTemplate!: TemplateRef<any>;
 
@@ -169,9 +174,21 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           // } else {
           //   this.router.navigate(['/']);
           // }
+          const userPayload ={
+            name : data.first_name,
+            email : data.user_email
+        }
+          this.plutoService.createCustomer(userPayload).subscribe(res=>{
+            if(res){
+              console.log("create the customer in stripe",res);
+              this.stripeCustomerId = res.id;
+              console.log("customer id",this.stripeCustomerId);
+            }
+          })
           if(this.selectedPlan == undefined){
             this.selectedPlan = 'starter'
           }
+
           if(this.selectedPlan){
             const backendPayload = {
               plan: {

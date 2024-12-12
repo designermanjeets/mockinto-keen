@@ -2,6 +2,7 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TranslationService } from '../../../../../../modules/i18n';
 import { AuthService, UserType } from '../../../../../../modules/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-inner',
@@ -28,7 +29,26 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.auth.logout();
+      (Swal as any).fire({
+        title: "Are you sure?",
+        text: "Do you really want to log out?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+        }
+      }).then((result: any) => {
+        if (result.isDismissed) {
+          return;
+        }
+        if (result.isConfirmed) {
+          this.auth.logout();
+        }
+      });
     // document.location.reload();
   }
 

@@ -43,7 +43,6 @@
     <div class="container">
         <div class="col-lg-12 d-flex gap-5 banner-main">
             <div class="col-lg-6">
-                <div class="short-div"><span>Mockinto</span></div>
                 <h1>
                     MockInto - Conquer your interviews with AI-Powered Mock <span>Interviews!</span>
                 </h1>
@@ -69,13 +68,19 @@
 <section class="padd-sec">
     <div class="container feature">
         <div class="col-lg-12 d-flex align-items-center number-sec">
-            <div class="col-lg-6 border-right mr-2 number-lower">
+            <!-- <div class="col-lg-6 border-right mr-2 number-lower">
                 <div class="short-div tag"><span>Feature / Why Choose Us</span></div>
                 <h2>
                     Master Every Interview with Ease
                 </h2>
+            </div> -->
+            <div class="col-lg-12 text-center">
+                <div class="text-head text-center d-flex justify-content-center flex-column align-items-center">
+                    <h2>Features</h2>
+                    <p>Mockinto provides affordable mock interviews, job postings, resume management, and live interview simulations to help you excel in your job preparation! </p>
+                </div>
             </div>
-            <div class="col-lg-6 d-flex gap-4">
+            <!-- <div class="col-lg-6 d-flex gap-4">
                 <div class="col d-flex align-items-center flex-column text-center">
                     <h3>100%</h3>
                     <p>personalized mock and live interview experiences</p>
@@ -84,7 +89,7 @@
                     <h3>500+</h3>
                     <p>tailored job-related questions<br> generated daily</p>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>
@@ -214,8 +219,7 @@
     <div class="container">
         <div class="col-lg-12 text-center">
             <div class="text-head text-center d-flex justify-content-center flex-column align-items-center faq-section">
-                <div class="short-div tag"><span>What You often Ask</span></div>
-                <h2>Frequently Ask Question</h2>
+                <h2>Frequently Asked Questions</h2>
             </div>
         </div>
         <div class="col-lg-12 mt-5">
@@ -247,7 +251,6 @@
     <div class="container price-plan">
         <div class="col-lg-12 text-center">
             <div class="text-head text-center d-flex justify-content-center flex-column align-items-center">
-                <div class="short-div tag"><span>Get Subscription Discount</span></div>
                 <h2>Choose Pricing Plan</h2>
                 <p>Affordable pricing for mock interviews, job posts, and resume management. Get interview-ready today!
                 </p>
@@ -434,13 +437,99 @@
                     <p> © 2024 Mockinto. All Rights Reserved.</p>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <a class="c-p" (click)="openTermsDialog()">Term and Privacy</a>
+                    <div>
+                        <a class="c-p" (click)="openSupportDialog()">Support</a> &nbsp; &nbsp;  <a class="c-p" (click)="openTermsDialog()">Term and Privacy</a>
+                    </div>
+                    <!-- <div>
+                        <a class="c-p" (click)="openTermsDialog()">Term and Privacy</a>
+                    </div> -->
                 </div>
             </div>
         </div>
     </footer>
 
 </section>
+
+
+
+<!--begin::Modal - Support-->
+<ng-template #supprtDialogTemplate let-data>
+    <div class="modal fade show" style="display: block;">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-fullscreen p-9">
+
+
+            <!--begin::Modal content-->
+            <div class="modal-content modal-rounded">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Contact Support</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon" (click)="closeDialog()">
+                        <i class="ki-duotone ki-cross fs-1 test">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body scroll-y m-5">
+                    <!--begin::Stepper-->
+                    <div class="d-flex flex-column">
+                        <!--begin::Container-->
+                        <div class="container p-0 m-0">
+                            <div class="text-center mb-5">
+                                <h3>If you need help, we're here for you!</h3>
+                                <p>Please fill out the form below, and our support team will get back to you as soon as possible.</p>
+                            </div>
+                        
+                            <!-- Support Form -->
+                            <form>
+                                <!-- Name Field -->
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" id="name" class="form-control" placeholder="Enter your name" required name="name">
+                                </div>
+                        
+                                <!-- Email Field -->
+                                <div class="mb-4">
+                                    <label for="email" class="form-label">Your Email</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required  name="email">
+                                </div>
+                        
+                                <!-- Message Field -->
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea id="message" class="form-control" placeholder="Describe your issue" rows="5" required  name="message"></textarea>
+                                </div>
+                        
+                                <!-- Submit Button -->
+                                <div class="d-flex flex-stack justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-primary">
+                                        <span class="indicator-label">Send Message</span>
+                                    </button>
+                                    <button type="button" class="btn btn-lg" (click)="closeDialog()">
+                                        <span class="indicator-label">Cancel</span> 
+                                    </button> 
+                                </div>
+                            </form>
+                        </div>
+                        <!--begin::Container-->
+                    </div>
+                    <!--end::Stepper-->
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+  </ng-template>
+  <!--end::Modal - Upload File-->
 
 <!--begin::Modal - Upload File-->
 <ng-template #termsDialogTemplate let-data>

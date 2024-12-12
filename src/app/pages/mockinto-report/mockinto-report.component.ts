@@ -16,11 +16,13 @@ export class MockintoReportComponent implements OnInit {
 
   masterCheckbox: boolean = false;
   someChecked = [];
+  scheduleId:any;
+  mockintoSchedules:any[]=[]
 
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
-  interviewSummary:any[]=[]
+  interviewSummary:any
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -32,6 +34,10 @@ export class MockintoReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.scheduleId = this.router.url.split('/')[3];
+    if(this.scheduleId){
+      this.reportMockintoSchedule();
+    }
     this.fetchAllMockintoSchedules();
   }
 
@@ -42,8 +48,15 @@ export class MockintoReportComponent implements OnInit {
         if(data) {
           if(this.paginator) {
             this.paginator.length = data.totalElements;
+           
           }
           this.allMockintoHistory = data.content;
+          const filteredSchedules = this.allMockintoHistory.filter(
+            (x: any) => x.id === Number(this.scheduleId)
+          );
+
+          this.mockintoSchedules = filteredSchedules;
+          console.log("filetr",this.mockintoSchedules)
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -54,14 +67,17 @@ export class MockintoReportComponent implements OnInit {
 
 
 
-  reportMockintoSchedule(mockintoSchedule: any) {
+
+
+
+  reportMockintoSchedule() {
     this.sharedService.isLoadingSubject?.next(true);
-    this.sharedService.fetchMockintoSummaryByScheduleId(mockintoSchedule.id).subscribe(
+    this.sharedService.fetchMockintoSummaryByScheduleId(this.scheduleId).subscribe(
       data => {
         if(data) {
-          this.interviewSummary = data;
+          this.interviewSummary = data[0];
+          console.log("interview Summary ",this.interviewSummary);
           this.sharedService.isLoadingSubject?.next(false);
-          this.router.navigate([`/dashboard/mockinto-report/${mockintoSchedule.id || 99}`]);
         }
       }
     );

@@ -54,6 +54,7 @@ export class AuthService implements OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/authenticate`, { username, password, rememberMe })
     .pipe(
       map((auth: AuthModel) => {
+        console.log("auth",auth)
         const result = this.setAuthFromLocalStorage(auth);
         return result;
       }),

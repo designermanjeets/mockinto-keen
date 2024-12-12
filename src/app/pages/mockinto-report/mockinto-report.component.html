@@ -22,7 +22,7 @@
                     <div class="d-flex flex-column">
                         <h2 class="mb-1">Mockinto Report</h2>
                         <div class="text-muted fw-bold">
-                            Data Analyst@Google LLC (Alphabet Inc.) 11:22 AM Nov 17 - 13:54
+                            {{mockintoSchedules[0]?.jobHeader ? mockintoSchedules[0]?.jobHeader: 'Data Analyst@Google LLC (Alphabet Inc.)' }}  {{interviewSummary?.createdDate | date}}
                         </div>
                     </div>
                     <!--end::Title-->
@@ -152,19 +152,19 @@
                                     </h3>
                                     <!--  begin::Toolbar -->
                                     <div class="d-flex align-items-center mb-5">
-                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-success px-4 py-2 me-4">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-light btn-color-muted btn-active-light-success px-4 py-2 me-4">
                                             <span [inlineSVG]="'./assets/media/icons/duotune/general/gen022.svg'" class="svg-icon svg-icon-3"></span>&nbsp;enthusiastic
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
                                             <span [inlineSVG]="'./assets/media/icons/duotune/general/gen022.svg'" class="svg-icon svg-icon-2"></span>&nbsp;dedicated
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
                                             <span [inlineSVG]="'./assets/media/icons/duotune/general/gen022.svg'" class="svg-icon svg-icon-2"></span>&nbsp;prepared
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
                                             <span [inlineSVG]="'./assets/media/icons/duotune/general/gen022.svg'" class="svg-icon svg-icon-2"></span>&nbsp;transparent
                                         </a>
-                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2 me-4">
                                             <span [inlineSVG]="'./assets/media/icons/duotune/general/gen022.svg'" class="svg-icon svg-icon-2"></span>&nbsp;eager
                                         </a>
                                     </div>
@@ -179,8 +179,7 @@
                                     </h3>
                                     <!--  begin::Toolbar -->
                                     <div class="align-items-center mb-5">
-                                        <p>You express your nervousness about the interview, but the interviewer reassures you and encourages a relaxed conversation. You mention that you're excited about the opportunity at Google and that you've prepared by taking online courses to build the necessary skills.</p>
-                                        <p>The interviewer acknowledges your enthusiasm and asks about your fit for the role despite the lack of direct experience. You explain that you have worked with data in AI projects and hold certifications not listed on your resume. The interviewer shows interest in learning more about the specific AI project and your role in it.</p>
+                                        <p>{{interviewSummary?.summaryText ? interviewSummary?.summaryText : 'Interview Summary is not Created'}}</p>
                                     </div>
                                     <!--  end::Toolbar -->
                                 </section>
