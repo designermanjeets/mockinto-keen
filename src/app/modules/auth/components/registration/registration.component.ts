@@ -180,9 +180,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         }
           this.plutoService.createCustomer(userPayload).subscribe(res=>{
             if(res){
-              console.log("create the customer in stripe",res);
               this.stripeCustomerId = res.id;
-              console.log("customer id",this.stripeCustomerId);
             }
           })
           if(this.selectedPlan == undefined){

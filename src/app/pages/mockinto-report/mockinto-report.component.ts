@@ -56,7 +56,6 @@ export class MockintoReportComponent implements OnInit {
           );
 
           this.mockintoSchedules = filteredSchedules;
-          console.log("filetr",this.mockintoSchedules)
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -76,7 +75,6 @@ export class MockintoReportComponent implements OnInit {
       data => {
         if(data) {
           this.interviewSummary = data[0];
-          console.log("interview Summary ",this.interviewSummary);
           this.sharedService.isLoadingSubject?.next(false);
         }
       }
