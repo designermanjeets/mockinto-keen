@@ -192,15 +192,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     event.stopImmediatePropagation();
     switch (plan) {
       case 'starter':
-        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Starter' } });
         break;
 
       case 'advanced':
-        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'advanced' } });
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Advanced' } });
         break;
 
       case 'enterprise':
-        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'enterprise' } });
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Enterprise' } });
         break;
       default:
         break;
@@ -218,7 +218,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   signUp(): void {
     // this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
     this.zone.run(() => {
-      this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+      this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Starter' } });
     });
   }
 

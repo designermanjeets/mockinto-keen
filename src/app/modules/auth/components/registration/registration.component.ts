@@ -25,6 +25,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   regError: string;
   passwordMismatch: boolean = false;
   stripeCustomerId:any;
+  productList:any[]=[];
+  productPrice:any;
+  subscriptionId:any;
 
 
   // private fields
@@ -130,6 +133,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    if(this.selectedPlan == undefined){
+      this.selectedPlan = 'Starter'
+    }
     this.hasError = false;
     const data: { [key: string]: string; } = {};
     
@@ -178,35 +184,51 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             name : data.first_name,
             email : data.user_email
         }
-          this.plutoService.createCustomer(userPayload).subscribe(res=>{
-            if(res){
-              this.stripeCustomerId = res.id;
+          this.plutoService.createCustomer(userPayload,user.candidates[0]?.id,user.tenant_id,).subscribe(customer=>{
+            if(customer){
+              this.stripeCustomerId = customer.id;
+              if(this.stripeCustomerId){
+                this.sharedService.updateTenant(user.tenant_id,this.stripeCustomerId).subscribe(tenant=>{
+                  if(tenant){
+                    this.plutoService.getProducts(3).subscribe(prod=>{
+                      if(prod){
+                        this.productList = prod.data;
+                        this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
+                        this.productPrice = this.productList[0]?.default_price;
+                        if(this.productPrice){
+                          this.plutoService.createSubscription(this.productPrice,this.stripeCustomerId,user.candidates[0]?.id,user.tenant_id).subscribe(subscription=>{
+                            if(subscription){
+                              this.subscriptionId = subscription.id
+                              if(this.subscriptionId){
+                                const backendPayload = {
+                                  plan: {
+                                    id: 9,
+                                  },
+                                  tenant: {
+                                  id: user.tenant_id
+                                },
+                                  stripeProductId: this.subscriptionId,
+                                  startDate: new Date().toISOString(),
+                                  status:  true,
+                                  deleted: 0,
+                                  endDate: new Date().toISOString(),
+                                  lastPaymentDate: new Date().toISOString(),
+                                  lastPaymentAmount: 0,
+                                  renewalDate: new Date().toISOString(),
+                                  futureDiscount: 0,
+                                };
+                                this.updateBackendForPlanChange(backendPayload);
+                              }
+                            }
+                          })
+                        }
+                      }
+                    })
+                  }
+                })
+              }
             }
           })
-          if(this.selectedPlan == undefined){
-            this.selectedPlan = 'starter'
-          }
-
-          if(this.selectedPlan){
-            const backendPayload = {
-              plan: {
-                id: 9, //this.selectedPlan.id,
-              },
-              tenant: {
-              id: user.tenant_id
-            },
-              startDate: new Date().toISOString(),
-              status:  true,
-              deleted: 0,
-              endDate: new Date().toISOString(),
-              lastPaymentDate: new Date().toISOString(),
-              lastPaymentAmount: 0,
-              renewalDate: new Date().toISOString(),
-              futureDiscount: 0,
-            };
-            this.updateBackendForPlanChange(backendPayload);
-
-          }
         } else {
           this.hasError = true;
           //this.regError = user.error.data;
@@ -217,6 +239,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       });
     this.unsubscribe.push(registrationSubscr);
   }
+
+  
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

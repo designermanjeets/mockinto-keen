@@ -142,6 +142,7 @@ export class CreateSubscriptionComponent implements OnInit {
               text: result.error.message,
             });
           } else if (result.paymentIntent.status === 'succeeded') {
+            this.addSubcriptionPayment(result.id,result.amount);
             (Swal as any).fire({
               icon: 'success',
               title: 'Success',
@@ -182,6 +183,24 @@ export class CreateSubscriptionComponent implements OnInit {
           });
         },
       });
+  }
+
+
+  addSubcriptionPayment(paymentIntenteId:any,amount:any):void{
+    let payment = {
+        amount: amount,
+        active: "1",
+        deleted: "0",
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString(),
+        stripePaymentIntentId: paymentIntenteId
+      }
+    
+    this.sharedService.addPayment(payment).subscribe(res=>{
+      if(res){
+
+      }
+    })
   }
 
   updateBackendForPlanChange(updateBackendForPlanChange: any) {

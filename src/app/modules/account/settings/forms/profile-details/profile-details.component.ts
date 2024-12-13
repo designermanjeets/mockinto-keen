@@ -11,6 +11,8 @@ interface Payload {
   last_name: string;
   password?: string;
   user_email:string;
+  active:boolean;
+  deleted:boolean;
 }
 
 @Component({
@@ -85,7 +87,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     const payload: Payload = {
       first_name: this.first_name,
       last_name: this.last_name,
-      user_email: this.candidateEmail
+      user_email: this.candidateEmail,
+      active: false,
+      deleted: true
       //password: this.candidatePassword,
     };
     if (this.candidatePassword && this.confirmPassword) {

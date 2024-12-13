@@ -672,6 +672,43 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
+  updateTenant(tenantId: any,stripeCustomerId:any){
+    const payload = {
+      id: tenantId,
+       stripeCustomer: {
+        id: tenantId,
+        stripeCustomerId: stripeCustomerId
+        }   
+    }
+    this.isLoadingSubject?.next(true);
+    return this.http.put<any>(`${environment.apiUrl}/tenant`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(err);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+
+  }
+
+  addPayment(payload:any){
+    this.isLoadingSubject?.next(true);
+    return this.http.post<any>(`${environment.apiUrl}/payment`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Error Updating Plan'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+
+  }
+
   // Misc Actions
 
   showToaster() {
@@ -683,5 +720,8 @@ export class SharedService implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
+
+
+ 
 
 }
