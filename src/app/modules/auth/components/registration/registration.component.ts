@@ -187,6 +187,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           this.plutoService.createCustomer(userPayload,user.candidates[0]?.id,user.tenant_id,).subscribe(customer=>{
             if(customer){
               this.stripeCustomerId = customer.id;
+              localStorage.setItem('customerId',JSON.stringify(this.stripeCustomerId));
               if(this.stripeCustomerId){
                 this.sharedService.updateTenant(user.tenant_id,this.stripeCustomerId).subscribe(tenant=>{
                   if(tenant){
@@ -195,10 +196,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                         this.productList = prod.data;
                         this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
                         this.productPrice = this.productList[0]?.default_price;
+                        let productId = this.productList[0]?.id
+                        console.log("product list",productId)
+
                         if(this.productPrice){
                           this.plutoService.createSubscription(this.productPrice,this.stripeCustomerId,user.candidates[0]?.id,user.tenant_id).subscribe(subscription=>{
                             if(subscription){
                               this.subscriptionId = subscription.id
+                              localStorage.setItem('subscriptionId',JSON.stringify(this.subscriptionId))
                               if(this.subscriptionId){
                                 const backendPayload = {
                                   plan: {
@@ -207,7 +212,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                                   tenant: {
                                   id: user.tenant_id
                                 },
-                                  stripeProductId: this.subscriptionId,
+                                 stripeSubscriptionId: this.subscriptionId,
+                                  stripeProductId: productId,
                                   startDate: new Date().toISOString(),
                                   status:  true,
                                   deleted: 0,

@@ -39,11 +39,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       active: false
     },
     {
-      question: 'What kind of feedback does MockInto provide?',
-      answer: 'MockInto offers detailed feedback on your communication, content, body language (if video-enabled), and response effectiveness, along with actionable improvement suggestions.',
-      active: false
-    },
-    {
       question: 'Is MockInto suitable for beginners?',
       answer: 'Absolutely! MockInto caters to all experience levels, from fresh graduates to seasoned professionals, with tailored guidance for each user.',
       active: false
