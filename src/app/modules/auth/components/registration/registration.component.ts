@@ -197,8 +197,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
                         this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
                         this.productPrice = this.productList[0]?.default_price;
                         let productId = this.productList[0]?.id
-                        console.log("product list",productId)
-
                         if(this.productPrice){
                           this.plutoService.createSubscription(this.productPrice,this.stripeCustomerId,user.candidates[0]?.id,user.tenant_id).subscribe(subscription=>{
                             if(subscription){

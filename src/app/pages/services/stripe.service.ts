@@ -265,7 +265,7 @@ export class StripeMockintoService {
         payload.set('line_items[0][price]', params.price);  
         payload.set('line_items[0][quantity]', '1');
         payload.set('mode', 'subscription');
-        payload.set('success_url', `${environment.apiUrl}/dashboard/successful-payment`);
+        payload.set('success_url', `https://mockinto-dev.vercel.app/dashboard/successful-payment`);
       
         return this.http.post<any>(
           `${StripeMockintoService.STRIPE_BASE_URL}/checkout/sessions`,
