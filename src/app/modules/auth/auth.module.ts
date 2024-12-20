@@ -9,6 +9,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { LogoutComponent } from './components/logout/logout.component';
 import { AuthComponent } from './auth.component';
 import { TranslationModule } from '../i18n/translation.module';
+import { NgxStripeModule } from 'ngx-stripe';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,8 @@ import { TranslationModule } from '../i18n/translation.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxStripeModule.forRoot('pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0'),
+    
   ],
 })
 export class AuthModule {}

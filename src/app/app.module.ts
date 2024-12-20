@@ -53,6 +53,7 @@ import { MixedWidget7Component } from './pages/mock-widgets/mixed-widget7/mixed-
 import { DropdownMenusModule } from './_metronic/partials';
 import { MockintoLiveComponent } from './pages/mockinto-live/mockinto-live.component';
 import { DashboardWrapperComponent } from './pages/dashboard-wrapper/dashboard-wrapper.component';
+import { SuccessPageComponent } from './pages/success-page/success-page.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -85,7 +86,8 @@ function appInitializer(authService: AuthService) {
     MixedWidget2Component,
     MixedWidget7Component,
     MockintoLiveComponent,
-    DashboardWrapperComponent
+    DashboardWrapperComponent,
+    SuccessPageComponent
   ],
   imports: [
     BrowserModule,

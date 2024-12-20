@@ -76,7 +76,7 @@
                         <div class="card-header">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <h2 class="fw-bold">Payment Method</h2>
+                                <h2 class="fw-bold">Candidate Details</h2>
                             </div>
                             <!--begin::Card title-->
                             <!--begin::Card toolbar-->
@@ -101,20 +101,22 @@
                                                             <mat-form-field appearance="outline" style="flex: 1">
                                                                 <mat-label>Name</mat-label>
                                                                 <input class="form-control form-check-solid" matInput
-                                                                    formControlName="name" required />
+                                                                    formControlName="name" required  [disabled]="true" 
+                                                                    />
                                                                 <mat-error *ngIf="checkoutForm.controls['name'].invalid">
                                                                     Name is required
                                                                 </mat-error>
                                                             </mat-form-field>
                                                             <mat-form-field appearance="outline" style="flex: 1">
                                                                 <mat-label>Email</mat-label>
-                                                                <input matInput formControlName="email" type="email" required />
+                                                                <input matInput formControlName="email" type="email" required [disabled]="true" 
+                                                                />
                                                                 <mat-error *ngIf="checkoutForm.controls['email'].invalid">
                                                                     Email is required
                                                                 </mat-error>
                                                             </mat-form-field>
                                                         </div>
-                                                        <div style="display: flex; flex-direction: row; gap: 10px">
+                                                        <!-- <div style="display: flex; flex-direction: row; gap: 10px">
                                                             <mat-form-field appearance="outline" style="flex: 1">
                                                                 <mat-label>Address</mat-label>
                                                                 <input matInput formControlName="address" />
@@ -147,7 +149,7 @@
                                                                     City is required
                                                                 </mat-error>
                                                             </mat-form-field>
-                                                        </div>
+                                                        </div> -->
                                                         <div style="margin-bottom: 10px"></div>
                                                         <ngx-stripe-elements *ngIf="elementsOptions?.clientSecret"
                                                             [stripe]="stripe" [elementsOptions]="elementsOptions">
@@ -349,7 +351,7 @@
                             <!--begin::Details-->
                             <div class="mb-0">
                                 <!--begin::Plan-->
-                                <span class="badge badge-light-info me-2">Starter</span>
+                                <span class="badge badge-light-info me-2">{{currentPlan}}</span>
                                 <!--end::Plan-->
                                 <!--begin::Price-->
                                 <span class="fw-semibold text-gray-600">${{selectedPlan.amount/100}} /

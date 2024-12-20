@@ -16,6 +16,7 @@ import { CreateSubscriptionComponent } from '../create-subscription/create-subsc
 import { MockintoReportComponent } from '../mockinto-report/mockinto-report.component';
 import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component';
 import { DashboardWrapperComponent } from '../dashboard-wrapper/dashboard-wrapper.component';
+import { SuccessPageComponent } from '../success-page/success-page.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -36,6 +37,7 @@ const dashboardRoutes: Routes = [
       { path: 'create-subscription', component: CreateSubscriptionComponent },
       { path: 'mockinto-report/:id', component: MockintoReportComponent },
       { path: 'mockinto-live/:id', component: MockintoLiveComponent },
+      { path: 'successful-payment', component: SuccessPageComponent },
       { path: '**', redirectTo: 'resume' }
     ]
   }
