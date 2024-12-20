@@ -17,6 +17,7 @@ import { MockintoReportComponent } from '../mockinto-report/mockinto-report.comp
 import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component';
 import { DashboardWrapperComponent } from '../dashboard-wrapper/dashboard-wrapper.component';
 import { SuccessPageComponent } from '../success-page/success-page.component';
+import { CancelPaymentPageComponent } from '../cancel-payment-page/cancel-payment-page.component';
 
 const dashboardRoutes: Routes = [
   {
@@ -38,6 +39,8 @@ const dashboardRoutes: Routes = [
       { path: 'mockinto-report/:id', component: MockintoReportComponent },
       { path: 'mockinto-live/:id', component: MockintoLiveComponent },
       { path: 'successful-payment', component: SuccessPageComponent },
+      { path: 'cancel-payment', component: CancelPaymentPageComponent },
+
       { path: '**', redirectTo: 'resume' }
     ]
   }

@@ -1,0 +1,47 @@
+.cancel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 20px 30px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+  }
+  
+  .icon img {
+    width: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    color: #d9534f;
+    margin-bottom: 10px;
+  }
+  
+  .message {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+  }
+  
+  .retry-button {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .retry-button:hover {
+    background-color: #c9302c;
+  }
+  
