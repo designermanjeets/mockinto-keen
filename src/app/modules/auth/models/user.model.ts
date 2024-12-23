@@ -25,6 +25,7 @@ export class UserModel extends AuthModel {
   user_email?: string;
   candidates?: any;
   email_id?: string;
+  stripeCustomerId?:string;
 
   setUser(_user: unknown) {
     const user = _user as UserModel;

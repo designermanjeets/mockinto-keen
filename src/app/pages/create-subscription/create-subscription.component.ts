@@ -23,10 +23,14 @@ export class CreateSubscriptionComponent implements OnInit {
   checkoutForm: FormGroup;
   selectedPlanDetails:any;
   productList:any[]=[];
-  productPrice:any;
-  subscriptionId=JSON.parse(localStorage.getItem('subscriptionId') || '{}');
-  customerId = JSON.parse(localStorage.getItem('customerId') || '{}');
-  productId : any;
+  // productPrice:any;
+  subscriptionId=JSON.parse(localStorage.getItem('subscriptionStripeId') || '{}');
+  customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
+  productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
+
+  productPrice = JSON.parse(localStorage.getItem('stripeProductPrice') || '{}');
+
+  //productId : any;
   paymentMethodId:any;
   setupIntentId:any;
   sessionId:any;
@@ -76,7 +80,7 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProduct();
+    //this.getProduct();
     this.fetchAllPlans();
     
   }
@@ -206,7 +210,6 @@ export class CreateSubscriptionComponent implements OnInit {
   
     // Send the flattened payload to your backend
     this.plutoService.createPaymentMethod(flatParams).subscribe(payment => {
-      console.log("Payment Method Created:", payment);
       this.paymentMethodId = payment.id;
       
     });
@@ -263,23 +266,47 @@ export class CreateSubscriptionComponent implements OnInit {
   
 
 
-  collectPayment(){
-    if(this.productPrice){
-      this.plutoService.createSession({
-        customer : this.customerId,
-        price: this.productPrice
+  // collectPayment(){
+  //   if(this.productPrice){
+  //     this.sharedService.createCheckoutSession({
+  //       price: this.productPrice,
+  //       quantity:1,
+  //       sucesfullUrl:'https://mockinto-dev.vercel.app/dashboard/successful-payment',
+  //       cancelUrl:'https://mockinto-dev.vercel.app/dashboard/cancel-payment',
+  //       returnUrl:'https://mockinto-dev.vercel.app/dashboard',
+
   
-      }).subscribe(session=>{
-        let url = session.url
-        this.sessionId = session.id
-        this.setupIntentId = session?.setup_intent;
-        if(url){
-          window.open(`${url}`, '_blank');
-        }  
-      })
+  //     }).subscribe(session=>{
+  //       let url = session.url
+  //       this.sessionId = session.id
+  //       this.setupIntentId = session?.setup_intent;
+  //       if(url){
+  //         window.open(`${url}`, '_blank');
+  //       }  
+  //     })
      
+  //   }
+  // }
+
+  collectPayment() {
+    if (this.productPrice) {
+      this.sharedService.createCheckoutSession(
+        this.productPrice, // stripePriceId
+        1, // quantity
+        'https://mockinto-dev.vercel.app/dashboard/successful-payment', // stripeSuccessUrl
+        'https://mockinto-dev.vercel.app/dashboard/cancel-payment', // stripeCancelUrl
+        'https://mockinto-dev.vercel.app/dashboard', // stripeReturnUrl
+      ).subscribe(
+        (response) => {
+          console.log('Checkout session created:', response);
+        },
+        (error) => {
+          console.error('Error creating checkout session:', error);
+        }
+      );
     }
   }
+  
 
 
 
@@ -357,7 +384,7 @@ export class CreateSubscriptionComponent implements OnInit {
           renewalDate: new Date().toISOString(),
           futureDiscount: 0,
         };
-        this.updateBackendForPlanChange(backendPayload);
+       this.updateBackendPlanChange(backendPayload);
       }
     })
 
@@ -382,8 +409,8 @@ export class CreateSubscriptionComponent implements OnInit {
     })
   }
 
-  updateBackendForPlanChange(updateBackendForPlanChange: any) {
-    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
+  updateBackendPlanChange(updateBackendForPlanChange: any) {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange,this.productPrice,this.customerId,this.productId).subscribe((res) => {
       if(res) {
         this.router.navigate(['dashboard/landing']);
       } else {

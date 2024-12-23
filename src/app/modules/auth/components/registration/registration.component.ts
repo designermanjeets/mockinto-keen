@@ -28,6 +28,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   productList:any[]=[];
   productPrice:any;
   subscriptionId:any;
+  productId:any;
+  tenantId:any;
 
 
   // private fields
@@ -180,59 +182,15 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           // } else {
           //   this.router.navigate(['/']);
           // }
-          const userPayload ={
-            name : data.first_name,
-            email : data.user_email
-        }
-          this.plutoService.createCustomer(userPayload,user.candidates[0]?.id,user.tenant_id,).subscribe(customer=>{
-            if(customer){
-              this.stripeCustomerId = customer.id;
-              localStorage.setItem('customerId',JSON.stringify(this.stripeCustomerId));
-              if(this.stripeCustomerId){
+            this.tenantId = user.tenant_id;
+             this.stripeCustomerId = user?.stripeCustomerId;
+             localStorage.setItem('stripeCustomerId',JSON.stringify(this.stripeCustomerId));
                 this.sharedService.updateTenant(user.tenant_id,this.stripeCustomerId).subscribe(tenant=>{
                   if(tenant){
-                    this.plutoService.getProducts(3).subscribe(prod=>{
-                      if(prod){
-                        this.productList = prod.data;
-                        this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
-                        this.productPrice = this.productList[0]?.default_price;
-                        let productId = this.productList[0]?.id
-                        if(this.productPrice){
-                          this.plutoService.createSubscription(this.productPrice,this.stripeCustomerId,user.candidates[0]?.id,user.tenant_id).subscribe(subscription=>{
-                            if(subscription){
-                              this.subscriptionId = subscription.id
-                              localStorage.setItem('subscriptionId',JSON.stringify(this.subscriptionId))
-                              if(this.subscriptionId){
-                                const backendPayload = {
-                                  plan: {
-                                    id: 9,
-                                  },
-                                  tenant: {
-                                  id: user.tenant_id
-                                },
-                                 stripeSubscriptionId: this.subscriptionId,
-                                  stripeProductId: productId,
-                                  startDate: new Date().toISOString(),
-                                  status:  true,
-                                  deleted: 0,
-                                  endDate: new Date().toISOString(),
-                                  lastPaymentDate: new Date().toISOString(),
-                                  lastPaymentAmount: 0,
-                                  renewalDate: new Date().toISOString(),
-                                  futureDiscount: 0,
-                                };
-                                this.updateBackendForPlanChange(backendPayload);
-                              }
-                            }
-                          })
+                    this.getStripeProducts();
                         }
-                      }
-                    })
-                  }
-                })
-              }
-            }
-          })
+                     })
+          
         } else {
           this.hasError = true;
           //this.regError = user.error.data;
@@ -244,7 +202,52 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(registrationSubscr);
   }
 
-  
+  getStripeProducts(){
+    this.sharedService.getProducts().subscribe((prod:any)=>{
+      if(prod){
+        this.productList = prod.data;
+        this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
+        this.productPrice = this.productList[0]?.default_price;
+        this.productId = this.productList[0]?.id
+        localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
+        localStorage.setItem('stripeProductId',JSON.stringify(this.productId));
+
+        this.getStripeSubscription();
+
+      }
+      })
+
+  }
+
+
+  getStripeSubscription(){
+    this.sharedService.getSubscriptions().subscribe((subscription:any)=>{
+      this.subscriptionId = subscription.data[0].id
+      localStorage.setItem('stripeSubscriptionId',JSON.stringify(this.productId));
+      if(this.subscriptionId){
+        const backendPayload = {
+            plan: {
+              id: 9,
+                  },
+              tenant: {
+                    id: this.tenantId
+                  },
+              stripeSubscriptionId: this.subscriptionId,
+              stripeProductId: this.productId,
+              startDate: new Date().toISOString(),
+              status:  true,
+              deleted: 0,
+              endDate: new Date().toISOString(),
+              lastPaymentDate: new Date().toISOString(),
+              lastPaymentAmount: 0,
+              renewalDate: new Date().toISOString(),
+              futureDiscount: 0,
+              };
+              this.updateBackendForPlanChange(backendPayload);
+                }
+    })
+
+  }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
@@ -257,7 +260,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
-    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res:any) => {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange,this.productPrice,this.stripeCustomerId,this.productId).subscribe((res:any) => {
       if(res) {
         (Swal as any).fire({
           icon: 'success',

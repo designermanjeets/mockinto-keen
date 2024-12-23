@@ -556,9 +556,9 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
   // Mockinto Plan Backend Update
-  updateBackendForPlanChange(stripeSubscription: any): Observable<any> {
+  updateBackendForPlanChange(subscription:any,price: any,stripeCustomerId:any,productId:any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.post<any>(`${environment.apiUrl}/subscription`, stripeSubscription)
+    return this.http.post<any>(`${environment.apiUrl}/subscription?stripeCustomerId=${stripeCustomerId}&stripePriceId=${price}&stripeProductId=${productId}`,subscription)
     .pipe(
       map((data: any) => {
         return data;
@@ -569,6 +569,34 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
+
+  createCheckoutSession(
+    stripePriceId: any,
+    quantity: any,
+    stripeSuccessUrl: any,
+    stripeCancelUrl: any,
+    stripeReturnUrl: any
+  ) {
+    this.isLoadingSubject?.next(true);
+    const url = `${environment.apiUrl}/stripe/checkout?stripePriceId=${stripePriceId}&stripeQuantity=${quantity}&stripeSuccessUrl=${stripeSuccessUrl}&stripeCancelUrl=${stripeCancelUrl}&stripeReturnUrl=${stripeReturnUrl}`;
+    
+    return this.http.post<any>(url, {}) // Include an empty body
+      .pipe(
+        map((data: any) => {
+          return data;
+        }),
+        catchError((err) => {
+          return of(new Error('Error Updating Plan'));
+        }),
+        finalize(() => this.isLoadingSubject?.next(false))
+      );
+  }
+  
+
+
+
+
 
 
   getConfigAll(): Observable<any> {
@@ -708,6 +736,38 @@ export class SharedService implements OnInit, OnDestroy {
     );
 
   }
+
+  getProducts():Observable<any>{
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/stripe/products`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+  getSubscriptions():Observable<any>{
+    this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/stripe/subscriptions`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+
 
   // Misc Actions
 
