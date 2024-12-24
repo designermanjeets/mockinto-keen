@@ -24,7 +24,7 @@ export class CreateSubscriptionComponent implements OnInit {
   selectedPlanDetails:any;
   productList:any[]=[];
   // productPrice:any;
-  subscriptionId=JSON.parse(localStorage.getItem('subscriptionStripeId') || '{}');
+  subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
   customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
 
@@ -35,6 +35,7 @@ export class CreateSubscriptionComponent implements OnInit {
   setupIntentId:any;
   sessionId:any;
   currentPlan:any;
+  newPlanPrice:any;
 
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
 
@@ -80,7 +81,6 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.getProduct();
     this.fetchAllPlans();
     
   }
@@ -109,32 +109,6 @@ export class CreateSubscriptionComponent implements OnInit {
     }
 
     
-
-    const amount = this.checkoutForm.get('amount')?.value;
-    // this.plutoService.createSession({
-    //   customer : this.customerId,
-    //   mode: 'subscription',
-    //   currency: 'usd',
-    //   success_url: "https://example.com/success",
-    //   price: this.productPrice
-
-    // }).subscribe(session=>{
-    //   console.log("create session",session)
-    //   this.sessionId = session.id
-    //   this.setupIntentId = session?.setup_intent;
-    //   // this.plutoService
-    //   // .createSetupIntent({
-    //   //   // amount: amount,
-    //   //   // currency: 'usd'
-    //   //   payment_method_types: ['card'], // Ensure this is an array with valid entries
-    //   // })
-    //   // .subscribe((pi) => {
-    //   //  this.reteriveSessionId();
-    //   //   this.elementsOptions.clientSecret = pi.client_secret as string;
-    //   //   this.cdRef.detectChanges();
-    //   // });
-    // })
-    
   }
   
 
@@ -148,101 +122,28 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   
-
-  getProduct(){
-    this.plutoService.getProducts(3).subscribe(res=>{
-      if(res){
-          this.productList = res.data;
-          this.productList = this.productList.filter(x=>x.name == this.currentPlan);
-          this.productId = this.productList[0]?.id
-          this.productPrice = this.productList[0]?.default_price;
-          
-      }
-
-    })                 
-  }
-
-
-
   updateSubscription(){
-    
-     this.plutoService.updateSubscription(this.subscriptionId,this.productPrice,this.customerId,this.logginInUser.candidates[0]?.id,this.logginInUser.tenant_id).subscribe(subscription=>{
-      if(subscription){
-      
- 
-       
+     this.plutoService.updateCandidateSubscription(this.subscriptionId,this.newPlanPrice).subscribe(sub=>{
+      if(sub){
+        localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
+      }
+     })
+  }
+
+
+
+
+
+  getProducts(){
+    this.plutoService.getStripeProducts().subscribe(product=>{
+      if(product){
+        console.log("all product",product);
+        this.productList = product.data.filter((x:any)=>x.name == this.currentPlan);
+        this.newPlanPrice = this.productList[0].default_price;
+        localStorage.setItem('stripeProductPrice',JSON.stringify(this.newPlanPrice));
+        
       }
     })
-  }
-
-
-
-
-  createPaymentMethod() {
-    // const params = {
-    //   type: 'us_bank_account',  // Required field to specify the payment method type
-    //   us_bank_account: {
-    //     account_holder_type: 'individual',  // account_holder_type is inside the us_bank_account object
-    //     account_number: '000123456789',    // Bank account number
-    //     routing_number: '110000000',       // Routing number
-    //   },
-    //   billing_details: {
-    //     name: this.logginInUser.username,  // Use the user name as billing details
-    //   }
-    // };
-
-
-    const params = {
-      type : 'card',
-      card:{
-        exp_month: 11,
-        exp_year: 28,
-        number: 4242424242424242,
-        cvc:346
-      }
-    }
-
-
-
-
-  
-    const flatParams = this.flattenParams(params);
-  
-    // Send the flattened payload to your backend
-    this.plutoService.createPaymentMethod(flatParams).subscribe(payment => {
-      this.paymentMethodId = payment.id;
-      
-    });
-  }
-
-  createPaymentAttach(){
-    let paylod={
-      customer: this.customerId 
-    }
-   
-    this.plutoService.customerPaymentAttach(this.paymentMethodId,paylod).subscribe(attach=>{
-      console.log("attach", attach)
-      if(attach){
-        this.updateCustomer();
-      }
-    })
-  }
-
-
-  updateCustomer() {
-    const updatedData = {
-      invoice_settings: {
-        default_payment_method: this.paymentMethodId // Set the default payment method
-      }
-    };
-  
-    
-    this.plutoService.updateCustomer(this.customerId, updatedData)
-      .subscribe((customer) => {
-        console.log('Customer updated:', customer);
-        this.updateSubscription();
-      })
-      
   }
   
 
@@ -265,40 +166,18 @@ export class CreateSubscriptionComponent implements OnInit {
   }
   
 
-
-  // collectPayment(){
-  //   if(this.productPrice){
-  //     this.sharedService.createCheckoutSession({
-  //       price: this.productPrice,
-  //       quantity:1,
-  //       sucesfullUrl:'https://mockinto-dev.vercel.app/dashboard/successful-payment',
-  //       cancelUrl:'https://mockinto-dev.vercel.app/dashboard/cancel-payment',
-  //       returnUrl:'https://mockinto-dev.vercel.app/dashboard',
-
-  
-  //     }).subscribe(session=>{
-  //       let url = session.url
-  //       this.sessionId = session.id
-  //       this.setupIntentId = session?.setup_intent;
-  //       if(url){
-  //         window.open(`${url}`, '_blank');
-  //       }  
-  //     })
-     
-  //   }
-  // }
-
   collectPayment() {
     if (this.productPrice) {
-      this.sharedService.createCheckoutSession(
-        this.productPrice, // stripePriceId
-        1, // quantity
-        'https://mockinto-dev.vercel.app/dashboard/successful-payment', // stripeSuccessUrl
-        'https://mockinto-dev.vercel.app/dashboard/cancel-payment', // stripeCancelUrl
-        'https://mockinto-dev.vercel.app/dashboard', // stripeReturnUrl
-      ).subscribe(
+      const formData = new FormData();
+      formData.append('line_items[0][price]', this.productPrice); 
+      formData.append('line_items[0][quantity]', '1'); 
+      formData.append('stripeSuccessUrl', 'https://mockinto-dev.vercel.app/dashboard/successful-payment');
+      formData.append('stripeCancelUrl', 'https://mockinto-dev.vercel.app/dashboard/cancel-payment');
+  
+      this.plutoService.createSessionChekout(formData).subscribe(
         (response) => {
           console.log('Checkout session created:', response);
+          // this.updateSubscription();
         },
         (error) => {
           console.error('Error creating checkout session:', error);
@@ -306,6 +185,7 @@ export class CreateSubscriptionComponent implements OnInit {
       );
     }
   }
+  
   
 
 
@@ -410,7 +290,7 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   updateBackendPlanChange(updateBackendForPlanChange: any) {
-    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange,this.productPrice,this.customerId,this.productId).subscribe((res) => {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
         this.router.navigate(['dashboard/landing']);
       } else {

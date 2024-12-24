@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { map, catchError, switchMap, finalize } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
 
 export type UserType = UserModel | undefined;
 
@@ -36,7 +37,9 @@ export class AuthService implements OnDestroy {
   constructor(
     private authHttpService: AuthHTTPService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+   // private readonly plutoService = inject(StripeMockintoService)
+    
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
@@ -126,10 +129,11 @@ export class AuthService implements OnDestroy {
     this.isLoadingSubject.next(true);
     return this.http.post<any>(`${environment.apiUrl}/register`, user)
     .pipe(
-      map(() => {
+      map((res:any) => {
         this.isLoadingSubject.next(false);
+        return res;
       }),
-      switchMap(() => this.login(user.user_email, user.password)),
+     // switchMap(() => this.login(user.user_email, user.password)),
       catchError((err) => {
         return of(err);
       }),
@@ -154,6 +158,7 @@ export class AuthService implements OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
 
 
   // forgotPassword(email: string): Observable<boolean> {

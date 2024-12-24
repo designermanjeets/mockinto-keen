@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, map, Observable, of } from 'rxjs';
 
 import { PaymentIntent } from '@stripe/stripe-js';
 import { environment } from 'src/environments/environment';
@@ -18,6 +18,8 @@ export class StripeMockintoService {
         'Content-Type': 'application/x-www-form-urlencoded',
     };
     authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
+    isLoading$: Observable<boolean>;
+    isLoadingSubject: BehaviorSubject<boolean>;
 
 
     constructor(
@@ -322,7 +324,135 @@ export class StripeMockintoService {
 
     }
 
+    
+
+
+
+
+
+
+
+
+    // Node js Stripe Api 
+
+    getStripeProducts():Observable<any>{
+       this.isLoadingSubject?.next(true);
+       return this.http.get<any>(`${environment.stripeApiUrl}/get-products`)
+       .pipe(
+         map((data: any) => {
+           return data;
+         }),
+         catchError((err) => {
+           return of(undefined);
+         }),
+         finalize(() => this.isLoadingSubject?.next(false))
+       );
+     }
+
+
+     getStripePlans():Observable<any>{
+      this.isLoadingSubject?.next(true);
+      return this.http.get<any>(`${environment.stripeApiUrl}/get-plans`)
+      .pipe(
+        map((data: any) => {
+          return data;
+        }),
+        catchError((err) => {
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject?.next(false))
+      );
     }
 
+   
+  createStripeCustomer(params: any): Observable<any> {
+      return this.http.post<any>(
+          `${environment.stripeApiUrl}/create-customer`,params)
+          .pipe(
+            map((data: any) => {
+              return data;
+            }),
+            catchError((err) => {
+              return of(undefined);
+            }),
+            finalize(() => this.isLoadingSubject?.next(false))
+          );
+      
+  }
 
+
+
+  createCandidateSubscription(productPrice:any,stripeCustomerId:any): Observable<any>{
+    const payload ={
+      customerId : stripeCustomerId,
+      priceId : productPrice
+    }
+    return this.http.post<any>(
+      `${environment.stripeApiUrl}/create-subscription`,payload)
+      .pipe(
+        map((data: any) => {
+          return data;
+        }),
+        catchError((err) => {
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject?.next(false))
+      );
+}
+
+
+
+cancelSubscription(subscriptionId:any){
+  return this.http.delete<any>(
+   `${environment.stripeApiUrl}/delete-subscription/${subscriptionId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+
+}
+
+
+updateCandidateSubscription(subscriptionId:any,productPrice:any): Observable<any>{
+  const payload = {
+    priceId : productPrice
+  }
+  return this.http.put<any>(
+    `${environment.stripeApiUrl}/update-subscription/${subscriptionId}`,payload)
+     .pipe(
+       map((data: any) => {
+         return data;
+       }),
+       catchError((err) => {
+         return of(undefined);
+       }),
+       finalize(() => this.isLoadingSubject?.next(false))
+     );
+}
+
+
+createSessionChekout(params: FormData): Observable<any> {
+  return this.http.post<any>(
+    `${environment.stripeApiUrl}/create-subscription`,params ).pipe(map((data: any) => {
+      return data;
+    }),
+    catchError((err) => {
+      console.error('Error:', err);
+      return of(undefined);
+    }),
+    finalize(() => this.isLoadingSubject?.next(false))
+  );
+}
+
+
+
+
+
+
+    }
 

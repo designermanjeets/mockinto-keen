@@ -556,9 +556,9 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
   // Mockinto Plan Backend Update
-  updateBackendForPlanChange(subscription:any,price: any,stripeCustomerId:any,productId:any): Observable<any> {
+  updateBackendForPlanChange(subscription:any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.post<any>(`${environment.apiUrl}/subscription?stripeCustomerId=${stripeCustomerId}&stripePriceId=${price}&stripeProductId=${productId}`,subscription)
+    return this.http.post<any>(`${environment.apiUrl}/subscription`,subscription)
     .pipe(
       map((data: any) => {
         return data;
