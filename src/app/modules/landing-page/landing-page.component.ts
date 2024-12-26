@@ -133,7 +133,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
 
   fetchAllPlans() {
-    this.plutoService.getAllPlans().subscribe((res) => {
+    this.plutoService.getStripePlans().subscribe((res) => {
       if(res) {
         this.allPlans = res.data;
         this.cdRef.detectChanges();

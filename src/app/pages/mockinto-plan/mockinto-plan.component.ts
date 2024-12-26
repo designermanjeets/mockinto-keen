@@ -20,6 +20,9 @@ export class MockintoPlanComponent implements OnInit {
   tenantId:any;
   selectedPlanName :any
   selectedPlan:any;
+  planName:any;
+  plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -35,9 +38,21 @@ export class MockintoPlanComponent implements OnInit {
     this.fetchAllPlans();
     this.getConfig();
     this.getSubscription();
+    this.fetchDashboardData();
    
   }
 
+
+  fetchDashboardData() {
+    this.sharedService.fetchDashboardData().subscribe(
+      (data) => {
+        if(!data) {
+        } else {
+          this.planName = data?.subscription[0]?.plan?.name;
+        }
+      }
+    );
+  }
 
   getConfig(){
     this.sharedService.isLoadingSubject?.next(true);
@@ -96,12 +111,50 @@ export class MockintoPlanComponent implements OnInit {
         break;
 
       case 'Professional':
+       if(this.planName == 'Professional' || this.planName == 'Enterprise'){
+        (Swal as any).fire({
+          text: "Already Subscribed Professional plan ! you Can Change it after a month",
+          icon: "warning",
+          buttonsStyling: false,
+          cancelButtonText: 'Cancel',
+          customClass: {
+            confirmButton: "btn btn-primary",
+           
+          }
+        }).then((result: any) => {
+          if(result.isConfirmed) {
+          }
+        });
+        break;
+       }
+       else{
         this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Professional' } });
         break;
+       }
+       
 
       case 'Enterprise':
-        this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Enterprise' } });
-        break;
+        if(this.planName == 'Enterprise'){
+          (Swal as any).fire({
+            text: "Already Subscribed Enterprise plan ! you Can Change it after a month",
+            icon: "warning",
+            buttonsStyling: false,
+            cancelButtonText: 'Cancel',
+            customClass: {
+              confirmButton: "btn btn-primary",
+             
+            }
+          }).then((result: any) => {
+            if(result.isConfirmed) {
+            }
+          });
+          break;
+         }
+         else{
+          this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Enterprise' } });
+          break;
+         }
+        
       default:
         break;
     }

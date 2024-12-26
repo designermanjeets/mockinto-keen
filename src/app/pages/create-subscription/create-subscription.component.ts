@@ -27,8 +27,9 @@ export class CreateSubscriptionComponent implements OnInit {
   subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
   customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
-
   productPrice = JSON.parse(localStorage.getItem('stripeProductPrice') || '{}');
+  plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+
 
   //productId : any;
   paymentMethodId:any;
@@ -75,15 +76,43 @@ export class CreateSubscriptionComponent implements OnInit {
       if (params.plan) {
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
+        localStorage.setItem('peviousPlan',JSON.stringify(params.plan));
+
+
 
       }
     });
   }
 
   ngOnInit(): void {
+    
+    if(this.currentPlan){
+      this.getStripeProducts();
+
+    }
     this.fetchAllPlans();
     
   }
+
+
+
+
+  
+  getStripeProducts(){
+    this.plutoService.getStripeProducts().subscribe((prod:any)=>{
+      if(prod){
+        this.productList = prod.data;
+        this.productList = this.productList.filter(x=>x.name == this.currentPlan);
+        this.productPrice = this.productList[0]?.default_price;
+        this.productId = this.productList[0]?.id
+        localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
+        localStorage.setItem('stripeProductId',JSON.stringify(this.productId));
+
+      }
+      })
+
+  }
+
 
 
 
@@ -122,14 +151,7 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   
-  updateSubscription(){
-     this.plutoService.updateCandidateSubscription(this.subscriptionId,this.newPlanPrice).subscribe(sub=>{
-      if(sub){
-        localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
-      }
-     })
-  }
-
+ 
 
 
 
@@ -137,7 +159,6 @@ export class CreateSubscriptionComponent implements OnInit {
   getProducts(){
     this.plutoService.getStripeProducts().subscribe(product=>{
       if(product){
-        console.log("all product",product);
         this.productList = product.data.filter((x:any)=>x.name == this.currentPlan);
         this.newPlanPrice = this.productList[0].default_price;
         localStorage.setItem('stripeProductPrice',JSON.stringify(this.newPlanPrice));
@@ -167,25 +188,60 @@ export class CreateSubscriptionComponent implements OnInit {
   
 
   collectPayment() {
-    if (this.productPrice) {
-      const formData = new FormData();
-      formData.append('line_items[0][price]', this.productPrice); 
-      formData.append('line_items[0][quantity]', '1'); 
-      formData.append('stripeSuccessUrl', 'https://mockinto-dev.vercel.app/dashboard/successful-payment');
-      formData.append('stripeCancelUrl', 'https://mockinto-dev.vercel.app/dashboard/cancel-payment');
+    if (this.plan?.name != 'Professional' ) {
+      let payload : any = {
+        price: this.productPrice,
+        mode: 'subscription',
+        quantity: 1,
+        sucessUrl : 'http://localhost:4200/dashboard/successful-payment',
+        cancelUrl : 'http://localhost:4200/dashboard/cancel-payment',
+        customer: this.customerId
+
+      }
   
-      this.plutoService.createSessionChekout(formData).subscribe(
+      this.plutoService.createSessionChekout(payload).subscribe(
         (response) => {
-          console.log('Checkout session created:', response);
-          // this.updateSubscription();
+          localStorage.setItem('sessionId',JSON.stringify(response.sessionUrl?.id));
+          localStorage.setItem('planAmount',JSON.stringify(response.sessionUrl?.amount_total));
+
+          
+
+          if(response.sessionUrl){
+            window.open(response.sessionUrl?.url, "_blank");
+          }
         },
         (error) => {
           console.error('Error creating checkout session:', error);
         }
       );
     }
+    else{
+      this.getSession();
+      
+    }
+  }
+
+
+  getSession(){
+    let session = JSON.parse(localStorage.getItem('sessionId') || '{}');
+    this.plutoService.getCheckoutSession(session).subscribe(res=>{
+      if(res){
+        localStorage.setItem('stripeSubscriptionId',JSON.stringify(res?.subscription));
+       let  subscription = res?.subscription;
+       this.subscriptionId = res?.subscription;
+       this.plutoService.updateCandidateSubscription(subscription,this.productPrice).subscribe(sub=>{
+        if(sub){
+          localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
+          this.addSubcriptionPayment(session);
+        }
+       })
+      }
+
+    })
+
   }
   
+
   
 
 
@@ -270,20 +326,32 @@ export class CreateSubscriptionComponent implements OnInit {
 
   }
 
+
+
+  getPlans(){
+    this.plutoService.getStripePlans().subscribe(res=>{
+      if(res){
+        let allPlan = res.data;
+        allPlan = allPlan.filter((plan:any)=>plan)
+      }
+    })
+  }
+
   
 
-  addSubcriptionPayment(paymentIntenteId:any,amount:any):void{
+  addSubcriptionPayment(session:any):void{
     let payment = {
-        amount: amount,
+        amount: this.amount,
         active: "1",
         deleted: "0",
         startDate: new Date().toISOString(),
         endDate: new Date().toISOString(),
-        stripePaymentIntentId: paymentIntenteId
+        stripePaymentIntentId: session
       }
     
     this.sharedService.addPayment(payment).subscribe(res=>{
       if(res){
+        this.deleteCandidateSubscription()
 
       }
     })

@@ -261,7 +261,6 @@ export class StripeMockintoService {
 
 
       createSession(params: any) { 
-        console.log("params",params)
         const payload = new URLSearchParams();
       
         payload.set('line_items[0][price]', params.price);  
@@ -435,10 +434,28 @@ updateCandidateSubscription(subscriptionId:any,productPrice:any): Observable<any
      );
 }
 
+getCheckoutSession(sessionId: any) {
+  let payload = {
+    sessionId : sessionId
+  }
+  this.isLoadingSubject?.next(true);
 
-createSessionChekout(params: FormData): Observable<any> {
+  return this.http.post<any>(`${environment.stripeApiUrl}/get-session`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+}
+
+
+createSessionChekout(params: any): Observable<any> {
   return this.http.post<any>(
-    `${environment.stripeApiUrl}/create-subscription`,params ).pipe(map((data: any) => {
+    `${environment.stripeApiUrl}/checkout`,params ).pipe(map((data: any) => {
       return data;
     }),
     catchError((err) => {
@@ -450,9 +467,5 @@ createSessionChekout(params: FormData): Observable<any> {
 }
 
 
-
-
-
-
-    }
+}
 

@@ -319,8 +319,7 @@
                                     </div>
                                     <!--end::Features-->
                                     <!--begin::Select-->
-                                    <a class="btn btn-sm btn-primary"
-                                        (click)="selectplan($event, 'Professional')">Select</a>
+                                    <a class="btn btn-sm btn-primary" (click)="selectplan($event, 'Professional')">{{ selectedPlanName === 'Professional' ? 'Subscribed' : 'Select' }}</a>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Option-->
@@ -429,7 +428,7 @@
                                     <!--end::Features-->
                                     <!--begin::Select-->
                                     <a class="btn btn-sm btn-primary"
-                                        (click)="selectplan($event, 'Enterprise')">Select</a>
+                                        (click)="selectplan($event, 'Enterprise')">{{ selectedPlanName === 'Professional' ? 'Upgrade' : 'Select' }}</a>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Option-->

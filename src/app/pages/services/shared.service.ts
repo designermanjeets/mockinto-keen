@@ -269,7 +269,6 @@ export class SharedService implements OnInit, OnDestroy {
       tenant: { id: this.tenantId },
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
-    console.log(payload);
     this.isLoadingSubject?.next(true);
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
@@ -289,7 +288,6 @@ export class SharedService implements OnInit, OnDestroy {
       tenant: { id: this.tenantId },
       candidate: { id: this.candidateId, tenant: { id: this.tenantId } }
     }
-    console.log(payload);
     this.isLoadingSubject?.next(true);
     return this.http.put<any>(`${environment.apiUrl}/interviewSchedule`, payload)
     .pipe(
@@ -704,12 +702,11 @@ export class SharedService implements OnInit, OnDestroy {
     const payload = {
       id: tenantId,
        stripeCustomer: {
-        id: tenantId,
         stripeCustomerId: stripeCustomerId
         }   
     }
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`${environment.apiUrl}/tenant`, payload)
+    return this.http.put<any>(`http://54.90.45.9:8080/api/tenant`, payload)
     .pipe(
       map((data: any) => {
         return data;

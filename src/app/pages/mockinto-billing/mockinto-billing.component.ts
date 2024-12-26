@@ -153,7 +153,6 @@ export class MockintoBillingComponent implements OnInit {
         payment.created = new Date(payment.created * 1000).toLocaleString();
       });
       this.allPayments = res.data;
-      console.log(this.allPayments);
       this.cdRef.detectChanges();
     });
   }

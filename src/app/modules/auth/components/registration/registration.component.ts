@@ -187,7 +187,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             email: data.user_email
           }
             this.tenantId = user.tenant_id;
-            this.candidateId = user.candidate[0].id;
+            this.candidateId = user.candidate[0]?.id;
             this.ceateCustomer(payload,data.password);
           
         } else {
@@ -208,7 +208,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.stripeCustomerId = customer?.id;
         localStorage.setItem('stripeCustomerId',JSON.stringify(this.stripeCustomerId));
         
-        this.updateTenat(payload.email,password);
+        //this.updateTenat(payload.email,password);
+        this.authService.login(payload.email,password).subscribe(res=>{
+          this.getStripeProducts();
+
+        })
+
 
       }
     })
