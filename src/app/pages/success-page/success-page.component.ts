@@ -16,28 +16,29 @@ export class SuccessPageComponent implements OnInit {
   amount = JSON.parse(localStorage.getItem('planAmount') || '{}');
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
-  plan= JSON.parse(localStorage.getItem('peviousPlan') || '{}');
+  plan= JSON.parse(localStorage.getItem('currentPlan') || '{}');
   selectedPlanDetails:any[]=[];
 
 
   private readonly plutoService = inject(StripeMockintoService);
-  constructor(private router: Router,    private sharedService: SharedService
+  constructor(private router: Router, private sharedService: SharedService
   ) {}
   ngOnInit(){
     this.addSubcriptionPayment();
     if(this.plan){
       this.getAllPlan();
     }
-   
+
   }
 
   goToDashboard(): void {
+    console.log("click the button")
     this.router.navigate(['/']);
   }
 
   
 
-
+ 
 
  addSubcriptionPayment():void{
   let payment = {
@@ -61,6 +62,7 @@ export class SuccessPageComponent implements OnInit {
 deleteCandidateSubscription(){
   this.sharedService.deleteSubscription(this.logginInUser.tenant_id).subscribe(sub=>{
     if(sub){
+      console.log("deltsubscription",sub)
       const backendPayload = {
         plan: {
           id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
@@ -101,13 +103,7 @@ getAllPlan(){
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
-        this.router.navigate(['dashboard/landing']);
-      } else {
-        (Swal as any).fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Something went wrong. Please try again later.',
-        });
+        console.log("update ",updateBackendForPlanChange)
       }
     });
     

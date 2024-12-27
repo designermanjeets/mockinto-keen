@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import Swal from 'sweetalert2';
 import { SharedService } from '../services/shared.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-subscription',
@@ -23,6 +24,8 @@ export class CreateSubscriptionComponent implements OnInit {
   checkoutForm: FormGroup;
   selectedPlanDetails:any;
   productList:any[]=[];
+  isLoading$: Observable<boolean>;
+  
   // productPrice:any;
   subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
   customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
@@ -34,9 +37,12 @@ export class CreateSubscriptionComponent implements OnInit {
   //productId : any;
   paymentMethodId:any;
   setupIntentId:any;
-  sessionId:any;
+  sessionId = JSON.parse(localStorage.getItem('sessionId') || '{}');
+
   currentPlan:any;
   newPlanPrice:any;
+  previousPlan= JSON.parse(localStorage.getItem('peviousPlan') || '{}');
+
 
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
 
@@ -74,22 +80,25 @@ export class CreateSubscriptionComponent implements OnInit {
   ) { 
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params.plan) {
+        console.log("selected plan",this.selectedPlan)
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
-        localStorage.setItem('peviousPlan',JSON.stringify(params.plan));
-
-
+        localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
 
       }
     });
   }
 
   ngOnInit(): void {
+    this.isLoading$ = this.sharedService.isLoading$;
+
     
     if(this.currentPlan){
       this.getStripeProducts();
 
     }
+
+    
     this.fetchAllPlans();
     
   }
@@ -188,7 +197,10 @@ export class CreateSubscriptionComponent implements OnInit {
   
 
   collectPayment() {
-    if (this.plan?.name != 'Professional' ) {
+    console.log("sessionID",this.sessionId);
+    this.sharedService.isLoadingSubject?.next(true);
+
+    if (Object.keys(this.sessionId).length === 0) {
       let payload : any = {
         price: this.productPrice,
         mode: 'subscription',
@@ -201,7 +213,9 @@ export class CreateSubscriptionComponent implements OnInit {
   
       this.plutoService.createSessionChekout(payload).subscribe(
         (response) => {
-          localStorage.setItem('sessionId',JSON.stringify(response.sessionUrl?.id));
+          this.sharedService.isLoadingSubject?.next(false);
+          this.sessionId = response.sessionUrl?.id
+          localStorage.setItem('sessionId',JSON.stringify(this.sessionId));
           localStorage.setItem('planAmount',JSON.stringify(response.sessionUrl?.amount_total));
 
           
@@ -215,10 +229,17 @@ export class CreateSubscriptionComponent implements OnInit {
         }
       );
     }
+
+
     else{
       this.getSession();
       
     }
+  }
+
+
+  getSubscription(){
+   
   }
 
 
@@ -229,73 +250,25 @@ export class CreateSubscriptionComponent implements OnInit {
         localStorage.setItem('stripeSubscriptionId',JSON.stringify(res?.subscription));
        let  subscription = res?.subscription;
        this.subscriptionId = res?.subscription;
-       this.plutoService.updateCandidateSubscription(subscription,this.productPrice).subscribe(sub=>{
-        if(sub){
-          localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
-          this.addSubcriptionPayment(session);
+       this.plutoService.getCandidateSubscription(subscription).subscribe(val=>{
+        if(val){
+          console.log("val",val)
+          let itemId = val?.items?.data[0]?.id
+          this.plutoService.updateCandidateSubscription(itemId,subscription,this.productPrice).subscribe(sub=>{
+            if(sub){
+              localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
+              this.addSubcriptionPayment(session);
+            }
+           })
         }
-       })
+      })
+      
       }
 
     })
 
   }
   
-
-  
-
-
-
-  // collectPayment() {
-  //   if (this.paying() || this.checkoutForm.invalid) {
-  //     this.checkoutForm.markAllAsTouched();
-  //     return;
-  //   };
-  //   let paymentMethod = 'card'
-  //   this.paying.set(true);
-  //   console.log(" this.paymentElement?.elements,", this.paymentElement?.elements,)
-
-
-  //   const { name, email, address, zipcode, city } =
-  //     this.checkoutForm.getRawValue();
-
-  //   this.plutoService.confirmPaymentIntent(this.setupIntentId,paymentMethod
-  //   )
-  //     .subscribe({
-  //       next: (result: any) => {
-  //         this.paying.set(false);
-  //         if (result.error) {
-  //           (Swal as any).fire({
-  //             icon: 'error',
-  //             title: 'Oops...',
-  //             text: result.error.message,
-  //           });
-  //         } else if (result.paymentIntent.status === 'succeeded') {
-  //           this.paymentMethodId = result.paymentIntent.payment_method;
-  //           this.updateCustomer();
-  //          // this.updateSubscription();
-  //           this.addSubcriptionPayment(result.id,result.amount);
-  //           (Swal as any).fire({
-  //             icon: 'success',
-  //             title: 'Success',
-  //             text: 'Payment completed successfully',
-  //           });
-  //           this.checkoutForm.reset();
-           
-
-           
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.paying.set(false);
-  //         (Swal as any).fire({
-  //           icon: 'error',
-  //           title: 'Oops...',
-  //           text: err.error.message,
-  //         });
-  //       },
-  //     });
-  // }
 
 
   deleteCandidateSubscription(){
@@ -360,6 +333,7 @@ export class CreateSubscriptionComponent implements OnInit {
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
+        this.sharedService.isLoadingSubject?.next(false);
         this.router.navigate(['dashboard/landing']);
       } else {
         (Swal as any).fire({

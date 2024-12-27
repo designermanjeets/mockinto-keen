@@ -176,7 +176,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const registrationSubscr = this.authService
       .registration(payload)
       .subscribe((user: any) => {
-        if (user) {
+        if (user?.tenant_id) {
+          console.log("register")
           // if(this.selectedPlan && this.selectedPlan !== 'starter') {
           //   this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           // } else {
@@ -192,7 +193,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           
         } else {
           this.hasError = true;
-          //this.regError = user.error.data;
+          this.regError = user.data;
         } 
       }, error => {
         this.hasError = true;

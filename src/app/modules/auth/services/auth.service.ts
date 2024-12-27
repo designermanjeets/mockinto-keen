@@ -84,6 +84,14 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem('general_config');
     localStorage.removeItem('tenant_general_config');
     localStorage.removeItem('pagination_general_config');
+    localStorage.removeItem('peviousPlan');
+    localStorage.removeItem('planAmount');
+    localStorage.removeItem('sessionId');
+    localStorage.removeItem('stripeCustomerId'); 
+    localStorage.removeItem('stripeProductId');
+    localStorage.removeItem('stripeProductPrice');
+    localStorage.removeItem('stripeSubscriptionId');  
+  
     
     (Swal as any).fire({
       title: 'Logout',
@@ -97,6 +105,13 @@ export class AuthService implements OnDestroy {
       localStorage.removeItem('unAuthSelectededPlan');
       localStorage.removeItem('general_config');
       localStorage.removeItem('pagination_general_config');
+      localStorage.removeItem('peviousPlan');
+      localStorage.removeItem('planAmount');
+      localStorage.removeItem('sessionId');
+      localStorage.removeItem('stripeCustomerId'); 
+      localStorage.removeItem('stripeProductId');
+      localStorage.removeItem('stripeProductPrice');
+      localStorage.removeItem('stripeSubscriptionId');  
       this.router.navigate(['/landing-page'], {
         queryParams: {},
       });

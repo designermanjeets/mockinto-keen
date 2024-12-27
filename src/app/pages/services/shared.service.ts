@@ -569,6 +569,23 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
 
+
+    // Mockinto Plan Backend Update
+    cancelBackendForPlanChange(subscription:any): Observable<any> {
+      this.isLoadingSubject?.next(true);
+      return this.http.put<any>(`${environment.apiUrl}/subscription`,subscription)
+      .pipe(
+        map((data: any) => {
+          return data;
+        }),
+        catchError((err) => {
+          return of(new Error('Error Updating Plan'));
+        }),
+        finalize(() => this.isLoadingSubject?.next(false))
+      );
+    }
+
+
   createCheckoutSession(
     stripePriceId: any,
     quantity: any,

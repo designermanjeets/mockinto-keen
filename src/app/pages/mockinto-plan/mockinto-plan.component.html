@@ -211,7 +211,7 @@
                                     <!--end::Features-->
                                     <!--begin::Select-->
                                     <a class="btn btn-sm btn-primary"
-                                        (click)="selectplan($event, 'Starter')">Subscribed</a>
+                                        (click)="selectplan($event, 'Starter')" disabled="true">Subscribed</a>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Option-->
@@ -319,7 +319,8 @@
                                     </div>
                                     <!--end::Features-->
                                     <!--begin::Select-->
-                                    <a class="btn btn-sm btn-primary" (click)="selectplan($event, 'Professional')">{{ selectedPlanName === 'Professional' ? 'Subscribed' : 'Select' }}</a>
+                                    <a class="btn btn-sm btn-primary" (click)="selectplan($event, 'Professional')">{{ selectedPlanName === 'Professional' ? 'Subscribed' : (selectedPlanName === 'Enterprise' ? 'Upgrade' : 'Select') }}
+                                    </a>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Option-->
@@ -428,7 +429,8 @@
                                     <!--end::Features-->
                                     <!--begin::Select-->
                                     <a class="btn btn-sm btn-primary"
-                                        (click)="selectplan($event, 'Enterprise')">{{ selectedPlanName === 'Professional' ? 'Upgrade' : 'Select' }}</a>
+                                        (click)="selectplan($event, 'Enterprise')">{{ selectedPlanName === 'Enterprise' ? 'Subscribed' : (selectedPlanName === 'Professional' ? 'Upgrade' : 'Select') }}
+                                    </a>
                                     <!--end::Select-->
                                 </div>
                                 <!--end::Option-->
@@ -492,8 +494,8 @@
                             <div class="nav flex-column">
                                 <!--begin::Tab link-->
                                 <label
-                                    class="nav-link btn btn-outline btn-outline-dashed btn-color-dark btn-active btn-active-primary d-flex flex-stack text-start p-6 active mb-6"
-                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_startup">
+                                    class="nav-link btn btn-outline btn-outline-dashed btn-color-dark btn-active  d-flex flex-stack text-start p-6 active mb-6"
+                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_startup" [ngClass]="{ 'active': selectedPlanName === 'Starter' }">
                                     <!--end::Description-->
                                     <div class="d-flex align-items-center me-2">
                                         <!--begin::Radio-->
@@ -524,7 +526,7 @@
                                 <!--begin::Tab link-->
                                 <label
                                     class="nav-link btn btn-outline btn-outline-dashed btn-color-dark btn-active btn-active-primary d-flex flex-stack text-start p-6 mb-6"
-                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_advanced">
+                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_advanced" [ngClass]="{ 'active': selectedPlanName === 'Professional' }">
                                     <!--end::Description-->
                                     <div class="d-flex align-items-center me-2">
                                         <!--begin::Radio-->
@@ -554,7 +556,7 @@
                                 <!--begin::Tab link-->
                                 <label
                                     class="nav-link btn btn-outline btn-outline-dashed btn-color-dark btn-active btn-active-primary d-flex flex-stack text-start p-6 mb-6"
-                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_enterprise">
+                                    data-bs-toggle="tab" data-bs-target="#kt_upgrade_plan_enterprise" [ngClass]="{ 'active': selectedPlanName === 'Enterprise' }">
                                     <!--end::Description-->
                                     <div class="d-flex align-items-center me-2">
                                         <!--begin::Radio-->
