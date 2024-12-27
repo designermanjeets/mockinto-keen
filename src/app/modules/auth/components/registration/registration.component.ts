@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { UserModel } from '../../models/user.model';
-import { first } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { SharedService } from 'src/app/pages/services/shared.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,13 +23,13 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   selectedPlan: string;
   regError: string;
   passwordMismatch: boolean = false;
-  stripeCustomerId:any;
-  productList:any[]=[];
-  productPrice:any;
-  subscriptionId:any;
-  productId:any;
-  tenantId:any;
-  candidateId:any;
+  stripeCustomerId: any;
+  productList: any[] = [];
+  productPrice: any;
+  subscriptionId: any;
+  productId: any;
+  tenantId: any;
+  candidateId: any;
 
 
   // private fields
@@ -67,7 +66,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   signIn() {
-    if(this.selectedPlan) {
+    if (this.selectedPlan) {
       this.router.navigate(['/auth/login'], {
         queryParams: { plan: this.selectedPlan },
       });
@@ -136,12 +135,12 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if(this.selectedPlan == undefined){
+    if (this.selectedPlan == undefined) {
       this.selectedPlan = 'Starter'
     }
     this.hasError = false;
     const data: { [key: string]: string; } = {};
-    
+
     Object.keys(this.f).forEach((key) => { data[key] = this.f[key].value });
 
     let payload = {
@@ -164,7 +163,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       active: 1,
       deleted: 0,
       updated_by: "1",
-      roles: [ { role: "admin" } ],
+      roles: [{ role: "admin" }],
       enabled: 1,
       username: data.username,
       user_email: data.user_email,
@@ -184,17 +183,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           //   this.router.navigate(['/']);
           // }
           let payload = {
-            firstName : data.first_name,
+            firstName: data.first_name,
             email: data.user_email
           }
-            this.tenantId = user.tenant_id;
-            this.candidateId = user.candidate[0]?.id;
-            this.ceateCustomer(payload,data.password);
-          
+          this.tenantId = user.tenant_id;
+          this.candidateId = user.candidate[0]?.id;
+          this.ceateCustomer(payload, data.password);
+
         } else {
           this.hasError = true;
           this.regError = user.data;
-        } 
+        }
       }, error => {
         this.hasError = true;
         this.regError = error.data;
@@ -202,108 +201,93 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(registrationSubscr);
   }
 
-
-  ceateCustomer(payload:any,password:any){
-    this.plutoService.createStripeCustomer(payload).subscribe(customer=>{
-      if(customer){
+  ceateCustomer(payload: any, password: any) {
+    this.plutoService.createStripeCustomer(payload).subscribe(customer => {
+      if (customer) {
         this.stripeCustomerId = customer?.id;
-        localStorage.setItem('stripeCustomerId',JSON.stringify(this.stripeCustomerId));
-        
-        //this.updateTenat(payload.email,password);
-        this.authService.login(payload.email,password).subscribe(res=>{
+        localStorage.setItem('stripeCustomerId', JSON.stringify(this.stripeCustomerId));
+        //this.updateTenant(payload.email,password);
+        this.authService.login(payload.email, password).subscribe(res => {
           this.getStripeProducts();
-
         })
-
-
       }
     })
   }
 
-
-  updateTenat(email:any,password:any){
-    this.sharedService.updateTenant(this.tenantId,this.stripeCustomerId).subscribe(tenant=>{
-      if(tenant){
-        this.authService.login(email,password).subscribe(res=>{
+  updateTenant(email: any, password: any) {
+    this.sharedService.updateTenant(this.tenantId, this.stripeCustomerId).subscribe(tenant => {
+      if (tenant) {
+        this.authService.login(email, password).subscribe(res => {
         })
         this.getStripeProducts();
-            }
-         })
+      }
+    })
   }
 
-  getStripeProducts(){
-    this.plutoService.getStripeProducts().subscribe((prod:any)=>{
-      if(prod){
+  getStripeProducts() {
+    this.plutoService.getStripeProducts().subscribe((prod: any) => {
+      if (prod) {
         this.productList = prod.data;
-        this.productList = this.productList.filter(x=>x.name == this.selectedPlan);
+        this.productList = this.productList.filter(x => x.name == this.selectedPlan);
         this.productPrice = this.productList[0]?.default_price;
         this.productId = this.productList[0]?.id
-        localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
-        localStorage.setItem('stripeProductId',JSON.stringify(this.productId));
+        localStorage.setItem('stripeProductPrice', JSON.stringify(this.productPrice));
+        localStorage.setItem('stripeProductId', JSON.stringify(this.productId));
         this.createSubscription();
 
       }
-      })
-
+    })
   }
 
-
-
-
-  createSubscription(){
-    this.plutoService.createCandidateSubscription(this.productPrice,this.stripeCustomerId).subscribe(subscription=>{
-      if(subscription){
+  createSubscription() {
+    this.plutoService.createCandidateSubscription(this.productPrice, this.stripeCustomerId).subscribe(subscription => {
+      if (subscription) {
         this.subscriptionId = subscription?.id
-        localStorage.setItem('stripeSubscriptionId',JSON.stringify(this.subscriptionId));
-
-        if(this.subscriptionId){
+        localStorage.setItem('stripeSubscriptionId', JSON.stringify(this.subscriptionId));
+        if (this.subscriptionId) {
           const backendPayload = {
-              plan: {
-                id: 9,
-                    },
-                tenant: {
-                      id: this.tenantId
-                    },
-                stripeSubscriptionId: this.subscriptionId,
-                stripeProductId: this.productId,
-                startDate: new Date().toISOString(),
-                status:  true,
-                deleted: 0,
-                endDate: new Date().toISOString(),
-                lastPaymentDate: new Date().toISOString(),
-                lastPaymentAmount: 0,
-                renewalDate: new Date().toISOString(),
-                futureDiscount: 0,
-                };
-                this.updateBackendForPlanChange(backendPayload);
-                  }
+            plan: {
+              id: 9,
+            },
+            tenant: {
+              id: this.tenantId
+            },
+            stripeSubscriptionId: this.subscriptionId,
+            stripeProductId: this.productId,
+            startDate: new Date().toISOString(),
+            status: true,
+            deleted: 0,
+            endDate: new Date().toISOString(),
+            lastPaymentDate: new Date().toISOString(),
+            lastPaymentAmount: 0,
+            renewalDate: new Date().toISOString(),
+            futureDiscount: 0,
+          };
+          this.updateBackendForPlanChange(backendPayload);
+        }
       }
     })
   }
 
-
-  getStripeSubscription(){
-    this.sharedService.getSubscriptions().subscribe((subscription:any)=>{
+  getStripeSubscription() {
+    this.sharedService.getSubscriptions().subscribe((subscription: any) => {
       this.subscriptionId = subscription.data[0].id
-      localStorage.setItem('stripeSubscriptionId',JSON.stringify(this.productId));
-     
+      localStorage.setItem('stripeSubscriptionId', JSON.stringify(this.productId));
     })
-
   }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 
-
   checkPasswordsMatch(event: any): void {
-   this.registrationForm.get('confirmPassword')?.value
+    this.registrationForm.get('confirmPassword')?.value
     this.passwordMismatch = this.registrationForm.get('password')?.value !== this.registrationForm.get('confirmPassword')?.value;
   }
 
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
-    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res:any) => {
-      if(res) {
+    this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res: any) => {
+      if (res) {
         (Swal as any).fire({
           icon: 'success',
           title: 'Success',
@@ -321,15 +305,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         });
       }
     });
-    
   }
 
   openTerms(event: Event) {
     event.preventDefault();
     const dialogRef = this.dialog.open(this.termsDialogTemplate, {
     });
-
     dialogRef.afterClosed().subscribe(result => {
+      //
     });
   }
 
