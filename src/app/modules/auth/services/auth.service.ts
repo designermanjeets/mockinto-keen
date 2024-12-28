@@ -122,7 +122,7 @@ export class AuthService implements OnDestroy {
       this.router.navigate(['/landing-page'], {
         queryParams: {},
       });
-      //document.location.reload();
+      document.location.reload();
     });
   }
 
