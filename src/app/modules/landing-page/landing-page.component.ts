@@ -186,15 +186,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   selectplan(event: Event, plan?: string) {
     event.stopImmediatePropagation();
     switch (plan) {
-      case 'starter':
+      case 'Starter':
         this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Starter' } });
         break;
 
-      case 'advanced':
-        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Advanced' } });
+      case 'Professional':
+        this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Professional' } });
         break;
 
-      case 'enterprise':
+      case 'Enterprise':
         this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Enterprise' } });
         break;
       default:

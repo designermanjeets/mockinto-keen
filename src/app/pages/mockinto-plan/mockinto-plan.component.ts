@@ -29,6 +29,7 @@ export class MockintoPlanComponent implements OnInit {
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
   currentPlan= JSON.parse(localStorage.getItem('currentPlan') || '{}');
+  mockintoSubscriptionId= JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
 
 
 
@@ -106,7 +107,6 @@ export class MockintoPlanComponent implements OnInit {
     this.plutoService.getAllPlans().subscribe((res) => {
       if(res) {
         this.allPlans = res.data;
-        console.log("all plans",this.allPlans);
         this.cdRef.detectChanges();
       }
     });
@@ -192,34 +192,71 @@ export class MockintoPlanComponent implements OnInit {
 
 
   cancelSubscription(){
-    this.plutoService.cancelSubscription(this.subscriptionId).subscribe(res=>{
-      if(res){
-        console.log("res",res)
+    if(this.selectedPlanName == 'Starter'){
+      (Swal as any).fire({
+        text: "Not Cancel the Free Subscription",
+        icon: "warning",
+        buttonsStyling: false,
+        cancelButtonText: 'Ok',
+        customClass: {
+          confirmButton: "btn btn-primary",
+         
+        }
+      }).then((result: any) => {
+        if(result.isConfirmed) {
+        }
+      });
+    }
+    else{
+      (Swal as any).fire({
+        title: "Are you sure?",
+        text: "Do you really want to Cancel Subscription?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+        }
+      }).then((result: any) => {
+        if (result.isDismissed) {
+          return;
+        }
+        if (result.isConfirmed) {
+          this.plutoService.cancelSubscription(this.subscriptionId).subscribe(res=>{
+            if(res){
+              const backendPayload = {
+                id: this.mockintoSubscriptionId,
+                plan: {
+                  id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
+                },
+                tenant: {
+                id: this.logginInUser.tenant_id
+              },
+              stripeSubscriptionId: this.subscriptionId,
+              stripeProductId: this.productId,
+                startDate: new Date().toISOString(),
+                status : true,
+               // status: res.status === 'succeess' ? true : false,
+                deleted: 1,
+                endDate: new Date().toISOString(),
+                lastPaymentDate: new Date().toISOString(),
+                lastPaymentAmount: this.amount,
+                renewalDate: new Date().toISOString(),
+                futureDiscount: 0,
+              };
+             this.updateBackendPlanChange(backendPayload);
+            }
+      
+          })
+        }
+      });
 
-        const backendPayload = {
-          id: this.subscriptionId,
-          plan: {
-            id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
-          },
-          tenant: {
-          id: this.logginInUser.tenant_id
-        },
-        stripeSubscriptionId: this.subscriptionId,
-        stripeProductId: this.productId,
-          startDate: new Date().toISOString(),
-          status : true,
-         // status: res.status === 'succeess' ? true : false,
-          deleted: 1,
-          endDate: new Date().toISOString(),
-          lastPaymentDate: new Date().toISOString(),
-          lastPaymentAmount: this.amount,
-          renewalDate: new Date().toISOString(),
-          futureDiscount: 0,
-        };
-       this.updateBackendPlanChange(backendPayload);
-      }
-
-    })
+    }
+   
+    
   }
 
 

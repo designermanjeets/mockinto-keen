@@ -32,7 +32,6 @@ export class SuccessPageComponent implements OnInit {
   }
 
   goToDashboard(): void {
-    console.log("click the button")
     this.router.navigate(['/']);
   }
 
@@ -62,7 +61,6 @@ export class SuccessPageComponent implements OnInit {
 deleteCandidateSubscription(){
   this.sharedService.deleteSubscription(this.logginInUser.tenant_id).subscribe(sub=>{
     if(sub){
-      console.log("deltsubscription",sub)
       const backendPayload = {
         plan: {
           id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
@@ -103,7 +101,6 @@ getAllPlan(){
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
-        console.log("update ",updateBackendForPlanChange)
       }
     });
     

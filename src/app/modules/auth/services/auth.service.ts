@@ -91,6 +91,9 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem('stripeProductId');
     localStorage.removeItem('stripeProductPrice');
     localStorage.removeItem('stripeSubscriptionId');  
+    localStorage.removeItem('currentPlan'); 
+    localStorage.removeItem('mockintoSubscriptionId'); 
+
   
     
     (Swal as any).fire({
@@ -112,6 +115,10 @@ export class AuthService implements OnDestroy {
       localStorage.removeItem('stripeProductId');
       localStorage.removeItem('stripeProductPrice');
       localStorage.removeItem('stripeSubscriptionId');  
+      localStorage.removeItem('currentPlan'); 
+      localStorage.removeItem('mockintoSubscriptionId'); 
+
+
       this.router.navigate(['/landing-page'], {
         queryParams: {},
       });

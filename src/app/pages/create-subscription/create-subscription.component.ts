@@ -80,7 +80,6 @@ export class CreateSubscriptionComponent implements OnInit {
   ) { 
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params.plan) {
-        console.log("selected plan",this.selectedPlan)
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
         localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
@@ -197,7 +196,6 @@ export class CreateSubscriptionComponent implements OnInit {
   
 
   collectPayment() {
-    console.log("sessionID",this.sessionId);
     this.sharedService.isLoadingSubject?.next(true);
 
     if (Object.keys(this.sessionId).length === 0) {
@@ -252,7 +250,6 @@ export class CreateSubscriptionComponent implements OnInit {
        this.subscriptionId = res?.subscription;
        this.plutoService.getCandidateSubscription(subscription).subscribe(val=>{
         if(val){
-          console.log("val",val)
           let itemId = val?.items?.data[0]?.id
           this.plutoService.updateCandidateSubscription(itemId,subscription,this.productPrice).subscribe(sub=>{
             if(sub){

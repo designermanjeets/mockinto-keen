@@ -30,6 +30,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   productId: any;
   tenantId: any;
   candidateId: any;
+  planId:any;
 
 
   // private fields
@@ -176,7 +177,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       .registration(payload)
       .subscribe((user: any) => {
         if (user?.tenant_id) {
-          console.log("register")
           // if(this.selectedPlan && this.selectedPlan !== 'starter') {
           //   this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           // } else {
@@ -233,9 +233,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         this.productId = this.productList[0]?.id
         localStorage.setItem('stripeProductPrice', JSON.stringify(this.productPrice));
         localStorage.setItem('stripeProductId', JSON.stringify(this.productId));
+        this.getAllPlan();
         this.createSubscription();
 
       }
+    })
+  }
+
+
+  getAllPlan(){
+    this.sharedService.getAllPlan(this.tenantId).subscribe(plan=>{
+      if(plan){
+        let planDetails = plan.filter((x:any)=>x.name == this.selectedPlan);
+        this.planId = planDetails[0]?.id;
+        
+      }
+
     })
   }
 
@@ -247,7 +260,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         if (this.subscriptionId) {
           const backendPayload = {
             plan: {
-              id: 9,
+              id: this.planId
             },
             tenant: {
               id: this.tenantId
@@ -288,6 +301,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   updateBackendForPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res: any) => {
       if (res) {
+        localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));
         (Swal as any).fire({
           icon: 'success',
           title: 'Success',
