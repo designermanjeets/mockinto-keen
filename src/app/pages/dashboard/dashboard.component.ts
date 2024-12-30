@@ -103,9 +103,9 @@ export class DashboardComponent implements OnInit {
       data => {
         if(data.length <= 0) {
           (Swal as any).fire({
-            title: 'Warning',
-            text: 'Some technical issue occur Please Contact Customer Support',
-            icon: 'warning',
+            title: 'Error',
+            text: 'No Subscription found, please contact Customer Support',
+            icon: 'error',
             confirmButtonText: "Ok",
           }).then((result: any) => {
             if(result.isConfirmed) {
