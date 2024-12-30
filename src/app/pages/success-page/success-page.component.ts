@@ -24,7 +24,6 @@ export class SuccessPageComponent implements OnInit {
   constructor(private router: Router, private sharedService: SharedService
   ) {}
   ngOnInit(){
-    this.addSubcriptionPayment();
     if(this.plan){
       this.getAllPlan();
     }
@@ -33,6 +32,8 @@ export class SuccessPageComponent implements OnInit {
 
   goToDashboard(): void {
     this.router.navigate(['/']);
+    this.addSubcriptionPayment();
+
   }
 
   
@@ -101,6 +102,7 @@ getAllPlan(){
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
+        localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));
       }
     });
     

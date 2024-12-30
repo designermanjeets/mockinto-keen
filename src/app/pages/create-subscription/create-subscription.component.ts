@@ -374,7 +374,7 @@ export class CreateSubscriptionComponent implements OnInit {
                 p.planname = 'Starter';
                 return p;
               }
-              if(p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'Professional') {
+              if(params.plan === 'Professional') {
                 p.planname = 'Professional';
                 return p;
               }

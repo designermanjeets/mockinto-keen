@@ -208,17 +208,15 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         localStorage.setItem('stripeCustomerId', JSON.stringify(this.stripeCustomerId));
         //this.updateTenant(payload.email,password);
         this.authService.login(payload.email, password).subscribe(res => {
-          this.getStripeProducts();
+          this.updateTenant();
         })
       }
     })
   }
 
-  updateTenant(email: any, password: any) {
+  updateTenant() {
     this.sharedService.updateTenant(this.tenantId, this.stripeCustomerId).subscribe(tenant => {
       if (tenant) {
-        this.authService.login(email, password).subscribe(res => {
-        })
         this.getStripeProducts();
       }
     })

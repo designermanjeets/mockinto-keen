@@ -22,6 +22,9 @@ export class MockintoPlanComponent implements OnInit {
   selectedPlan:any;
   planName:any;
   selectedPlanDetails:any[]=[];
+  productList:any[]=[];
+  productPrice:any;
+  planId:any;
 
   plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
   subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
@@ -30,6 +33,7 @@ export class MockintoPlanComponent implements OnInit {
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
   currentPlan= JSON.parse(localStorage.getItem('currentPlan') || '{}');
   mockintoSubscriptionId= JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
+  stripeCustomerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}')
 
 
 
@@ -247,7 +251,7 @@ export class MockintoPlanComponent implements OnInit {
                 renewalDate: new Date().toISOString(),
                 futureDiscount: 0,
               };
-             this.updateBackendPlanChange(backendPayload);
+             this.cancekBackendPlan(backendPayload);
             }
       
           })
@@ -262,10 +266,13 @@ export class MockintoPlanComponent implements OnInit {
 
 
 
-      updateBackendPlanChange(updateBackendForPlanChange: any) {
+      cancekBackendPlan(updateBackendForPlanChange: any) {
         this.sharedService.cancelBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
           if(res) {
             this.sharedService.isLoadingSubject?.next(false);
+            this.currentPlan = 'Starter';
+            localStorage.setItem('currentPlan', JSON.stringify(this.currentPlan));
+            this.getStripeProducts();
              (Swal as any).fire({
                       icon: 'success',
                       title: 'Success',
@@ -284,9 +291,95 @@ export class MockintoPlanComponent implements OnInit {
         
       }
 
-  }
+
+      getStripeProducts() {
+        this.plutoService.getStripeProducts().subscribe((prod: any) => {
+          if (prod) {
+            this.productList = prod.data;
+            this.productList = this.productList.filter(x => x.name == this.currentPlan);
+            this.productPrice = this.productList[0]?.default_price;
+            this.productId = this.productList[0]?.id
+            localStorage.setItem('stripeProductPrice', JSON.stringify(this.productPrice));
+            localStorage.setItem('stripeProductId', JSON.stringify(this.productId));
+            this.getMockintoAllPlan();
+            this.createFreeSubscription();
+    
+          }
+        })
+      }
 
 
+      getMockintoAllPlan(){
+        this.sharedService.getAllPlan(this.tenantId).subscribe(plan=>{
+          if(plan){
+            let planDetails = plan.filter((x:any)=>x.name == this.currentPlan);
+            this.planId = planDetails[0]?.id;
+            
+          }
+    
+        })
+      }
+
+
+      createFreeSubscription() {
+        this.plutoService.createCandidateSubscription(this.productPrice, this.stripeCustomerId).subscribe(subscription => {
+          if (subscription) {
+            this.subscriptionId = subscription?.id
+            localStorage.setItem('stripeSubscriptionId', JSON.stringify(this.subscriptionId));
+            if (this.subscriptionId) {
+              const backendPayload = {
+                plan: {
+                  id: this.planId
+                },
+                tenant: {
+                  id: this.tenantId
+                },
+                stripeSubscriptionId: this.subscriptionId,
+                stripeProductId: this.productId,
+                startDate: new Date().toISOString(),
+                status: true,
+                deleted: 0,
+                endDate: new Date().toISOString(),
+                lastPaymentDate: new Date().toISOString(),
+                lastPaymentAmount: 0,
+                renewalDate: new Date().toISOString(),
+                futureDiscount: 0,
+              };
+              this.updateBackendForPlanChange(backendPayload);
+            }
+          }
+        })
+      }
+
+
+        updateBackendForPlanChange(updateBackendForPlanChange: any) {
+          this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res: any) => {
+            if (res) {
+              localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));
+              this.router.navigate(['/']);
+            } else {
+              (Swal as any).fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong. Please try again later.',
+              }).then(() => {
+                this.router.navigate(['/landing-page']);
+              });
+            }
+          });
+        }
+    
+
+      }
+
+
+
+
+      
+
+
+
+    
 
 
   
