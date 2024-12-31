@@ -116,7 +116,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
                                     <a (click)="editJobProfile(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item.jobDescription}}</a>
+                                        class="text-gray-800 text-hover-primary c-p">{{item.jobDescription.length > 50 ? (item.jobDescription | slice:0:50) + '.....' : item.jobDescription }}</a>
                                 </div>
                             </td>
                             <td>{{item.createdDate | date}}</td>
@@ -436,8 +436,8 @@
                                                     <textarea cols="4" type="text"
                                                         class="form-control form-control-solid"
                                                         placeholder="Enter Job Description" value=""
-                                                        name="jobDescription" [(ngModel)]="jobDescription"></textarea>
-                                                    <mat-hint align="end">Remaining Characters: 3000</mat-hint>
+                                                        name="jobDescription" [(ngModel)]="jobDescription"  (input)="updateRemainingCharacters()"></textarea>
+                                                        <mat-hint align="end">Remaining Characters: {{ remainingCharacters }}</mat-hint>
                                                     <!--end::Input-->
                                                 </div>
                                                 <!--end::Input group-->

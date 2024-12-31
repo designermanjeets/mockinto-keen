@@ -17,6 +17,7 @@ export class SuccessPageComponent implements OnInit {
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
   plan= JSON.parse(localStorage.getItem('currentPlan') || '{}');
+  mockintoSubscriptionId = JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
   selectedPlanDetails:any[]=[];
 
 
@@ -27,18 +28,17 @@ export class SuccessPageComponent implements OnInit {
     if(this.plan){
       this.getAllPlan();
     }
+    this.addSubcriptionPayment();
 
+   
   }
 
   goToDashboard(): void {
-    this.router.navigate(['/']);
-    this.addSubcriptionPayment();
+   // this.router.navigate(['/']);
+   window.close();
+
 
   }
-
-  
-
- 
 
  addSubcriptionPayment():void{
   let payment = {
@@ -60,7 +60,7 @@ export class SuccessPageComponent implements OnInit {
 
 
 deleteCandidateSubscription(){
-  this.sharedService.deleteSubscription(this.logginInUser.tenant_id).subscribe(sub=>{
+  this.sharedService.deleteSubscription(this.mockintoSubscriptionId).subscribe(sub=>{
     if(sub){
       const backendPayload = {
         plan: {

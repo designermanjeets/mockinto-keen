@@ -673,9 +673,10 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
-  deleteSubscription(tenantId: any): Observable<any> {
+
+  deleteSubscription(subscriptionId: any): Observable<any> {
     this.isLoadingSubject?.next(true);
-    return this.http.delete<any>(`${environment.apiUrl}/subscription/all?tenantId=${tenantId}`)
+    return this.http.delete<any>(`${environment.apiUrl}/subscription?subscriptionId=${subscriptionId}`)
     .pipe(
       map((data: any) => {
         return data;

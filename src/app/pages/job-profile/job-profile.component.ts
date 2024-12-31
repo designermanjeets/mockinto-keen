@@ -45,6 +45,8 @@ export class JobProfileComponent implements OnInit {
   fruitCtrl = new FormControl('');
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   announcer = inject(LiveAnnouncer);
+  maxCharacters: number = 3000;
+  remainingCharacters: number = this.maxCharacters;
 
   constructor(
     private sharedService: SharedService,
@@ -197,6 +199,10 @@ export class JobProfileComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
       });
     }
+    }
+
+    updateRemainingCharacters() {
+      this.remainingCharacters = this.maxCharacters - (this.jobDescription?.length || 0);
     }
    
 

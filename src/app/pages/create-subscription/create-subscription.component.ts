@@ -32,6 +32,9 @@ export class CreateSubscriptionComponent implements OnInit {
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
   productPrice = JSON.parse(localStorage.getItem('stripeProductPrice') || '{}');
   plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
+  mockintoSubscriptionId = JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
+
+  
 
 
   //productId : any;
@@ -80,6 +83,7 @@ export class CreateSubscriptionComponent implements OnInit {
   ) { 
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params.plan) {
+        console.log("params",params)
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
         localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
@@ -111,6 +115,7 @@ export class CreateSubscriptionComponent implements OnInit {
       if(prod){
         this.productList = prod.data;
         this.productList = this.productList.filter(x=>x.name == this.currentPlan);
+        console.log("filter product list",this.productList);
         this.productPrice = this.productList[0]?.default_price;
         this.productId = this.productList[0]?.id
         localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
@@ -142,6 +147,7 @@ export class CreateSubscriptionComponent implements OnInit {
    
 
     if (this.selectedPlan) {
+      console.log("selected plan",this.selectedPlan)
       this.checkoutForm.get('amount')?.setValue(this.selectedPlan.amount);
     }
 
@@ -197,8 +203,9 @@ export class CreateSubscriptionComponent implements OnInit {
 
   collectPayment() {
     this.sharedService.isLoadingSubject?.next(true);
+    console.log("sessionId",this.sessionId)
 
-    if (Object.keys(this.sessionId).length === 0) {
+    if (Object.keys(this.sessionId).length === 0 || this.sessionId == undefined) {
       let payload : any = {
         price: this.productPrice,
         mode: 'subscription',
@@ -215,10 +222,8 @@ export class CreateSubscriptionComponent implements OnInit {
           this.sessionId = response.sessionUrl?.id
           localStorage.setItem('sessionId',JSON.stringify(this.sessionId));
           localStorage.setItem('planAmount',JSON.stringify(response.sessionUrl?.amount_total));
-
-          
-
           if(response.sessionUrl){
+          this.router.navigate(['/']);
             window.open(response.sessionUrl?.url, "_blank");
           }
         },
@@ -242,9 +247,11 @@ export class CreateSubscriptionComponent implements OnInit {
 
 
   getSession(){
+    this.sharedService.isLoadingSubject?.next(true);
     let session = JSON.parse(localStorage.getItem('sessionId') || '{}');
     this.plutoService.getCheckoutSession(session).subscribe(res=>{
-      if(res){
+      if(res.status === 'complete'){
+        this.sharedService.isLoadingSubject?.next(false);
         localStorage.setItem('stripeSubscriptionId',JSON.stringify(res?.subscription));
        let  subscription = res?.subscription;
        this.subscriptionId = res?.subscription;
@@ -257,19 +264,23 @@ export class CreateSubscriptionComponent implements OnInit {
               this.addSubcriptionPayment(session);
             }
            })
-        }
-      })
-      
+           
       }
-
+      })
+    }
+    else if (res.status === 'open'){
+      localStorage.removeItem('sessionId');
+      this.collectPayment();
+    }
+    },(error) => {
+      console.error('Error fetching session status:', error);
+      this.sharedService.isLoadingSubject?.next(false);
     })
 
   }
-  
-
 
   deleteCandidateSubscription(){
-    this.sharedService.deleteSubscription(this.logginInUser.tenant_id).subscribe(res=>{
+    this.sharedService.deleteSubscription(this.mockintoSubscriptionId).subscribe(res=>{
       if(res){
         const backendPayload = {
           plan: {
@@ -331,7 +342,13 @@ export class CreateSubscriptionComponent implements OnInit {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
         this.sharedService.isLoadingSubject?.next(false);
-        this.router.navigate(['dashboard/landing']);
+        (Swal as any).fire({
+                  icon: 'success',
+                  title: 'Success',
+                  text: 'Your Plan Successfully Upgrade !',
+                }).then(() => {
+                  this.router.navigate(['/']);
+                });
       } else {
         (Swal as any).fire({
           icon: 'error',
@@ -374,7 +391,7 @@ export class CreateSubscriptionComponent implements OnInit {
                 p.planname = 'Starter';
                 return p;
               }
-              if(params.plan === 'Professional') {
+              if( p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'Professional') {
                 p.planname = 'Professional';
                 return p;
               }

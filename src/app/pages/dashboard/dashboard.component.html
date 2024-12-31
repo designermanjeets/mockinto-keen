@@ -200,7 +200,8 @@
                     <!--begin::Content-->
                     <div class="me-5">
                       <!--begin::Title-->
-                      <a class="text-gray-800 fw-bold fs-6">{{job.jobHeader}} - {{job.jobDescription}}</a>
+                      <a class="text-gray-800 fw-bold fs-6">{{job.jobHeader}} -  {{ job.jobDescription.length > 50 ? (job.jobDescription | slice:0:50) + '.....' : job.jobDescription }}
+                      </a>
                       <!--end::Title-->
                       <!--begin::Desc-->
                       <!--end::Desc-->
