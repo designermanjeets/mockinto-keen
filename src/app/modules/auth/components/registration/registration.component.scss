@@ -1,0 +1,11 @@
+:host {
+  width: 100%;
+  @media (min-width: 992px) {
+    .form {
+      width: 100%;
+      .mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}

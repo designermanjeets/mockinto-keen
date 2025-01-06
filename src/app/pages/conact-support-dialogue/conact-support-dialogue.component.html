@@ -1,0 +1,76 @@
+<ng-template>
+    <div class="modal fade show modal-pop" style="display: block;">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-fullscreen p-9">
+
+
+            <!--begin::Modal content-->
+            <div class="modal-content modal-rounded">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2 class="color22">Contact Support</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon" (click)="closeDialog()">
+                        <i class="ki-duotone ki-cross fs-1 test">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                        </i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body scroll-y m-5">
+                    <!--begin::Stepper-->
+                    <div class="d-flex flex-column">
+                        <!--begin::Container-->
+                        <div class="container p-0 m-0">
+                            <div class="text-center mb-5">
+                                <h3>If you need help, we're here for you!</h3>
+                                <p class="color22">Please fill out the form below, and our support team will get back to you as soon as possible.</p>
+                            </div>
+                        
+                            <!-- Support Form -->
+                            <form>
+                                <!-- Name Field -->
+                                <div class="mb-4">
+                                    <label for="name" class="form-label">Your Name</label>
+                                    <input type="text" id="name" class="form-control" placeholder="Enter your name" required name="name">
+                                </div>
+                        
+                                <!-- Email Field -->
+                                <div class="mb-4">
+                                    <label for="email" class="form-label">Your Email</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Enter your email" required  name="email">
+                                </div>
+                        
+                                <!-- Message Field -->
+                                <div class="mb-4">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea id="message" class="form-control" placeholder="Describe your issue" rows="5" required  name="message"></textarea>
+                                </div>
+                        
+                                <!-- Submit Button -->
+                                <div class="d-flex flex-stack justify-content-end">
+                                    <button type="submit" class="btn btn-lg btn-primary">
+                                        <span class="indicator-label">Send Message</span>
+                                    </button>
+                                    <button type="button" class="btn btn-lg" (click)="closeDialog()">
+                                        <span class="indicator-label">Cancel</span> 
+                                    </button> 
+                                </div>
+                            </form>
+                        </div>
+                        <!--begin::Container-->
+                    </div>
+                    <!--end::Stepper-->
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+  </ng-template>

@@ -1,0 +1,38 @@
+.rounded-lg {
+    border-radius: 100%;
+}
+.white-bg {
+    background-color: #fff;
+}
+.transcriptbox {
+    height: 160px;
+    overflow: auto;
+    border-left: 4px solid var(--bs-primary);
+}
+
+.transcriptboxcandidate {
+    height: 225px;
+    overflow: auto;
+    border-left: 4px solid var(--bs-success);
+}
+.kt-containerMeeting {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: scroll;
+    max-width: none;
+}
+
+:host {
+    ::ng-deep {
+        .noUi-handle-lower {
+            display: none;
+        }
+        .noUi-connects {
+            background-color: var(--bs-secondary);
+        }
+    }
+}

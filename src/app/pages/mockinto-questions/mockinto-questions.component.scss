@@ -1,0 +1,11 @@
+:host {
+    ::ng-deep {
+        .accordion.accordion-icon-toggle .accordion-icon {
+            justify-content: start;
+            display: inline-block;
+        }
+    }
+}
+.w-90 {
+    width: 90%;
+}
