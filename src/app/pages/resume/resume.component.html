@@ -391,15 +391,13 @@
                                                             </i>
                                                         </span>
                                                     </label>
-                                                    <!--end::Label-->
-                                                    <!--begin::Input-->
+                                                   
                                                     <input type="text" class="form-control form-control-solid"
                                                         placeholder="Enter Name" value="" name="fileName"
                                                         [(ngModel)]="fileName" />
-                                                    <!--end::Input-->
+                                                    
                                                 </div>
-                                                <!--end::Input group-->
-                                                <!--begin::Input group-->
+                                               
                                                 <div class="fv-row mb-8">
                                                     <!--begin::Dropzone-->
                                                     <div class="dropzone" (click)="fileUploadInput.click()">
@@ -425,10 +423,10 @@
                                                                 <span *ngIf="resumeFile"
                                                                     class="fw-semibold fs-4 text-muted">{{resumeFile.size/1000}}kb</span>
                                                             </div>
-                                                            <!--end::Info-->
+                                                        
                                                         </div>
                                                     </div>
-                                                    <input class="hidden" #fileUploadInput type="file" name="file"
+                                                    <input class="hidden" #fileUploadInput type="file" name="file" accept="application/pdf"
                                                         (change)="onFileChange($event)" />
                                                     <!--end::Dropzone-->
                                                 </div>

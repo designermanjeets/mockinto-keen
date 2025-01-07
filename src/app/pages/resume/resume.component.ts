@@ -199,10 +199,22 @@ export class ResumeComponent implements OnInit {
     });
   }
 
+  
   onFileChange(event: any) {
-    this.resumeFile = event.target.files[0];
-    this.sharedService.showToaster();
+    const file = event.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        this.sharedService.showToaster(); 
+        if (this.fileUploadInput) {
+          this.fileUploadInput.nativeElement.value = '';
+        }
+        return; 
+      }
+      this.resumeFile = file; 
+      this.sharedService.showToaster(); 
+    }
   }
+  
 
   uploadResume() {
     this.sharedService.isLoadingSubject?.next(true);

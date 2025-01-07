@@ -135,10 +135,22 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     );
   }
 
-  submit() {
+submit() {
     if (this.selectedPlan == undefined) {
       this.selectedPlan = 'Starter'
     }
+
+    if (this.registrationForm.get('password')?.value !== this.registrationForm.get('confirmPassword')?.value) {
+      this.passwordMismatch = true;
+      (Swal as any).fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Passwords do not match. Please try again.',
+            });
+          return; 
+        }
+
+
     this.hasError = false;
     const data: { [key: string]: string; } = {};
 
@@ -323,7 +335,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(this.termsDialogTemplate, {
     });
     dialogRef.afterClosed().subscribe(result => {
-      //
     });
   }
 

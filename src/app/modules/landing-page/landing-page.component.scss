@@ -3,7 +3,15 @@
 h1,h2,h3,p,a{
     font-family: "Quicksand", sans-serif;
 }
-
+body{
+    color: #000;
+}
+.faq-question h3 {
+    color: #000;
+}
+.faq-answer p {
+    color: #000;
+}
 .ki-duotone {
     pointer-events: none;
     cursor: pointer;
@@ -35,6 +43,11 @@ header {
     background: #fff;
     padding: 10px 15px 10px 15px;
     border-radius: 30px;
+}
+.top-banner {
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 .nav-inner li {
     list-style-type: none;
@@ -263,6 +276,7 @@ button{
 }
 
 .explain h2 {
+    color: #000;
     padding-top: 40px;
     font-size: 3.5rem;
     line-height: 46px;
@@ -274,6 +288,7 @@ button{
 }
 .explain p {
     font-size: 18px;
+    color: #000;
     padding-right: 110px;
     line-height: 35px;
     margin: 0;
@@ -311,6 +326,7 @@ button{
 }
 .price-plan p {
     font-size: 16px;
+    color: #000;
     font-weight: 400;
     line-height: 25px;
 }
@@ -343,6 +359,7 @@ button{
 }
 .plan-feature li {
     list-style-type: none;
+    color: #000;
     padding-bottom: 15px;
     font-size: 18px;
     font-weight: 400;
@@ -351,6 +368,7 @@ button{
 }
 span.check {
     margin-right: 10px;
+    color: #000;
     font-size: 17px;
     border-radius: 50%;
 }

@@ -121,21 +121,18 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editMockintoSchedule(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item?.jobHeader}}</a>
+                                    {{item?.jobHeader}}
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center desc-mock">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editMockintoSchedule(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item?.jobDescription}}</a>
+                                        {{item?.jobDescription}}
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a class="text-gray-800 text-hover-primary c-p">{{item?.scheduleStartDate |
-                                        date}}</a>
+                                    {{item?.scheduleStartDate | date}}
                                 </div>
                             </td>
                             <td>{{item?.createdDate | date}}</td>

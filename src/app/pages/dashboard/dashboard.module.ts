@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule, WidgetsModule } from '../../_metronic/partials';
-
 import { ResumeComponent } from '../resume/resume.component';
 import { JobProfileComponent } from '../job-profile/job-profile.component';
 import { MockintoHistoryComponent } from '../mockinto-history/mockinto-history.component';
@@ -18,7 +17,6 @@ import { MockintoLiveComponent } from '../mockinto-live/mockinto-live.component'
 import { DashboardWrapperComponent } from '../dashboard-wrapper/dashboard-wrapper.component';
 import { SuccessPageComponent } from '../success-page/success-page.component';
 import { CancelPaymentPageComponent } from '../cancel-payment-page/cancel-payment-page.component';
-
 const dashboardRoutes: Routes = [
   {
     path: '',
@@ -40,7 +38,6 @@ const dashboardRoutes: Routes = [
       { path: 'mockinto-live/:id', component: MockintoLiveComponent },
       { path: 'successful-payment', component: SuccessPageComponent },
       { path: 'cancel-payment', component: CancelPaymentPageComponent },
-
       { path: '**', redirectTo: 'resume' }
     ]
   }
