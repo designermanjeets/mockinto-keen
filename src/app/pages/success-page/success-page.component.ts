@@ -28,7 +28,7 @@ export class SuccessPageComponent implements OnInit {
     if(this.plan){
       this.getAllPlan();
     }
-    this.addSubcriptionPayment();
+    this.deleteCandidateSubscription();
 
    
   }
@@ -40,8 +40,11 @@ export class SuccessPageComponent implements OnInit {
 
   }
 
- addSubcriptionPayment():void{
+ addSubcriptionPayment(id : any):void{
   let payment = {
+    subscription: {
+      id : id
+      },
       amount: this.amount,
       active: "1",
       deleted: "0",
@@ -52,7 +55,8 @@ export class SuccessPageComponent implements OnInit {
   
   this.sharedService.addPayment(payment).subscribe(res=>{
     if(res){
-     this.deleteCandidateSubscription();
+     //this.deleteCandidateSubscription();
+     console.log("success");
     }
   })
 }
@@ -102,7 +106,11 @@ getAllPlan(){
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
+        console.log("new response",res);
         localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));
+        console.log(JSON.stringify(res?.id))
+        this.addSubcriptionPayment(JSON.stringify(res?.id));
+
       }
     });
     
@@ -110,3 +118,6 @@ getAllPlan(){
 
 
 }
+
+
+

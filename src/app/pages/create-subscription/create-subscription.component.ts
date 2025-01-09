@@ -321,6 +321,7 @@ export class CreateSubscriptionComponent implements OnInit {
 
   addSubcriptionPayment(session:any):void{
     let payment = {
+        
         amount: this.amount,
         active: "1",
         deleted: "0",

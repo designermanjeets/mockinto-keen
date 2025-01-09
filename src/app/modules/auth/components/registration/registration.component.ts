@@ -269,7 +269,7 @@ submit() {
         if (this.subscriptionId) {
           const backendPayload = {
             plan: {
-              id: this.planId
+              id: this.planId 
             },
             tenant: {
               id: this.tenantId
