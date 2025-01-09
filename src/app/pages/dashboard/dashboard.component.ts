@@ -116,6 +116,7 @@ export class DashboardComponent implements OnInit {
         else{
           localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
           console.log(data[data.length - 1]?.plan?.name);
+          
           localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
 
         }

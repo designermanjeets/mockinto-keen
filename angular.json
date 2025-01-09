@@ -20,6 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+           
             "outputPath": "dist/demo2",
             "allowedCommonJsDependencies": [
               "object-path",
@@ -27,6 +28,7 @@
               "clipboard.js",
               "prismjs"
             ],
+   
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -130,4 +132,8 @@
       "@angular-eslint/schematics"
     ]
   }
+
+
+
+
 }

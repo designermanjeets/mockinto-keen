@@ -26,8 +26,7 @@ export class SharedService implements OnInit, OnDestroy {
 
   candidateId: any;
   tenantId: any;
-  userId:any;
-
+  userId: any;
   get allTenantGeneralConfig(): any {
     return JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
   }
@@ -344,6 +343,24 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+
+
+
+  getPaymentSubscriptionall(mockintoSubscriptionId:any): Observable<any>{
+    console.log("subs id",mockintoSubscriptionId);
+    return this.http.get<any>(`${environment.apiUrl}/payment/subscription/all?subscriptionId=${mockintoSubscriptionId}`)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('No Subscription Found'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
 
   editProfile(profile: any): Observable<any> {
     const payload = {

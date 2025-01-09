@@ -71,10 +71,32 @@ export class MockintoPlanComponent implements OnInit {
         if(!data) {
         } else {
           this.planName = data?.subscription[data?.subscription.length -1]?.plan?.name;
+          console.log(data?.subscription[data?.subscription.length -1]?.id);
+          localStorage.setItem('mockintoSubscriptionId', JSON.stringify(data?.subscription[data?.subscription.length -1]?.id));
+          localStorage.setItem("stripeCustomerId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.tenant?.stripeCustomer?.stripeCustomerId))
+          localStorage.setItem("stripeSubscriptionId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.stripeSubscriptionId))
+          this.getPaymentSubscriptionall(data?.subscription[data?.subscription.length -1]?.id);
         }
       }
     );
   }
+
+
+getPaymentSubscriptionall(id:any) {
+    this.sharedService.getPaymentSubscriptionall(id).subscribe(
+      (data) => {
+        if(!data) {
+        } else {
+          console.log("payment-Subscriptionall",data);
+          if (data[0]?.stripePaymentIntentId) {
+            localStorage.setItem('sessionId', data[0].stripePaymentIntentId);
+          }
+          console.log("sessionId",data[0]?.stripePaymentIntentId);
+        }
+      }
+    );
+  }
+
 
   getConfig(){
     this.sharedService.isLoadingSubject?.next(true);
@@ -85,7 +107,6 @@ export class MockintoPlanComponent implements OnInit {
         }
       }
     ); 
-
   }
 
   getSubscription(){

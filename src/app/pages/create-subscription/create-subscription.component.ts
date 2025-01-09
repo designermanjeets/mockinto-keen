@@ -26,7 +26,6 @@ export class CreateSubscriptionComponent implements OnInit {
   isLoading$: Observable<boolean>;
   isPaying : any = false;
   
-  // productPrice:any;
   subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
   customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
@@ -34,19 +33,13 @@ export class CreateSubscriptionComponent implements OnInit {
   plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
   mockintoSubscriptionId = JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
 
-  
-
-
-  //productId : any;
   paymentMethodId:any;
   setupIntentId:any;
-  sessionId = JSON.parse(localStorage.getItem('sessionId') || '{}');
+  sessionId = localStorage.getItem('sessionId') || '{}';
 
   currentPlan:any;
   newPlanPrice:any;
   previousPlan= JSON.parse(localStorage.getItem('peviousPlan') || '{}');
-
-
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
 
   @ViewChild(StripePaymentElementComponent) paymentElement!: StripePaymentElementComponent;
@@ -204,8 +197,11 @@ export class CreateSubscriptionComponent implements OnInit {
   collectPayment() {
     this.isPaying = true;
     this.sharedService.isLoadingSubject?.next(true);
-    console.log("sessionId",this.sessionId)
-    if (Object.keys(this.sessionId).length === 0 || this.sessionId == undefined) {
+    console.log("sessionId",this.sessionId);
+    console.log(typeof this.sessionId);
+    console.log("creating new subs");
+    if (Object.keys(this.sessionId).length === 0 || !this.sessionId || this.sessionId === "{}") {
+      console.log("creating ..")
       let payload : any = {
         price: this.productPrice,
         mode: 'subscription',
@@ -214,6 +210,7 @@ export class CreateSubscriptionComponent implements OnInit {
         cancelUrl :  `${window.location.origin}/dashboard/cancel-payment`,
         customer: this.customerId
       }
+      console.log("payload",payload);
   
       this.plutoService.createSessionChekout(payload).subscribe(
         (response) => {
@@ -247,7 +244,7 @@ export class CreateSubscriptionComponent implements OnInit {
 
   getSession(){
     this.sharedService.isLoadingSubject?.next(true);
-    let session = JSON.parse(localStorage.getItem('sessionId') || '{}');
+    let session = localStorage.getItem('sessionId') || '{}';
     this.plutoService.getCheckoutSession(session).subscribe(res=>{
       if(res.status === 'complete'){
         this.sharedService.isLoadingSubject?.next(false);
@@ -260,7 +257,8 @@ export class CreateSubscriptionComponent implements OnInit {
           this.plutoService.updateCandidateSubscription(itemId,subscription,this.productPrice).subscribe(sub=>{
             if(sub){
               localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
-              this.addSubcriptionPayment(session);
+              //this.addSubcriptionPayment(session);
+              this.deleteCandidateSubscription();
             }
            })    
       }
@@ -319,9 +317,11 @@ export class CreateSubscriptionComponent implements OnInit {
 
   
 
-  addSubcriptionPayment(session:any):void{
+  addSubcriptionPayment(session:any,id:any):void{
     let payment = {
-        
+      subscription: {
+        id : id
+        },
         amount: this.amount,
         active: "1",
         deleted: "0",
@@ -331,9 +331,8 @@ export class CreateSubscriptionComponent implements OnInit {
       }
     
     this.sharedService.addPayment(payment).subscribe(res=>{
-      if(res){
-        this.deleteCandidateSubscription()
-
+      if(res){  
+        console.log("success");
       }
     })
   }
@@ -341,7 +340,12 @@ export class CreateSubscriptionComponent implements OnInit {
   updateBackendPlanChange(updateBackendForPlanChange: any) {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res) => {
       if(res) {
+        let session = localStorage.getItem('sessionId') || '{}';
+        this.addSubcriptionPayment(session,JSON.stringify(res?.id));
+
         this.sharedService.isLoadingSubject?.next(false);
+
+
         (Swal as any).fire({
                   icon: 'success',
                   title: 'Success',
