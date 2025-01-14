@@ -147,12 +147,21 @@ export class MockintoBillingComponent implements OnInit {
   }
 
   fetchAllPayments() {
-    this.plutoService.getPaymentHistory().subscribe((res) => {
-      res.data.forEach((payment: any) => {
-        payment.amount = payment.amount / 100;
-        payment.created = new Date(payment.created * 1000).toLocaleString();
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    console.log(loggedInUser);
+    this.plutoService.getPaymentHistory(loggedInUser.email_id).subscribe((res) => {
+      const filteredPayments = res.data.filter((payment: any) => 
+        payment.billing_details?.email === loggedInUser.email_id
+      );
+  
+      // Process the filtered payments
+      filteredPayments.forEach((payment: any) => {
+        payment.amount = payment.amount / 100; 
+        payment.created = new Date(payment.created * 1000).toLocaleString(); 
       });
-      this.allPayments = res.data;
+
+      this.allPayments = filteredPayments;
+
       this.cdRef.detectChanges();
     });
   }

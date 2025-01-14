@@ -212,12 +212,21 @@ export class AuthService implements OnDestroy {
     }
   }
 
+
+  decodeToken(token: string): any {
+    try {
+      return JSON.parse(atob(token.split('.')[1])); // Basic JWT decoding without a library
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  }
+
   refreshToken(): Observable<any> {
     const auth = this.getAuthFromLocalStorage();
     if (!auth || !auth.refreshToken) {
       return of(undefined);
     }
-
     this.isLoadingSubject.next(true);
     return this.http.post<any>(`${environment.apiUrl}/refresh`, {
       refreshToken: auth.refreshToken,

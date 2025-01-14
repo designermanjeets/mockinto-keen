@@ -33,13 +33,16 @@ export class MockintoHistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchAllMockintoSchedules();
+    setTimeout(() => {
+      this.fetchAllMockintoSchedules();
+    }, 2000);
   }
 
   fetchAllMockintoSchedules(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
+        console.log(data);
         if(data) {
           this.paginator.length = data.totalElements;
           this.allMockintoHistory = data.content;

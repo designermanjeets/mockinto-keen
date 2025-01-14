@@ -35,8 +35,8 @@
                             <td class="min-w-150px">Date</td>
                             <td class="min-w-250px">Description</td>
                             <td class="min-w-150px">Amount</td>
-                            <td class="min-w-150px">Invoice</td>
-                            <td></td>
+                            <!-- <td class="min-w-150px">Invoice</td>
+                            <td></td> -->
                         </tr>
                     </thead>
                     <tbody class="fw-semibold text-gray-600">
@@ -44,16 +44,16 @@
                         <tr *ngFor="let payment of allPayments">
                             <td>{{ payment.created }}</td>
                             <td>
-                                <a href="#">{{ payment.description || 'Plan Startup' }}</a>
+                                {{ payment.description }}
                             </td>
                             <td>${{ payment.amount }}</td>
-                            <td>
+                            <!-- <td>
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-primary">PDF</a>
                             </td>
                             <td class="text-right
                             ">
                                 <a href="#" class="btn btn-sm btn-light btn-active-light-primary">View</a>
-                            </td>
+                            </td> -->
                         </tr>
                         <!--end::Table row-->
                     </tbody>

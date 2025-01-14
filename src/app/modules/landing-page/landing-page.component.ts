@@ -205,16 +205,17 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   
 
   signIn(): void {
-    this.zone.run(() => {
-      this.router.navigate(['/auth/login']);
-    });
+    this.router.navigate(['/auth/login']);
+    // this.zone.run(() => {
+    //   this.router.navigate(['/auth/login']);
+    // });
   }
 
   signUp(): void {
-    // this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
-    this.zone.run(() => {
-      this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Starter' } });
-    });
+    this.router.navigate(['/auth/registration'], { queryParams: { plan: 'starter' } });
+    // this.zone.run(() => {
+    //   this.router.navigate(['/auth/registration'], { queryParams: { plan: 'Starter' } });
+    // });
   }
 
   getPlans(): void {

@@ -1,16 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { BehaviorSubject, catchError, finalize, map, Observable, of } from 'rxjs';
-
 import { PaymentIntent } from '@stripe/stripe-js';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 
 export class StripeMockintoService {
+    customerId : any ;
     private authLocalStorageToken = `auth-user`;
 
+
+   
+
+
     private static readonly STRIPE_BASE_URL = 'https://api.stripe.com/v1';
+  
     STRIPE_PUBLIC_KEY = "pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0";
     STRIPE_SECRET_KEY = "sk_test_51QA7S8AWH1At8PiUzUgL0hKv5UQyQ4lpQuDWLdwMvk8iSxbviNDzTfCAEZOgF5DXMI7IZFiXR9ikaZ2YTrDxH0PQ00GsKMNpLf";
     HEADERS = {
@@ -23,7 +28,9 @@ export class StripeMockintoService {
 
 
     constructor(
-        private readonly http: HttpClient
+      
+        private readonly http: HttpClient,
+        
     ) { }
 
     createPaymentIntent(params: any): Observable<PaymentIntent> {
@@ -49,11 +56,15 @@ export class StripeMockintoService {
         );
     }
 
-    getPaymentHistory(): Observable<any> {
+
+    
+    getPaymentHistory(email:any): Observable<any> {
         return this.http.get<any>(
-            `${StripeMockintoService.STRIPE_BASE_URL}/payment_intents`, { headers: this.HEADERS }
+            `${environment.stripeApiUrl}/api/charges-list?email=${email}`, { headers: this.HEADERS }
         );
     }
+
+
 
     getAllPlans(): Observable<any> {
         return this.http.get<any>(

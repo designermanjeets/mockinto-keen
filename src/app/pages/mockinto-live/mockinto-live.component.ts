@@ -74,7 +74,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.scheduleId = this.router.url.split('/')[3]; // Fixed Position Don't Change the Path in routing
+    this.scheduleId = this.router.url.split('/')[3]; 
     this.fetchMockintoScheduleById();
     this.fetchAllMockintoSchedules();
     
@@ -161,13 +161,13 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         if (result.isConfirmed) {
           this.isMeetingProgress = true;
           this.jogIDBotQuestions = [];
-          this.router.navigate(['dashboard/mockinto-history']);
           if(this.jogIDBotQuestions.length == 0) {
             this.endMockintoSchedule();
-
+            // this.router.navigate(['dashboard/mockinto-history']);
           }
           else{
             this.stopMockintoSchedule();
+            // this.router.navigate(['dashboard/mockinto-history']);
           }
         }
       });
@@ -188,10 +188,13 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
      
     })
     this.sharedService.endMockintoSchedule(payload).subscribe((res) => {
+
       //this.isMeetingProgress = false;
       this.jogIDBotQuestions = [];
-      this.router.navigate(['dashboard/mockinto-history']);
+      
     });
+    this.router.navigate(['dashboard/mockinto-history']);
+    console.log("navigating")
   }
 
   stopMockintoSchedule(){
@@ -201,12 +204,21 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       "scheduleStatusId": 5
      
     })
-    this.sharedService.stopMockintoSchedule(payload).subscribe((res) => {
-     // this.isMeetingProgress = false;
+    this.sharedService.stopMockintoSchedule(payload).subscribe({
+    next: (res: any) => {
+     
+      console.log('API call succeeded with response:', res);
       this.jogIDBotQuestions = [];
       this.router.navigate(['dashboard/mockinto-history']);
-    });
-
+      console.log('Navigating after API completion');
+    },
+    error: (err: any) => {
+      console.error('API call failed with error:', err);
+    },
+    complete: () => {
+      console.log('API call completed successfully');
+    }
+  });
   }
 
   fetchAllMockintoQuestionsByScheduleId() {
@@ -406,9 +418,10 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       })
       this.startWebkitSpeechRecognition(this.jogIDBotQuestions[this.currentQuestionIndex].question);
     } else {
-      this.isMeetingProgress = true;
+      this.isMeetingProgress = false;
       //this.jogIDBotQuestions = [];
       this.currentQuestionIndex = 0;
+      this.endMockintoSchedule();
     }
   }
 

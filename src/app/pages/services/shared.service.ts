@@ -488,6 +488,7 @@ export class SharedService implements OnInit, OnDestroy {
     return this.http.post<any>(`${environment.apiUrl}/interviewSchedule/end`, mockintoSchedule)
     .pipe(
       map((data: any) => {
+        
         return data;
       }),
       catchError((err) => {

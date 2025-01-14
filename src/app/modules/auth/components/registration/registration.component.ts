@@ -236,9 +236,15 @@ submit() {
 
   getStripeProducts() {
     this.plutoService.getStripeProducts().subscribe((prod: any) => {
+      console.log("hello")
       if (prod) {
+        
         this.productList = prod.data;
-        this.productList = this.productList.filter(x => x.name == this.selectedPlan);
+        // console.log(this.productList[0]?.default_price);
+        // console.log(this.productList);
+        this.productList = this.productList.filter(x => x.name.toLowerCase() == this.selectedPlan.toLowerCase());
+        // console.log(this.selectedPlan);
+        // console.log(this.productList);
         this.productPrice = this.productList[0]?.default_price;
         this.productId = this.productList[0]?.id
         localStorage.setItem('stripeProductPrice', JSON.stringify(this.productPrice));
@@ -262,6 +268,7 @@ submit() {
 
 
   createSubscription() {
+    console.log("create subscription",this.productPrice,this.stripeCustomerId);
     this.plutoService.createCandidateSubscription(this.productPrice, this.stripeCustomerId).subscribe(subscription => {
       if (subscription) {
         this.subscriptionId = subscription?.id

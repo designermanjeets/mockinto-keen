@@ -110,6 +110,7 @@ export class CreateSubscriptionComponent implements OnInit {
         this.productList = this.productList.filter(x=>x.name == this.currentPlan);
         console.log("filter product list",this.productList);
         this.productPrice = this.productList[0]?.default_price;
+        console.log(this.productPrice)
         this.productId = this.productList[0]?.id
         localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
         localStorage.setItem('stripeProductId',JSON.stringify(this.productId));
