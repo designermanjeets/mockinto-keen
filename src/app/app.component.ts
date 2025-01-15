@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TranslationService } from './modules/i18n';
+import { Injectable } from '@angular/core';
 // language list
 import { locale as enLang } from './modules/i18n/vocabs/en';
 import { locale as chLang } from './modules/i18n/vocabs/ch';
@@ -10,6 +11,14 @@ import { locale as frLang } from './modules/i18n/vocabs/fr';
 import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './modules/auth';
+import jwt_decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
+
+
+
+@Injectable({
+  providedIn: 'root',
+})
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -51,16 +60,24 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+
+        const decoded = jwtDecode(loggedInUser.token);
+        console.log('Decoded Token:', decoded.exp);
+
         if(Object.keys(loggedInUser).length !== 0) {
           const jwtExpired = loggedInUser.jwtExpirationInSec;
           const currentTime = Math.floor(Date.now() / 1000);
-          if (jwtExpired && currentTime > jwtExpired - 60) { // refresh token 1 minute before expiration
-            // this.authService.refreshToken().subscribe((response) => {
-            //   console.log(response);
-            //   if (response) {
-            //     localStorage.setItem('auth-user', JSON.stringify(response));
-            //   }
-            // });
+          console.log(currentTime);
+          
+          if (decoded.exp && currentTime > decoded.exp - 1100) {
+            console.log("refreshing token");
+            this.authService.refreshToken().subscribe((response) => {
+              console.log(response);
+              if (response) {
+                console.log("REFRESHING TOKEN...")
+                // localStorage.setItem('auth-user', JSON.stringify(response));
+              }
+            });
           }
         } else {
           localStorage.removeItem(this.authLocalStorageToken);

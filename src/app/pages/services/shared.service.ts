@@ -70,6 +70,7 @@ export class SharedService implements OnInit, OnDestroy {
     .pipe(
       map((data: any) => {
         return data;
+
       }),
       catchError((err) => {
         return of(undefined);
@@ -679,6 +680,7 @@ export class SharedService implements OnInit, OnDestroy {
 
   getSubscriptionByTenantId(tenantId:any):Observable<any>{
     this.isLoadingSubject?.next(true);
+   
     return this.http.get<any>(`${environment.apiUrl}/subscription/all?tenantId=${tenantId}`)
     .pipe(
       map((data: any) => {

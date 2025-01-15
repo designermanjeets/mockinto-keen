@@ -193,11 +193,34 @@ export class AuthService implements OnDestroy {
   setAuthFromLocalStorage(auth: AuthModel): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
     if (auth && auth.token) {
+      console.log("setting token");
       localStorage.setItem(this.authLocalStorageToken, JSON.stringify(auth));
       return true;
     }
     return false;
   }
+
+
+  setAuthFromRefreshLocalStorage(auth: AuthModel): boolean {
+    // Retrieve the existing auth object from localStorage
+    const existingAuth = this.getAuthFromLocalStorage();
+  
+    // Check if the auth object exists and contains a token
+    if (existingAuth && auth.token) {
+      // Replace the token while preserving the rest of the auth data
+      existingAuth.token = auth.token;
+  
+      // Store the updated auth object back to localStorage
+      localStorage.setItem(this.authLocalStorageToken, JSON.stringify(existingAuth));
+  
+      console.log("Token updated successfully");
+      return true;
+    }
+  
+    console.log("Failed to update token: auth object or token missing");
+    return false;
+  }
+  
 
   private getAuthFromLocalStorage(): AuthModel | undefined {
     try {
@@ -234,8 +257,8 @@ export class AuthService implements OnDestroy {
     })
     .pipe(
       map((auth: AuthModel) => {
-        this.setAuthFromLocalStorage(auth);
-        return auth.token;
+        this.setAuthFromRefreshLocalStorage(auth);
+        return auth;
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );

@@ -25,6 +25,9 @@ export class AuthInterceptor implements HttpInterceptor {
     let authReq = req;
     const tenantId = authUser?.tenant_id;       
     const candidateId = authUser?.candidates[0]?.id;
+    // if (this.authService.isLoadingSubject.value) {
+    //   return Observable.empty(); // Or any other logic to block the request
+    // }
    
     const correlationId = uuid();
     if (authToken && !req.url.includes('https://api.stripe.com/')) {
@@ -58,22 +61,30 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         // Handle 401 Unauthorized errors
-        if (error.status === 401) {
-          if (!authReq.url.includes('/refresh') && !this.isRefreshing) {
-            return this.handle401Error(authReq, next);
-          } else {
-            (Swal as any).fire({
-              title: 'Session Expired',
-              text: 'Your session has expired. Please login again.',
-              icon: 'error',
-              showConfirmButton: false,
-              showCancelButton: true,
-              cancelButtonText: 'OK'
-            }).then(() => {
-              this.authService.logout();
-            });
-            return throwError(() => error);
-          }
+        if (error.status === 400) {
+          return this.handle401Error(authReq, next);
+          // if (true) {
+            
+          // } else {
+          //   (Swal as any).fire({
+          //     title: 'Session Expired',
+          //     text: 'Your session has expired. Please login again.',
+          //     icon: 'error',
+          //     showConfirmButton: false,
+          //     showCancelButton: true,
+          //     cancelButtonText: 'OK'
+          //   }).then(() => {
+          //     this.authService.logout();
+          //   });
+          //   return throwError(() => error);
+          // }
+        }
+
+
+
+        if (error.status === 401){
+          return this.handle401Error(authReq, next);
+
         }
 
         if (error.status === 403) {
@@ -132,11 +143,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return this.authService.refreshToken().pipe(
       switchMap((user: UserModel) => {
         this.isRefreshing = false;
-        this.authService.setAuthFromLocalStorage(user);
+        this.authService.setAuthFromRefreshLocalStorage(user);
 
         const authReq = req.clone({
           setHeaders: {
-            //Authorization: `Bearer ${user.token}`
+            Authorization: `Bearer ${user.token}`
           }
         });
 
@@ -159,3 +170,6 @@ export class AuthInterceptor implements HttpInterceptor {
     }
   }
 }
+
+
+
