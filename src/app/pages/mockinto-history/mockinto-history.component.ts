@@ -42,7 +42,6 @@ export class MockintoHistoryComponent implements OnInit {
     this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(1, page, size, 'id', 'ASC').subscribe(
       data => {
-        console.log(data);
         if(data) {
           this.paginator.length = data.totalElements;
           this.allMockintoHistory = data.content;

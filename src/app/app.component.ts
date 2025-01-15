@@ -49,41 +49,88 @@ export class AppComponent implements OnInit {
     );
   }
 
+  // ngOnInit() {
+  //   this.modeService.init();
+  //   this.router.events.subscribe((event) => {
+  //     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+  //       if(Object.keys(loggedInUser).length === 0) {
+  //         localStorage.removeItem('isLoggedIn');
+  //       }
+  //   });
+  //   this.router.events.subscribe((event) => {
+  //     if (event instanceof NavigationEnd) {
+  //       const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+  //       if (!loggedInUser || !loggedInUser.token) {
+  //         console.error('Token is missing or invalid:', loggedInUser?.token);
+  //       } else{
+  //         const decoded = jwtDecode(loggedInUser.token);
+  //         console.log('Decoded Token:', decoded.exp);
+  //         if(Object.keys(loggedInUser).length !== 0) {
+  //           const jwtExpired = loggedInUser.jwtExpirationInSec;
+  //           const currentTime = Math.floor(Date.now() / 1000);
+  //           console.log(currentTime);
+  //           if (decoded.exp && currentTime > decoded.exp - 120) {
+  //             console.log("refreshing token");
+  //             this.authService.refreshToken().subscribe((response) => {
+  //               console.log(response);
+  //               if (response) {
+  //                 console.log("REFRESHING TOKEN...")
+  //                 // localStorage.setItem('auth-user', JSON.stringify(response));
+  //               }
+  //             });
+  //           }
+  //         } else {
+  //           localStorage.removeItem(this.authLocalStorageToken);
+  //           localStorage.removeItem('isLoggedIn');
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
+
+
+
+
   ngOnInit() {
     this.modeService.init();
+  
+    // Check if user is logged in when route changes
     this.router.events.subscribe((event) => {
       const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-        if(Object.keys(loggedInUser).length === 0) {
-          localStorage.removeItem('isLoggedIn');
-        }
+      if (Object.keys(loggedInUser).length === 0) {
+        localStorage.removeItem('isLoggedIn');
+      }
     });
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-
-        const decoded = jwtDecode(loggedInUser.token);
-        console.log('Decoded Token:', decoded.exp);
-
-        if(Object.keys(loggedInUser).length !== 0) {
-          const jwtExpired = loggedInUser.jwtExpirationInSec;
+    this.startTokenRefreshWatcher();
+  }
+  
+  startTokenRefreshWatcher() {
+    const REFRESH_THRESHOLD = 120;
+    const CHECK_INTERVAL = 60 * 1000; 
+    setInterval(() => {
+      const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+      if (loggedInUser && loggedInUser.token) {
+        try {
+          console.log('checking for token')
+          const decoded = jwtDecode(loggedInUser.token);
           const currentTime = Math.floor(Date.now() / 1000);
-          console.log(currentTime);
-          
-          if (decoded.exp && currentTime > decoded.exp - 1100) {
-            console.log("refreshing token");
+          if (decoded.exp && currentTime > decoded.exp - REFRESH_THRESHOLD) {
+            console.log("Refreshing token automatically...");
             this.authService.refreshToken().subscribe((response) => {
-              console.log(response);
               if (response) {
-                console.log("REFRESHING TOKEN...")
+                console.log("Token refreshed successfully:", response);
                 // localStorage.setItem('auth-user', JSON.stringify(response));
+              } else {
+                console.error("Failed to refresh token.");
               }
             });
           }
-        } else {
-          localStorage.removeItem(this.authLocalStorageToken);
+        } catch (error) {
+          console.error("Error decoding token:", error);
+          localStorage.removeItem('auth-user');
           localStorage.removeItem('isLoggedIn');
         }
       }
-    });
+    }, CHECK_INTERVAL);
   }
 }
