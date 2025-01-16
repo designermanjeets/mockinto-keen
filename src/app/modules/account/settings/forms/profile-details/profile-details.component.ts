@@ -88,8 +88,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       first_name: this.first_name,
       last_name: this.last_name,
       user_email: this.candidateEmail,
-      active: false,
-      deleted: true
+      active: true,
+      deleted: false
       //password: this.candidatePassword,
     };
     if (this.candidatePassword && this.confirmPassword) {

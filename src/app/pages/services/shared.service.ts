@@ -744,7 +744,7 @@ export class SharedService implements OnInit, OnDestroy {
         }   
     }
     this.isLoadingSubject?.next(true);
-    return this.http.put<any>(`http://54.90.45.9:8080/api/tenant`, payload)
+    return this.http.put<any>(`${environment.apiUrl}/tenant`, payload)
     .pipe(
       map((data: any) => {
         return data;
