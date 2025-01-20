@@ -35,12 +35,9 @@
 
   <!--begin::Form group-->
   <div class="fv-row mb-10">
-    <label class="form-label fs-6  text-dark"><span class="required">Username</span></label>
+    <label class="form-label fs-6  text-dark"><span class="required">Email</span></label>
     <input class="form-control form-control-lg form-control-solid" type="email" name="email" formControlName="username"
-      autocomplete="off" [ngClass]="{
-        'is-invalid': loginForm.controls['username'].invalid && loginForm.controls['username'].touched,
-        'is-valid': loginForm.controls['username'].valid
-      }" />
+      autocomplete="off"/>
     <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
         validation: 'required',
         message: 'Email is required',
@@ -77,10 +74,7 @@
     </div>
 
     <input class="form-control form-control-lg form-control-solid" type="password" name="password" autocomplete="off"
-      formControlName="password" [ngClass]="{
-        'is-invalid': loginForm.controls['password'].invalid && loginForm.controls['password'].touched,
-        'is-valid': loginForm.controls['password'].valid
-      }" />
+      formControlName="password"  />
     <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
         validation: 'required',
         message: 'Password is required',

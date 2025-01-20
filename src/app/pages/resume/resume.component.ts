@@ -199,6 +199,47 @@ export class ResumeComponent implements OnInit {
     });
   }
 
+
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    console.log("event",event);
+    const dropZone = event.target as HTMLElement;
+    dropZone.classList.add('dragover');
+  }
+
+  onDragLeave(event: DragEvent) {
+    const dropZone = event.target as HTMLElement;
+    dropZone.classList.remove('dragover');
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+  
+    const dropZone = event.target as HTMLElement;
+    dropZone.classList.remove('dragover');
+  
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      if (file.type !== 'application/pdf') {
+        this.sharedService.showToaster();
+        if (this.fileUploadInput) {
+          this.fileUploadInput.nativeElement.value = ''; 
+        }
+        return;
+      }
+      this.resumeFile = file;
+      this.sharedService.showToaster();
+      event.dataTransfer.clearData();
+    }
+  }
+  
+
+  handleFile(file: File) {
+    console.log('File uploaded:', file);
+    // Handle file upload logic here
+  }
+
   
   onFileChange(event: any) {
     const file = event.target.files[0];

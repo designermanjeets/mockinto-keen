@@ -137,7 +137,7 @@ getPaymentSubscriptionall(id:any) {
        // this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: 'Starter' } });
        if(this.planName == 'Starter'){
         (Swal as any).fire({
-          text: "You Already Use the Free plan please Choose  the another plan",
+          text: "You are already using the Free plan",
           icon: "warning",
           buttonsStyling: false,
           cancelButtonText: 'Cancel',
@@ -218,7 +218,7 @@ getPaymentSubscriptionall(id:any) {
   cancelSubscription(){
     if(this.selectedPlanName == 'Starter'){
       (Swal as any).fire({
-        text: "Not Cancel the Free Subscription",
+        text: "The free subscription cannot be canceled.",
         icon: "warning",
         buttonsStyling: false,
         cancelButtonText: 'Ok',

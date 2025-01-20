@@ -93,6 +93,16 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submit() {
     this.hasError = false;
+    if (!this.f.username.value) {
+      this.hasError = true;
+      this.logError = 'Email is required';
+      return;
+    }
+    if (!this.f.password.value) {
+      this.hasError = true;
+      this.logError = 'Password is required';
+      return;
+    }
     const loginSubscr = this.authService
       .login(this.f.username.value, this.f.password.value, true)
       .pipe(first())

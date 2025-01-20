@@ -76,6 +76,10 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     }
   }
 
+  cancel(){
+    this.router.navigate(['/landing-page']);
+  }
+
   // convenience getter for easy access to form fields
   get f() {
     return this.registrationForm.controls;
@@ -136,6 +140,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
 submit() {
+    
     if (this.selectedPlan == undefined) {
       this.selectedPlan = 'Starter'
     }

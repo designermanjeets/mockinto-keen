@@ -276,36 +276,43 @@ export class JobProfileComponent implements OnInit {
     this.fetchAlljobProfiles(event.pageIndex, event.pageSize);
   }
 
-  // Chips AutoComplete
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+add(event: MatChipInputEvent): void {
 
-    // Add our fruit
-    if (value) {
+  console.log("adding",this.fruits);
+    const value = (event.value || '').trim();
+    if (value && !this.fruits.some(fruit => fruit.toLowerCase() === value.toLowerCase())) {
       this.fruits.push(value);
     }
-
-    // Clear the input value
     event.chipInput!.clear();
-
-    // this.fruitCtrl.setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.fruits.indexOf(fruit);
+remove(fruit: string): void {
+  const index = this.fruits.indexOf(fruit);
 
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
+  if (index >= 0) {
+    this.fruits.splice(index, 1);
 
-      // this.announcer.announce(`Removed ${fruit}`);
-    }
+    // Optionally announce the removed value
+    // this.announcer.announce(`Removed ${fruit}`);
+  }
+}
+
+
+selected(event: MatAutocompleteSelectedEvent): void {
+  const selectedValue = event.option.viewValue;
+
+  if (!this.fruits.includes(selectedValue)) {
+    this.fruits.push(selectedValue); 
+    console.log('Selected event:', event);
+  } else {
+    console.log('Duplicate value not added:', selectedValue);
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.fruits.push(event.option.viewValue);
-    this.fruitInput.nativeElement.value = '';
-    this.fruitCtrl.setValue(null);
-  }
+  // Clear the input and reset the form control
+  this.fruitInput.nativeElement.value = '';
+  this.fruitCtrl.setValue(null);
+}
+
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

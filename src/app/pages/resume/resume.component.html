@@ -427,8 +427,21 @@
 
                                                         </div>
                                                     </div>
-                                                    <input class="hidden" #fileUploadInput type="file" name="file"
-                                                        accept="application/pdf" (change)="onFileChange($event)" />
+                                                    <div 
+  class="file-drop-zone" 
+  (dragover)="onDragOver($event)" 
+  (dragleave)="onDragLeave($event)" 
+  (drop)="onDrop($event)"
+  >
+  <p>Drag and drop your file here, or <span (click)="fileUploadInput.click()">browse</span></p>
+  <input 
+    class="hidden" 
+    #fileUploadInput 
+    type="file" 
+    name="file" 
+    accept="application/pdf" 
+    (change)="onFileChange($event)" />
+</div>
                                                     <!--end::Dropzone-->
                                                 </div>
                                                 <!--end::Input group-->
