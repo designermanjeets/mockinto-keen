@@ -323,13 +323,14 @@ submit() {
     this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res: any) => {
       if (res) {
         localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));
-        (Swal as any).fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Registration successful.',
-        }).then(() => {
-          this.router.navigate(['/']);
-        });
+        this.router.navigate(['/']);
+        // (Swal as any).fire({
+        //   icon: 'success',
+        //   title: 'Success',
+        //   text: 'Registration successful.',
+        // }).then(() => {
+        //   this.router.navigate(['/']);
+        // });
       } else {
         (Swal as any).fire({
           icon: 'error',

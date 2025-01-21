@@ -25,21 +25,24 @@ export class JobProfileComponent implements OnInit {
   origJobProfiles: any = [];
   masterCheckbox: boolean = false;
   someChecked = [];
+  maxWords: number = 300; // Define the maximum word limit
+  remainingWords: number = this.maxWords;
 
   jobName: any;
   jobDescription: any;
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
-  tenantGeneralConfig:any;
-  generalConfig:any[]=[];
-  jobCount:any;
+  tenantGeneralConfig: any;
+  generalConfig: any[] = [];
+  jobCount: any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   filteredFruits: Observable<string[]>;
+  tenantId: any;
   fruits: string[] = [];
   allFruits: string[] = ['Java', 'Python', 'React', 'Angular'];
   fruitCtrl = new FormControl('');
@@ -47,7 +50,6 @@ export class JobProfileComponent implements OnInit {
   announcer = inject(LiveAnnouncer);
   maxCharacters: number = 3000;
   remainingCharacters: number = this.maxCharacters;
-
   constructor(
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
@@ -63,21 +65,52 @@ export class JobProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
-    this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
-    this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
-    const filterJobCount = plan.filter(x=>x.configKey == "jobdescription")
-    this.jobCount = Number(filterJobCount[0]?.configValue)
-    this.fetchAlljobProfiles();
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    this.tenantId = loggedInUser.tenant_id;
+
+    this.getSubscription()
+    
+  }
+
+
+
+
+
+  getSubscription(){
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        if(data.length <= 0) {
+          console.log("No Subscription");
+        }
+        else{
+          const data_ = data[data.length - 1]?.plan
+          console.log("genral_config_data",data_)
+          localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+          this.tenantGeneralConfig = data_
+          this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+
+          const plan = this.generalConfig?.filter((x: any) => x.type == this.tenantGeneralConfig?.name);
+          const filterJobCount = plan.filter(x => x.configKey == "jobdescription")
+          this.jobCount = Number(filterJobCount[0]?.configValue)
+          this.fetchAlljobProfiles();
+          console.log('jobcount',this.jobCount);
+          
+          localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+
+        }
+      }
+    ); 
   }
 
   fetchAlljobProfiles(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllJobProfiles(page, size).subscribe(
       data => {
-        if(data) {
+        if (data) {
           this.paginator.length = data.totalElements;
           this.jobProfiles = data.content;
+          console.log('job profiles---->',this.jobProfiles);
           this.origJobProfiles = JSON.parse(JSON.stringify(this.jobProfiles));
         }
         this.resetSelection();
@@ -100,10 +133,10 @@ export class JobProfileComponent implements OnInit {
         cancelButton: "btn btn-active-light"
       }
     }).then((result: any) => {
-      if(result.isDismissed) {
+      if (result.isDismissed) {
         return;
       }
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         this.sharedService.deleteJobProfile(profile).subscribe(
           data => {
             this.fetchAlljobProfiles();
@@ -126,10 +159,10 @@ export class JobProfileComponent implements OnInit {
         cancelButton: "btn btn-active-light"
       }
     }).then((result: any) => {
-      if(result.isDismissed) {
+      if (result.isDismissed) {
         return;
       }
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         const profiles_filter = this.jobProfiles.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
           return { id: item.id };
@@ -160,33 +193,33 @@ export class JobProfileComponent implements OnInit {
   }
 
   addJobDescriptionDialog() {
-    if(this.jobProfiles.length == this.jobCount){
+    if (this.jobProfiles.length == this.jobCount) {
       (Swal as any).fire({
-      title: "Job Limit Reached", 
-      text: "You have reached the maximum number of Job. Please buy a subscription to add more Job.", 
-      icon: "warning",
-      showCancelButton: true,
-      buttonsStyling: false,
-      confirmButtonText: "Go to Subscription",
-      cancelButtonText: "Cancel",
-      customClass: {
-        confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-active-light"
-      }
-    }).then((result: any) => {
-      if(result.isDismissed) {
-        return;
-      }
-      if(result.isConfirmed) {
-       this.router.navigate(['dashboard/mockinto-plan']);
-      }
-    });
-    }
-    else{
-      const dialogRef = this.dialog.open(this.addDialogTemplate, {
-        data: { },
+        title: "Job Limit Reached",
+        text: "You have reached the maximum number of Job. Please buy a subscription to add more Job.",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Go to Subscription",
+        cancelButtonText: "Cancel",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+        }
+      }).then((result: any) => {
+        if (result.isDismissed) {
+          return;
+        }
+        if (result.isConfirmed) {
+          this.router.navigate(['dashboard/mockinto-plan']);
+        }
       });
-  
+    }
+    else {
+      const dialogRef = this.dialog.open(this.addDialogTemplate, {
+        data: {},
+      });
+
       dialogRef.afterOpened().subscribe(result => {
         this.jobName = '';
         this.jobDescription = '';
@@ -195,16 +228,27 @@ export class JobProfileComponent implements OnInit {
         this.fruitCtrl.setValue(null);
         this.cdRef.detectChanges();
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
       });
     }
-    }
+  }
 
-    updateRemainingCharacters() {
-      this.remainingCharacters = this.maxCharacters - (this.jobDescription?.length || 0);
-    }
-   
+  updateRemainingCharacters() {
+    const wordCount = this.jobDescription 
+    ? this.jobDescription.trim().split(/\s+/).length 
+    : 0;
+
+  // Calculate remaining words
+  this.remainingWords = Math.max(this.maxWords - wordCount, 0);
+
+  // Optional: truncate the description if it exceeds the word limit
+  if (wordCount > this.maxWords) {
+    const wordsArray = this.jobDescription.trim().split(' ').slice(0, this.maxWords);
+    this.jobDescription = wordsArray.join(' ');
+  }
+  }
+
 
   closeDialog() {
     this.dialog.closeAll();
@@ -214,7 +258,7 @@ export class JobProfileComponent implements OnInit {
     const tags = this.fruits?.map((item: any) => item).join(',');
     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     this.sharedService.isLoadingSubject?.next(true);
-    if(Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
+    if (Object.keys(patchValue).length !== 0 && patchValue.constructor === Object) {
       const payload = {
         ...patchValue.jobdescription,
         "jobHeader": this.jobName,
@@ -223,7 +267,7 @@ export class JobProfileComponent implements OnInit {
       }
       this.sharedService.updateJobProfile(payload).subscribe(
         data => {
-          if(data) {
+          if (data) {
             this.sharedService.isLoadingSubject?.next(false);
             this.closeDialog();
             this.fetchAlljobProfiles();
@@ -239,12 +283,12 @@ export class JobProfileComponent implements OnInit {
         "updatedBy": "0",
         "jobTags": tags,
         "tenant": {
-            "id": loggedInUser.tenant_id
+          "id": loggedInUser.tenant_id
         }
       };
       this.sharedService.addJobProfile(payload).subscribe(
         data => {
-          if(data) {
+          if (data) {
             this.sharedService.isLoadingSubject?.next(false);
             this.closeDialog();
             this.fetchAlljobProfiles();
@@ -276,9 +320,9 @@ export class JobProfileComponent implements OnInit {
     this.fetchAlljobProfiles(event.pageIndex, event.pageSize);
   }
 
-add(event: MatChipInputEvent): void {
+  add(event: MatChipInputEvent): void {
 
-  console.log("adding",this.fruits);
+    console.log("adding", this.fruits);
     const value = (event.value || '').trim();
     if (value && !this.fruits.some(fruit => fruit.toLowerCase() === value.toLowerCase())) {
       this.fruits.push(value);
@@ -286,32 +330,32 @@ add(event: MatChipInputEvent): void {
     event.chipInput!.clear();
   }
 
-remove(fruit: string): void {
-  const index = this.fruits.indexOf(fruit);
+  remove(fruit: string): void {
+    const index = this.fruits.indexOf(fruit);
 
-  if (index >= 0) {
-    this.fruits.splice(index, 1);
+    if (index >= 0) {
+      this.fruits.splice(index, 1);
 
-    // Optionally announce the removed value
-    // this.announcer.announce(`Removed ${fruit}`);
-  }
-}
-
-
-selected(event: MatAutocompleteSelectedEvent): void {
-  const selectedValue = event.option.viewValue;
-
-  if (!this.fruits.includes(selectedValue)) {
-    this.fruits.push(selectedValue); 
-    console.log('Selected event:', event);
-  } else {
-    console.log('Duplicate value not added:', selectedValue);
+      // Optionally announce the removed value
+      // this.announcer.announce(`Removed ${fruit}`);
+    }
   }
 
-  // Clear the input and reset the form control
-  this.fruitInput.nativeElement.value = '';
-  this.fruitCtrl.setValue(null);
-}
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    const selectedValue = event.option.viewValue;
+
+    if (!this.fruits.includes(selectedValue)) {
+      this.fruits.push(selectedValue);
+      console.log('Selected event:', event);
+    } else {
+      console.log('Duplicate value not added:', selectedValue);
+    }
+
+    // Clear the input and reset the form control
+    this.fruitInput.nativeElement.value = '';
+    this.fruitCtrl.setValue(null);
+  }
 
 
   private _filter(value: string): string[] {
@@ -323,7 +367,7 @@ selected(event: MatAutocompleteSelectedEvent): void {
   searchJobProfile(event: any) {
     const value = event.target.value;
     this.sharedService.isLoadingSubject?.next(true);
-    if(value) {
+    if (value) {
       this.jobProfiles = this.origJobProfiles.filter((item: any) => {
         return item.jobHeader.toLowerCase().includes(value.toLowerCase());
       });

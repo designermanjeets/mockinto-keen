@@ -56,6 +56,8 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    
     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
    
     this.tenantId = loggedInUser.tenant_id;
@@ -67,7 +69,8 @@ export class DashboardComponent implements OnInit {
       this.getSubscription();
       this.fetchAlljobProfiles();
       this.fetchAllMockintoSchedules();
-    }
+    
+  }
   }
 
   fetchDashboardData() {
@@ -115,7 +118,8 @@ export class DashboardComponent implements OnInit {
         }
         else{
           localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
-          console.log(data[data.length - 1]?.plan?.name);
+
+          console.log("subs",data);
           
           localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
 
@@ -131,6 +135,7 @@ export class DashboardComponent implements OnInit {
         if(data) {
           let paginationConfigue = data.filter((item:any) => item.category === 'pagination');
           let Userpalns= data.filter((item:any) => item.category === 'plan');
+          console.log('userplans',Userpalns)
           localStorage.setItem('tenant_general_config',JSON.stringify(Userpalns));
           localStorage.setItem('pagination_general_config',JSON.stringify(paginationConfigue));
         }

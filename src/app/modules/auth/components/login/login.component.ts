@@ -93,22 +93,28 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submit() {
     this.hasError = false;
-    if (!this.f.username.value) {
+
+    // Trim username and password
+    const trimmedUsername = this.f.username.value.trim();
+    const trimmedPassword = this.f.password.value.trim();
+
+    if (!trimmedUsername) {
       this.hasError = true;
       this.logError = 'Email is required';
       return;
     }
-    if (!this.f.password.value) {
+    if (!trimmedPassword) {
       this.hasError = true;
       this.logError = 'Password is required';
       return;
     }
+
     const loginSubscr = this.authService
-      .login(this.f.username.value, this.f.password.value, true)
+      .login(trimmedUsername, trimmedPassword, true)
       .pipe(first())
       .subscribe((user: UserModel | undefined | any) => {
         if (!user.error) {
-          if(this.selectedPlan && this.selectedPlan !== 'starter') {
+          if (this.selectedPlan && this.selectedPlan !== 'starter') {
             this.router.navigate(['/dashboard/create-subscription'], { queryParams: { plan: this.selectedPlan } });
           } else {
             this.router.navigate([this.returnUrl]);
@@ -118,6 +124,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.logError = user.error.data;
         }
       });
+
     this.unsubscribe.push(loginSubscr);
   }
 

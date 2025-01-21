@@ -436,28 +436,30 @@
                                                     <textarea cols="4" type="text"
                                                         class="form-control form-control-solid"
                                                         placeholder="Enter Job Description" value=""
-                                                        name="jobDescription" [(ngModel)]="jobDescription"  (input)="updateRemainingCharacters()"></textarea>
-                                                        <mat-hint align="end">Remaining Characters: {{ remainingCharacters }}</mat-hint>
+                                                        name="jobDescription" [(ngModel)]="jobDescription" maxlength="3000" (input)="updateRemainingCharacters()"></textarea>
+                                                        <mat-hint align="end">Remaining Words: {{ remainingWords }}</mat-hint>
                                                     <!--end::Input-->
+                                                    <div *ngIf="(jobDescription.trim().split(' ').length < 30)" class="text-danger">Minimum 30 words required.</div>
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Actions-->
                                                <div class="d-flex gap-3">
                                                 <div class="d-flex flex-stack">
-                                                    <button type="button" class="btn btn-lg btn-primary"
-                                                        (click)="addUpdatejobDescription(data)"
-                                                        [disabled]="!jobName || !jobDescription">
-                                                        <ng-container *ngIf="isLoading$ | async">
-                                                            <span class="indicator-progress" [style.display]="'block'">
-                                                                Please wait...
-                                                                <span
-                                                                    class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                            </span>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="(isLoading$ | async) === false">
-                                                            <span class="indicator-label">Submit</span>
-                                                        </ng-container>
-                                                    </button>
+                                                    <button 
+                                                    type="button" 
+                                                    class="btn btn-lg btn-primary"
+                                                    (click)="addUpdatejobDescription(data)"
+                                                    [disabled]="!jobName.trim() || !jobDescription.trim() || (jobDescription.trim().split(' ').length < 30) ">
+                                                    <ng-container *ngIf="isLoading$ | async">
+                                                      <span class="indicator-progress" [style.display]="'block'">
+                                                        Please wait...
+                                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                      </span>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="(isLoading$ | async) === false">
+                                                      <span class="indicator-label">Submit</span>
+                                                    </ng-container>
+                                                  </button>
                                                 </div>
                                                 <div class="d-flex flex-stack">
                                                     <button type="button" class="btn btn-lg btn-primary" (click)="closeDialog()">

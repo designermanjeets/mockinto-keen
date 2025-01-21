@@ -127,8 +127,6 @@
                                             </i>
                                         </button>
                                     </div>
-                                    <!--end::Share link-->
-                                    <!--begin::More-->
                                     <div class="ms-2">
                                         <button type="button"
                                             class="btn btn-sm btn-icon btn-light btn-active-light-primary"
@@ -382,7 +380,7 @@
                                                     <!--begin::Label-->
                                                     <label
                                                         class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
-                                                        <span class="required">Name</span>
+                                                        <span class="required">Names</span>
                                                         <span class="ms-1" data-bs-toggle="tooltip"
                                                             title="Specify name">
                                                             <i class="ki-duotone ki-information-5 text-gray-500 fs-6">
@@ -392,11 +390,9 @@
                                                             </i>
                                                         </span>
                                                     </label>
-
                                                     <input type="text" class="form-control form-control-solid"
-                                                        placeholder="Enter Name" value="" name="fileName"
-                                                        [(ngModel)]="fileName" />
-
+                                                        placeholder="Enter Name" name="fileName" [(ngModel)]="fileName"
+                                                        (ngModelChange)="fileName = fileName?.trimStart()" />
                                                 </div>
 
                                                 <div class="fv-row mb-8">
@@ -427,21 +423,13 @@
 
                                                         </div>
                                                     </div>
-                                                    <div 
-  class="file-drop-zone" 
-  (dragover)="onDragOver($event)" 
-  (dragleave)="onDragLeave($event)" 
-  (drop)="onDrop($event)"
-  >
-  <p>Drag and drop your file here, or <span (click)="fileUploadInput.click()">browse</span></p>
-  <input 
-    class="hidden" 
-    #fileUploadInput 
-    type="file" 
-    name="file" 
-    accept="application/pdf" 
-    (change)="onFileChange($event)" />
-</div>
+                                                    <div class="file-drop-zone" (dragover)="onDragOver($event)"
+                                                        (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+                                                        <p>Drag and drop your file here, or <span
+                                                                (click)="fileUploadInput.click()">browse</span></p>
+                                                        <input class="hidden" #fileUploadInput type="file" name="file"
+                                                            accept="application/pdf" (change)="onFileChange($event)" />
+                                                    </div>
                                                     <!--end::Dropzone-->
                                                 </div>
                                                 <!--end::Input group-->
@@ -450,7 +438,7 @@
                                                     <div class="d-flex flex-stack">
                                                         <button type="button" class="btn btn-lg btn-primary"
                                                             (click)="uploadResume()"
-                                                            [disabled]="!resumeFile || !fileName">
+                                                            [disabled]="!resumeFile || !isValidFileName()">
                                                             <ng-container *ngIf="isLoading$ | async">
                                                                 <span class="indicator-progress"
                                                                     [style.display]="'block'">

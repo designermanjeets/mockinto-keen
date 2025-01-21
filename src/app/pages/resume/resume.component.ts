@@ -30,6 +30,7 @@ export class ResumeComponent implements OnInit {
   generalConfig:any[]=[];
   tenantGeneralConfig:any;
   resumeCount:any
+  tenantId:any
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('previewResumeTemplate', { static: true }) previewResumeTemplate!: TemplateRef<any>;
@@ -47,12 +48,20 @@ export class ResumeComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
     this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
-    this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
-    const filterResumeCount = plan.filter(x=>x.configKey == "resumecount");
-    this.resumeCount = Number(filterResumeCount[0]?.configValue)
-    this.fetchAllResumes();
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    this.tenantId = loggedInUser.tenant_id;
+
+    this.getSubscription()
+
+
+    
+    
   }
+
+
+
+
+  
 
   fetchAllResumes(page = 0, size = 10) {
     this.sharedService.isLoadingSubject?.next(true);
@@ -74,7 +83,7 @@ export class ResumeComponent implements OnInit {
     this.sharedService.previewResume(resume.id).subscribe(
       result => {
         const { filename, data } = result;
-        this.previewResumeDialog(filename, data);
+        this.previewResumeDialog(filename.trim(), data);
       }
     );
   }
@@ -138,6 +147,37 @@ export class ResumeComponent implements OnInit {
     });
   }
 
+
+
+
+    getSubscription(){
+      this.sharedService.isLoadingSubject?.next(true);
+      this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+        data => {
+          if(data.length <= 0) {
+            console.log("No Subscription");
+          }
+          else{
+            const data_ = data[data.length - 1]?.plan
+            console.log("genral_config_data",data_)
+            localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+            this.tenantGeneralConfig = data_
+            const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+            const filterResumeCount = plan.filter(x=>x.configKey == "resumecount");
+            console.log(filterResumeCount);
+            this.resumeCount = Number(filterResumeCount[0]?.configValue)
+            console.log(this.resumeCount);
+            this.fetchAllResumes();
+            
+            localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+  
+          }
+        }
+      ); 
+    }
+
+
+
   addResumeDialog() {
   if(this.resumeCount == this.resumes.length){
     (Swal as any).fire({
@@ -191,6 +231,8 @@ export class ResumeComponent implements OnInit {
     const blobUrl = window.URL.createObjectURL(blob);
     // Create a URL for the Blob
     const resume = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+    filename = filename.trim();
+    this.fileName = this.fileName.trim();
     const dialogRef = this.dialog.open(this.previewResumeTemplate, {
       data: { filename, resume },
     });
@@ -252,6 +294,7 @@ export class ResumeComponent implements OnInit {
         return; 
       }
       this.resumeFile = file; 
+      this.fileName = this.fileName.trim()
       this.sharedService.showToaster(); 
     }
   }
@@ -270,6 +313,10 @@ export class ResumeComponent implements OnInit {
         this.closeDialog();
       }
     );
+  }
+
+  isValidFileName(): boolean {
+    return this.fileName && this.fileName.trim().length > 0;
   }
 
   onMasterChange(event: any) {
