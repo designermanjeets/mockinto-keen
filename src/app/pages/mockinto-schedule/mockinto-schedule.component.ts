@@ -50,6 +50,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   private intervalId: any;
   allReadySchedule:any
   dashboardData:any;
+  isLoading: boolean = false;
 
 
   origSchedules: any = [];
@@ -305,72 +306,81 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     });
   }
 
+  
+
   addUpdateMockintoSchedule(patchValue?: any) {
-    this.sharedService.isLoadingSubject?.next(true);
-    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-    if(patchValue) {
-      const payload = Object.assign({},
-        {
-          "id": patchValue.id,
-          "active": 1,
-          "deleted": 0,
-          "interviewPeriodMinutes": 0,
-          "scheduleStartDate": moment(this.dateControl.value).toISOString(),
-          "scheduleStatusId": 0,
-          "updatedBy": 0,
-          "jobPosting": {
-              "id": this.mockJobProfile,
+      this.isLoading = true; // Set loading to true when the operation begins
+      this.sharedService.isLoadingSubject?.next(true);
+      const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+      if (patchValue) {
+          const payload = Object.assign({}, {
+              "id": patchValue.id,
               "active": 1,
               "deleted": 0,
+              "interviewPeriodMinutes": 0,
+              "scheduleStartDate": moment(this.dateControl.value).toISOString(),
+              "scheduleStatusId": 0,
               "updatedBy": 0,
-              "tenant": {
-                  "id": loggedInUser.tenant_id
+              "jobPosting": {
+                  "id": this.mockJobProfile,
+                  "active": 1,
+                  "deleted": 0,
+                  "updatedBy": 0,
+                  "tenant": {
+                      "id": loggedInUser.tenant_id
+                  }
+              },
+              "resume": {
+                  "id": this.mockResume
               }
-          },
-          "resume": {
-              "id": this.mockResume
-          }
-        }
-      );
-      const cleanedData = this.removeCircularReferences(payload);
-      this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
-        if(data) {
-          this.sharedService.isLoadingSubject?.next(false);
-          this.closeDialog();
-          this.fetchAllMockintoSchedules();
-        }
-      });
-    } else {
-      const payload = {
-        "active": 1,
-        "deleted": 0,
-        "interviewPeriodMinutes": 0,
-        "scheduleStartDate": moment(this.dateControl.value).toISOString(),
-        "scheduleStatusId": 0,
-        "updatedBy": 0,
-        "jobPosting": {
-            "id": this.mockJobProfile,
-            "active": 1,
-            "deleted": 0,
-            "updatedBy": 0,
-            "tenant": {
-                "id": loggedInUser.tenant_id
-            }
-        },
-        "resume": {
-            "id": this.mockResume
-        }
-      };
-      this.sharedService.addMockintoSchedule(payload).subscribe(data => {
-        if(data) {
-          this.sharedService.isLoadingSubject?.next(false);
-          this.closeDialog();
-          this.fetchAllMockintoSchedules();
-        }
-      });
-    }
+          });
+          const cleanedData = this.removeCircularReferences(payload);
+          this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
+              if (data) {
+                  this.isLoading = false; // Set loading to false when the operation completes
+                  this.sharedService.isLoadingSubject?.next(false);
+                  this.closeDialog();
+                  this.fetchAllMockintoSchedules();
+              }
+          }, error => {
+              this.isLoading = false; // Ensure loading is turned off even if there's an error
+              this.sharedService.isLoadingSubject?.next(false);
+          });
+      } else {
+          const payload = {
+              "active": 1,
+              "deleted": 0,
+              "interviewPeriodMinutes": 0,
+              "scheduleStartDate": moment(this.dateControl.value).toISOString(),
+              "scheduleStatusId": 0,
+              "updatedBy": 0,
+              "jobPosting": {
+                  "id": this.mockJobProfile,
+                  "active": 1,
+                  "deleted": 0,
+                  "updatedBy": 0,
+                  "tenant": {
+                      "id": loggedInUser.tenant_id
+                  }
+              },
+              "resume": {
+                  "id": this.mockResume
+              }
+          };
+          this.sharedService.addMockintoSchedule(payload).subscribe(data => {
+              if (data) {
+                  this.isLoading = false; // Set loading to false when the operation completes
+                  this.sharedService.isLoadingSubject?.next(false);
+                  this.closeDialog();
+                  this.fetchAllMockintoSchedules();
+              }
+          }, error => {
+              this.isLoading = false; // Ensure loading is turned off even if there's an error
+              this.sharedService.isLoadingSubject?.next(false);
+          });
+      }
   }
-
+  
  removeCircularReferences(obj: any, seen = new WeakSet()) {
     if (obj && typeof obj === 'object') {
       if (seen.has(obj)) return undefined;

@@ -20,6 +20,8 @@ export class AuthService implements OnDestroy {
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
   private authLocalStorageToken = `auth-user`;
 
+  
+
   // public fields
   currentUser$: Observable<UserType>;
   isLoading$: Observable<boolean>;
@@ -47,6 +49,26 @@ export class AuthService implements OnDestroy {
     this.isLoading$ = this.isLoadingSubject.asObservable();
     const subscr = this.getUserByToken().subscribe();
     this.unsubscribe.push(subscr);
+  }
+
+
+  verifypassword(username: string | undefined, password: string | undefined, rememberMe: boolean = true): Observable<UserType> {
+    
+    return this.http.post<any>(`${environment.apiUrl}/authenticate`, { username, password, rememberMe })
+    .pipe(
+      
+      switchMap((res: any) => {
+        if(res) {
+          return res;
+        } else {
+          return of({ error: 'User Data Incorrect!'})
+        }
+      }),
+      catchError((err) => {
+        return of(err);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 
   login(username: string | undefined, password: string | undefined, rememberMe: boolean = true): Observable<UserType> {
@@ -101,7 +123,7 @@ export class AuthService implements OnDestroy {
       text: 'You have been successfully logged out!',
       icon: 'success',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 1000,
     }).then(() => {
       localStorage.removeItem(this.authLocalStorageToken);
       localStorage.removeItem('isLoggedIn');

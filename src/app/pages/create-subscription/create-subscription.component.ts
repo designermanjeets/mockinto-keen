@@ -91,8 +91,17 @@ export class CreateSubscriptionComponent implements OnInit {
     
     if(this.currentPlan){
       this.getStripeProducts();
-
     }
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.plan) {
+        console.log("params",params)
+        this.selectedPlan = params.plan;
+        this.currentPlan = params.plan;
+        localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
+
+      }
+    });
 
     
     this.fetchAllPlans();

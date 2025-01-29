@@ -40,18 +40,18 @@
                                 <span class="path2"></span>
                             </i>
                         </button> -->
-                        <div class="btn btn-icon btn-light-primary rounded-lg me-3 border border-gray-300 text-white">
+                        <!-- <div class="btn btn-icon btn-light-primary rounded-lg me-3 border border-gray-300 text-white">
                             <i class="fa-solid fa-closed-captioning"></i>
-                        </div>
-                        <div
+                        </div> -->
+                        <!-- <div
                             class="btn btn-icon btn-light-primary position-relative rounded-lg me-3 border border-gray-300">
                             <i class="fa-solid fa-microphone"></i>
-                            <!-- <i class="fa-solid fa-microphone-slash"></i> -->
-                        </div>
-                        <button
+                            
+                        </div> -->
+                        <!-- <button
                             class="btn btn-icon btn-light-primary position-relative rounded-lg me-3 border border-gray-300">
                             <i class="fa-solid fa-video"></i>
-                        </button>
+                        </button> -->
                         <button [disabled]="speechSynthesisInProgress || SpeechRecognitionisInProgress"
                             class="btn btn-danger position-relative border border-gray-300"
                             (click)="startOrStopMockinto()">
@@ -118,7 +118,7 @@
                                 [disabled]="speechSynthesisInProgress || SpeechRecognitionisInProgress || !isMeetingProgress"
                                 id="next_question_tooltip"
                                 class="btn white-bg position-relative border border-gray-300 me-3" placement="top-start"
-                                ngbTooltip="Move to next Question" (click)="onNextQuestion()">
+                               (click)="onNextQuestion()">
                                 <span>
                                     Next Question
                                     <i class="fa-regular fa-circle-right"></i>
@@ -128,7 +128,7 @@
                                 [disabled]="speechSynthesisInProgress || isReadyForNextQuestion || !isMeetingProgress"
                                 id="record_answer_tooltip"
                                 class="btn btn-danger position-relative border border-gray-300 me-5"
-                                placement="top-start" ngbTooltip="Click to Record your answer"
+                                placement="top-start" 
                                 (click)="onRecordAnswer()">
                                 <span>
                                     <i class="fa-solid fa-headset"></i>

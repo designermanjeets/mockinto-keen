@@ -124,6 +124,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         });
       }
       if(res) {
+        console.log(res);
         if(payload.password){
           (Swal as any).fire({
             title: 'Warning!',
@@ -139,7 +140,91 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
             if(result.isConfirmed) {
               this.auth.logout();
             }
+            else{
+              this.auth.logout();
+            }
           });
+          
+        }
+       
+      }
+    });
+  }
+
+
+
+  changePassword() {
+
+    if(this.passwordMismatch || !this.first_name || !this.last_name || !this.candidatePassword || !this.confirmPassword) {
+      (Swal as any).fire({
+        title: 'Error!',
+        text: 'Please fill password and confirm password fields',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      return;
+    }
+
+    this.isLoading$.next(true);
+    const payload: Payload = {
+      first_name: this.first_name,
+      last_name: this.last_name,
+      user_email: this.candidateEmail,
+      active: true,
+      deleted: false,
+      password: this.candidatePassword,
+    };
+   
+
+    this.sharedService.editProfile(payload).subscribe((res) => {
+      if(!res.error){
+        if (this.authUser) {
+          this.authUser.firstName = this.first_name;
+          this.authUser.lastName = this.last_name;
+          localStorage.setItem('auth-user', JSON.stringify(this.authUser));
+        }
+        (Swal as any).fire({
+          title: 'Success!',
+          text: 'Profile updated successfully',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          this.isLoading$.next(false);
+          this.cdr.detectChanges();
+        });
+      } else {
+        (Swal as any).fire({
+          title: 'Error!',
+          text: res.error.data,
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        }).then(() => {
+          this.isLoading$.next(false);
+          this.cdr.detectChanges();
+        });
+      }
+      if(res) {
+        console.log(res);
+        if(payload.password){
+          (Swal as any).fire({
+            title: 'Warning!',
+            text: "Please Login New Credentials",
+            icon: "warning",
+            buttonsStyling: false,
+            confirmButtonText: "Logout",
+            customClass: {
+              confirmButton: "btn btn-primary",
+             
+            }
+          }).then((result: any) => {
+            if(result.isConfirmed) {
+              this.auth.logout();
+            }
+            else{
+              this.auth.logout();
+            }
+          });
+          
         }
        
       }

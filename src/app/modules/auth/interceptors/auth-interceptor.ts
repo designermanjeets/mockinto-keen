@@ -88,18 +88,19 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         if (error.status === 403) {
-          if(!this.router.url.includes('auth/login')) {
-            (Swal as any).fire({
-              title: 'Forbidden',
-              text: 'You do not have permission to access this resource.',
-              icon: 'error',
-              showConfirmButton: false,
-              showCancelButton: true,
-              cancelButtonText: 'OK'
-            }).then(() => {
-              this.authService.logout();
-            });
-          }
+          // if(!this.router.url.includes('auth/login')) {
+          //   (Swal as any).fire({
+          //     title: 'Forbidden',
+          //     text: 'You do not have permission to access this resource.',
+          //     icon: 'error',
+          //     showConfirmButton: false,
+          //     showCancelButton: true,
+          //     cancelButtonText: 'OK'
+          //   }).then(() => {
+          //     this.authService.logout();
+          //   });
+          // }
+          this.authService.logout();
           return throwError(() => error);
         }
 

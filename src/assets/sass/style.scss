@@ -7070,3 +7070,20 @@ body.no-background {
     background-image: none !important;
     background-color: #fff;
 }
+
+.btn > i {
+    display: inline-flex;
+    font-size: 2.1rem !important;
+    padding-right: 0.35rem;
+    vertical-align: middle;
+}
+.form-check.form-check-solid .form-check-input:not(:checked) {
+    background-color: #bbbbbd !important;
+}
+th{
+    color: #000 !important;
+}
+i.ki-duotone.ki-cross.fs-1{
+    color: #000 !important;
+    font-size: 30px !important;
+}

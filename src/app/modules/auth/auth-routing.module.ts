@@ -24,6 +24,7 @@ const routes: Routes = [
       {
         path: 'registration',
         component: RegistrationComponent,
+        data: { returnUrl: window.location.pathname },
       },
       {
         path: 'forgot-password',

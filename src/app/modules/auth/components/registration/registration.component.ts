@@ -32,9 +32,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   candidateId: any;
   planId:any;
 
-
-  // private fields
-  private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  private unsubscribe: Subscription[] = []; 
   private readonly plutoService = inject(StripeMockintoService);
 
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}') as UserModel;
@@ -60,9 +58,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initForm();
     this.activatedRoute.queryParams.subscribe((params) => {
+      console.log(params);
       if (params.plan) {
         this.selectedPlan = params.plan;
       }
+      
     });
   }
 
@@ -241,9 +241,7 @@ submit() {
 
   getStripeProducts() {
     this.plutoService.getStripeProducts().subscribe((prod: any) => {
-      console.log("hello")
       if (prod) {
-        
         this.productList = prod.data;
         // console.log(this.productList[0]?.default_price);
         // console.log(this.productList);
@@ -256,7 +254,6 @@ submit() {
         localStorage.setItem('stripeProductId', JSON.stringify(this.productId));
         this.getAllPlan();
         this.createSubscription();
-
       }
     })
   }

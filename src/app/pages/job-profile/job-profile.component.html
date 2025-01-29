@@ -439,7 +439,7 @@
                                                         name="jobDescription" [(ngModel)]="jobDescription" maxlength="3000" (input)="updateRemainingCharacters()"></textarea>
                                                         <mat-hint align="end">Remaining Words: {{ remainingWords }}</mat-hint>
                                                     <!--end::Input-->
-                                                    <div *ngIf="(jobDescription?.trim().split(' ')?.length < 30)" class="text-danger">Minimum 30 words required.</div>
+                                                    <div *ngIf="(jobDescription?.trim().split(' ').length < 30)" class="text-danger">Minimum 30 words required.</div>
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Actions-->
@@ -449,7 +449,7 @@
                                                     type="button" 
                                                     class="btn btn-lg btn-primary"
                                                     (click)="addUpdatejobDescription(data)"
-                                                    [disabled]="!jobName.trim() || !jobDescription.trim() || (jobDescription?.trim()?.split(' ').length < 30) ">
+                                                    [disabled]="!jobName.trim() || !jobDescription.trim() || (jobDescription.trim().split(' ').length < 30) ">
                                                     <ng-container *ngIf="isLoading$ | async">
                                                       <span class="indicator-progress" [style.display]="'block'">
                                                         Please wait...
