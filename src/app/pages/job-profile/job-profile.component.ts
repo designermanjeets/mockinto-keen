@@ -244,7 +244,7 @@ export class JobProfileComponent implements OnInit {
 
   // Optional: truncate the description if it exceeds the word limit
   if (wordCount > this.maxWords) {
-    const wordsArray = this.jobDescription.trim().split(' ').slice(0, this.maxWords);
+    const wordsArray = this.jobDescription?.trim()?.split(' ').slice(0, this.maxWords);
     this.jobDescription = wordsArray.join(' ');
   }
   }

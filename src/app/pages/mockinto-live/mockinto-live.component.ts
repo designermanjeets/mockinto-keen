@@ -345,12 +345,11 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript;
             this.currentFinalTanscript = this.currentFinalTanscript + finalTranscript;
+            this.mockintoQueAnsBank[this.currentQuestionIndex].answer = this.currentFinalTanscript;
           } else {
             interimTranscript += event.results[i][0].transcript;
             this.candidateAnswers = this.currentFinalTanscript + interimTranscript;
             this.mockintoQueAnsBank[this.currentQuestionIndex].answer = this.currentFinalTanscript + interimTranscript;
-
-
           }
         }
       }

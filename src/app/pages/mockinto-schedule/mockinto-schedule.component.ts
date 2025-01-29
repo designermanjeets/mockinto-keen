@@ -67,9 +67,11 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     this.isLoading$ = this.sharedService.isLoading$;
     this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
     this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
-    const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
-    this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
+    if(this.generalConfig?.length) {
+      const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+      const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
+      this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
+    }
     this.fetchDashboardData();
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
