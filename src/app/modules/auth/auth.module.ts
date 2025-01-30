@@ -10,6 +10,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { AuthComponent } from './auth.component';
 import { TranslationModule } from '../i18n/translation.module';
 import { NgxStripeModule } from 'ngx-stripe';
+import { VerifyComponent } from './components/verify-account/verify.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NgxStripeModule } from 'ngx-stripe';
     ForgotPasswordComponent,
     LogoutComponent,
     AuthComponent,
+    VerifyComponent,
   ],
   imports: [
     CommonModule,

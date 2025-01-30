@@ -205,6 +205,44 @@ export class AuthService implements OnDestroy {
 
 
 
+  resendOtp(email: any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    let payload = {
+      email : email
+    }
+    return this.http.post<any>(`${environment.apiUrl}/resendOtp?email=${email}`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Error not Forgot Plan'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+
+  validateOtp(email: any, otp:any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    let payload = {
+      email : email,
+      otp : otp
+    }
+    return this.http.post<any>(`${environment.apiUrl}/validateOtp?email=${email}&otp=${otp}`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(new Error('Invalid Otp'));
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
   // forgotPassword(email: string): Observable<boolean> {
   //   this.isLoadingSubject.next(true);
   //   return this.authHttpService

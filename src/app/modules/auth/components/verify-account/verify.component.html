@@ -1,0 +1,39 @@
+<form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="form w-100">
+    <div class="mb-10 text-center">
+      <h1 class="text-dark mb-3">Verify Account</h1>
+      <div class="text-gray-400 fs-4">Enter OTP</div>
+      
+      
+    </div>
+  
+    <ng-container *ngIf="logError">
+        <div class="mb-lg-15 alert alert-danger">
+          <div class="alert-text font-weight-bold">{{ logError }}</div>
+        </div>
+      </ng-container>
+
+    <div class="fv-row mb-10">
+    
+      <div class="otp-container">
+        <input *ngFor="let digit of otpArray; let i = index"
+               class="otp-input"
+               type="text"
+               maxlength="1"
+               pattern="[0-9]*"
+               inputmode="numeric"
+               (input)="onInputChange($event, i)"
+               (keydown)="onKeyDown($event, i)">
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary w-100" [disabled]="isSubmitting || !isOtpComplete()">
+      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+      <span *ngIf="!isSubmitting">Submit</span>
+    </button>
+
+
+    <button type="button" class="btn btn-link w-100 mt-3" (click)="resendOTP()" [disabled]="isResendDisabled">
+        Resend OTP <span *ngIf="isResendDisabled">({{ countdown }}s)</span>
+      </button>
+  </form>
+  

@@ -61,6 +61,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       console.log(params);
       if (params.plan) {
         this.selectedPlan = params.plan;
+        localStorage.setItem('selectedPlan', JSON.stringify(this.selectedPlan));
       }
       
     });
@@ -199,13 +200,19 @@ submit() {
           // } else {
           //   this.router.navigate(['/']);
           // }
+          localStorage.setItem('verify-email', JSON.stringify(data.user_email));
+          this.router.navigate(['/auth/verify-email']);
           let payload = {
             firstName: data.first_name,
             email: data.user_email
           }
+          localStorage.setItem('first_name', JSON.stringify(data.first_name));
           this.tenantId = user.tenant_id;
           this.candidateId = user.candidate[0]?.id;
-          this.ceateCustomer(payload, data.password);
+          localStorage.setItem('tenantId', JSON.stringify(this.tenantId));
+          localStorage.setItem('candidateId', JSON.stringify(this.candidateId));
+          localStorage.setItem('password', JSON.stringify(data.password));
+          //this.ceateCustomer(payload, data.password);
 
         } else {
           this.hasError = true;

@@ -64,10 +64,8 @@ export class CreateSubscriptionComponent implements OnInit {
   get amount() {
     const amountValue = this.checkoutForm.get('amount')?.value;
     if (!amountValue || amountValue < 0) return 0;
-
     return Number(amountValue) / 100;
   }
-
   constructor(
     private cdRef: ChangeDetectorRef,
     private router: Router,
@@ -80,11 +78,9 @@ export class CreateSubscriptionComponent implements OnInit {
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
         localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
-
       }
     });
   }
-
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
 
