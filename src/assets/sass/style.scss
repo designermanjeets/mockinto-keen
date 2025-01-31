@@ -7087,3 +7087,37 @@ i.ki-duotone.ki-cross.fs-1{
     color: #000 !important;
     font-size: 30px !important;
 }
+.timeing .box {
+    border: 1px solid #ddd;
+    text-align: center;
+    position: relative;
+}
+.time {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+.timeing h3{
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.timeing .box p {
+    text-align: center;
+}
+.timer .col-lg-4 {
+    height: min-content;
+    text-align: center;
+    border-right: 1px solid #c9c7c7;
+}
+.main-timer{
+    border: none !important;
+}
+.timer {
+    height: min-content;
+    padding-top: 20px;
+}
+.head-sub h2 {
+    color: #ff3d00;
+    margin-bottom: 6px !important;
+}

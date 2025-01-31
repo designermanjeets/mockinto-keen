@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit,ElementRef,ViewChildren,QueryList ,AfterViewChecked,ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { SharedService } from '../services/shared.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -27,8 +27,9 @@ let speechRecognitionList: any;
   styleUrls: ['./mockinto-live.component.scss'],
   providers: [DatePipe]
 })
-export class MockintoLiveComponent implements OnInit, AfterContentInit {
-
+export class MockintoLiveComponent implements OnInit, AfterContentInit,AfterViewChecked{
+  @ViewChild('questionContainer') questionContainer!: ElementRef;
+  @ViewChildren('[data-last]') lastQuestion!: QueryList<ElementRef>;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
@@ -80,6 +81,10 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
     
   }
 
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+}
+
   fetchMockintoScheduleById() {
     this.sharedService.fetchMockintoScheduleById(this.scheduleId).subscribe((res) => {
       if(res) {
@@ -113,6 +118,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
+    this.scrollToBottom();
     const slider_pitach = document.querySelector("#kt_slider_voice_pitch") as HTMLElement | any;
     if(slider_pitach) {
       noUiSlider.create(slider_pitach, {
@@ -129,6 +135,7 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
         }
       });
     }
+
 
     const slider_rate = document.querySelector("#kt_slider_voice_rate") as HTMLElement | any;
     if(slider_rate) {
@@ -147,7 +154,18 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       });
     }
   }
-  
+
+
+
+  scrollToBottom(): void {
+    console.log("scrolling down");
+    if (this.questionContainer?.nativeElement) {
+      console.log("scrolling");
+      setTimeout(() => {
+        this.questionContainer.nativeElement.scrollTop = this.questionContainer.nativeElement.scrollHeight;
+      }, 50); // Small delay to ensure rendering is done
+    }
+  }
   startOrStopMockinto() {
     if(this.isMeetingProgress) {
       (Swal as any).fire({
@@ -378,6 +396,10 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
   }
 
   onNextQuestion() {
+    console.log("next question");
+    this.cdRef.detectChanges();  // Force Angular to update the view
+    this.scrollToBottom();  // Call scroll function after the update
+   
     this.currentQuestionIndex++;
     if(this.currentQuestionIndex < this.jogIDBotQuestions.length) {
       this.isReadyForNextQuestion = false;
@@ -422,6 +444,8 @@ export class MockintoLiveComponent implements OnInit, AfterContentInit {
       this.currentQuestionIndex = 0;
       this.endMockintoSchedule();
     }
+    this.cdRef.detectChanges(); 
+    this.scrollToBottom(); 
   }
 
 

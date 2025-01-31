@@ -201,7 +201,8 @@ submit() {
           //   this.router.navigate(['/']);
           // }
           localStorage.setItem('verify-email', JSON.stringify(data.user_email));
-          this.router.navigate(['/auth/verify-email']);
+          
+          
           let payload = {
             firstName: data.first_name,
             email: data.user_email
@@ -212,6 +213,14 @@ submit() {
           localStorage.setItem('tenantId', JSON.stringify(this.tenantId));
           localStorage.setItem('candidateId', JSON.stringify(this.candidateId));
           localStorage.setItem('password', JSON.stringify(data.password));
+
+          (Swal as any).fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Verification email sent. Please verify your email to login.',
+          }).then(() => {
+            this.router.navigate(['/auth/verify-email']);
+          });
           //this.ceateCustomer(payload, data.password);
 
         } else {

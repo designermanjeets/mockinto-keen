@@ -355,7 +355,7 @@ export class CreateSubscriptionComponent implements OnInit {
         (Swal as any).fire({
                   icon: 'success',
                   title: 'Success',
-                  text: 'Your Plan Successfully Upgrade !',
+                  text: 'Your Plan Updated Successfully',
                 }).then(() => {
                   this.router.navigate(['/']);
                 });

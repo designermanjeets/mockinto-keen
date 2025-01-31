@@ -1,8 +1,11 @@
 import { Component, Renderer2, HostListener, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild, TemplateRef, NgZone } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { NgForm } from '@angular/forms';  
 import { Router } from '@angular/router';
 import { SharedService } from 'src/app/pages/services/shared.service';
 import { StripeMockintoService } from 'src/app/pages/services/stripe.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-landing-page',
@@ -16,6 +19,50 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   @ViewChild('termsDialogTemplate', { static: true }) termsDialogTemplate!: TemplateRef<any>;
   @ViewChild('supprtDialogTemplate', { static: true }) supprtDialogTemplate!: TemplateRef<any>;
 
+  contactForm: FormGroup;
+  email : any;
+  message : any;
+
+
+
+
+
+  submitTicketData(email:any,message:any) {
+    this.sharedService.submitTicket(email,message).subscribe(
+      (data) => {
+        if(data) {
+          console.log(data.message);
+
+          (Swal as any).fire({
+          icon: 'success',
+          title: 'Success',
+          text: data.message,
+        }).then(() => { 
+        });
+        } else {
+          (Swal as any).fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again later.',
+                  }).then(() => {
+                  });
+        }
+      }
+    );
+  }
+
+  formData = { email: '', message: '' };
+  submitForm(myForm: NgForm) {
+    if (myForm.invalid) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+    console.log('Form submitted:', this.formData);
+    this.submitTicketData(this.formData.email, this.formData.message)
+    myForm.resetForm();
+  }
+
+ 
 
   faqs = [
     {

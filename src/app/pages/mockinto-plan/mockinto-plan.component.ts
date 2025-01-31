@@ -70,6 +70,7 @@ export class MockintoPlanComponent implements OnInit {
       (data) => {
         if(!data) {
         } else {
+          console.log("subscription data --->",data?.subscription);
           this.planName = data?.subscription[data?.subscription.length -1]?.plan?.name;
           console.log(data?.subscription[data?.subscription.length -1]?.id);
           localStorage.setItem('mockintoSubscriptionId', JSON.stringify(data?.subscription[data?.subscription.length -1]?.id));
@@ -388,8 +389,6 @@ getPaymentSubscriptionall(id:any) {
             }
           });
         }
-    
-
       }
 
 

@@ -14,7 +14,7 @@
                         <div class="card-header">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <h2 class="fw-bold">Product</h2>
+                                <h2 class="fw-bold">Plan</h2>
                             </div>
                             <!--begin::Card title-->
                             <!--begin::Card toolbar-->
@@ -34,10 +34,10 @@
                                     id="kt_subscription_products_table">
                                     <thead>
                                         <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                                            <th class="min-w-300px">Product</th>
+                                            <th class="min-w-300px">Plan</th>
                                             <th class="min-w-100px">Qty</th>
                                             <th class="min-w-150px">Total</th>
-                                            <th class="min-w-70px text-end">Remove</th>
+                                            <!-- <th class="min-w-70px text-end">Remove</th> -->
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-600" *ngIf="allPlans?.length">
@@ -45,8 +45,8 @@
                                             <td>${{selectedPlan.amount/100}} - Plan for upto 10 Mockinto schedules</td>
                                             <td>1</td>
                                             <td>${{selectedPlan.amount/100}} / {{selectedPlan.interval}}</td>
-                                            <td class="text-end">
-                                                <!--begin::Delete-->
+                                            <!-- <td class="text-end">
+                                              
                                                 <a class="btn btn-icon btn-flex btn-active-light-primary w-30px h-30px me-3"
                                                     data-bs-toggle="tooltip" title="Delete"
                                                     data-kt-action="product_remove" (click)="cancelPayment()">
@@ -58,8 +58,8 @@
                                                         <span class="path5"></span>
                                                     </i>
                                                 </a>
-                                                <!--end::Delete-->
-                                            </td>
+                                                
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -408,7 +408,7 @@
                                 id="kt_subscriptions_create_button" 
                                 [disabled]="paying()" 
                                 (click)="collectPayment()">
-                            <span class="indicator-label">Pay {{ amount | currency }}</span>
+                            <span class="indicator-label"> {{ amount === 0 ? 'Select' : 'Pay ' + (amount | currency) }}</span>
                             <span class="indicator-progress">Please wait...
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
@@ -711,7 +711,7 @@
                         <!--begin::Modal header-->
                         <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2 class="fw-bold">Add a Product</h2>
+                            <h2 class="fw-bold">Add a Plan</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">

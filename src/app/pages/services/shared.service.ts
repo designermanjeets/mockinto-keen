@@ -79,6 +79,10 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
 
+
+
+  
+
   // BEGIN: Manage Resumes
 
   uploadResume(file: any): Observable<any> {
@@ -183,6 +187,27 @@ export class SharedService implements OnInit, OnDestroy {
       finalize(() => this.isLoadingSubject?.next(false))
     );
   }
+  
+  submitTicket(email:any,message:any): Observable<any> {
+    this.isLoadingSubject?.next(true);
+    const payload = { 
+      email: email,
+      message: message
+    }
+    return this.http.post<any>(`${environment.stripeApiUrl}/submit-ticket`, payload)
+    .pipe(
+      map((data: any) => {
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+
 
   updateJobProfile(jobProfile: any): Observable<any> {
     const payload = {

@@ -68,6 +68,10 @@ export class DeactivateAccountComponent implements OnInit{
             showCancelButton: true,
             confirmButtonText: "Verify",
             cancelButtonText: "Cancel",
+            customClass: {
+              confirmButton: 'btn btn-primary' ,
+              cancelButton: 'btn btn-active-light'
+          },
             preConfirm: (password: string | null) => {  
               if (!password) {
                 Swal.showValidationMessage("Password is required");

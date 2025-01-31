@@ -36,8 +36,12 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   preferredTimezone: string = '';
   candidatePassword: string = '';
   confirmPassword: string = '';
-  passwordMismatch: boolean = false;
+  planName:string = 'starter';
+  planPrice:string = '0';
 
+  passwordMismatch: boolean = false;
+  logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+  
   private authLocalStorageToken = `auth-user`;
   authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
 
@@ -57,8 +61,31 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
    this.getCandidateDetails();
    this.first_name = this.authUser.firstName;
    this.last_name = this.authUser.lastName;
-   
+   this.fetchDashboardData();
   }
+
+
+
+
+  
+  fetchDashboardData() {
+    this.sharedService.fetchDashboardData().subscribe(
+      (data) => {
+        if(!data) {
+        } else {
+          console.log("subscription data --->",data?.subscription);
+          this.planName = data?.subscription[data?.subscription.length -1]?.plan?.name;
+          this.planPrice =data?.subscription[data?.subscription.length -1]?.plan?.price;
+          console.log(this.planName,this.planPrice);
+          // localStorage.setItem('mockintoSubscriptionId', JSON.stringify(data?.subscription[data?.subscription.length -1]?.id));
+          // localStorage.setItem("stripeCustomerId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.tenant?.stripeCustomer?.stripeCustomerId))
+          // localStorage.setItem("stripeSubscriptionId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.stripeSubscriptionId))
+          //this.getPaymentSubscriptionall(data?.subscription[data?.subscription.length -1]?.id);
+        }
+      }
+    );
+  }
+
 
   getCandidateDetails(){
     this.sharedService.getCandidateDetails().subscribe((res) => {
@@ -223,10 +250,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
             else{
               this.auth.logout();
             }
-          });
-          
-        }
-       
+          });    
+        }      
       }
     });
   }

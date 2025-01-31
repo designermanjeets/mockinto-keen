@@ -397,12 +397,14 @@ p.cost {
     border-radius: 5px;
     overflow: hidden;
     background-color: #fff;
+    transition: all 0.3s ease-in-out;
   
     .faq-question {
         padding: 15px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
+        transition: background 0.3s ease;
   
       h3 {
         margin: 0;
@@ -414,7 +416,7 @@ p.cost {
     .faq-answer {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
+      transition: max-height 0.5s ease, padding 0.5s ease;
   
       &.active {
         max-height: 200px; 
@@ -857,4 +859,20 @@ li.nav-item {
         outline: none;
         box-shadow: none;
     }
+}
+
+
+.sticky-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    padding: 10px !important;
+    height: 50px;
+    border-radius: 50%;
+    z-index: 1000;
+    
+}
+.sticky-button img{
+    width: 100%;
 }
