@@ -28,7 +28,6 @@
     </li>
   </ul>
   <div class="tab-content" id="profileTabsContent">
-    <!-- Profile Details Tab -->
     <div class="tab-pane fade show active" id="profile" role="tabpanel">
       <div class="card-body border-top p-9">
         <div class="row mb-6">
@@ -148,21 +147,21 @@
   <div class="row col-lg-12 d-flex justify-content-center border-bottom  timer">
 
   <div class="col-lg-4 main-timer">
-    <h2 class="m-0 ">12</h2>
+    <h2 class="m-0 ">{{ timeleft  }}</h2>
     <p><b>Minutes Left</b></p>
   </div>
   </div>
 
   <div class="col-lg-12 p-3 mt-5">
     <div class="head-sub ">
-      <h2>Subscription</h2>
+      <h2>Subscription Plan</h2>
     </div>
     <div class="head-det d-flex justify-content-between " ng-if="planName && planPrice">
       <p>{{planName}}</p> <p><b>${{planPrice}}</b></p>
     </div>
   </div>
   <div class="col-lg-12 mt-5 d-flex justify-content-center">
-    <button class=" btn btn-primary">Upgrade</button>
+    <button class=" btn btn-primary" (click)="updatePlan()">Update Plan</button>
   </div>
 
 

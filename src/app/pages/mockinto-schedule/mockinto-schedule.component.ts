@@ -22,19 +22,25 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   mockintoSchedules: any = [];
   masterCheckbox: boolean = false;
   someChecked = [];
-
   mockJobProfile: any;
   mockResume: any;
 
+
+
+  timespent : any;
+  timeleft : any;
+  totaltime : any;
+
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
-
   allJobProfiles: any = [];
+  candidateId = JSON.parse(localStorage.getItem('candidateId') || '{}');
   allResumes: any = [];
   generalConfig:any[]=[];
   tenantGeneralConfig:any;
   scheduleCount :any;
   scheduleStatusId:any;
+  tenantId : any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
@@ -51,10 +57,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   allReadySchedule:any
   dashboardData:any;
   isLoading: boolean = false;
-
-
   origSchedules: any = [];
-
   constructor(
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
@@ -66,6 +69,11 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.isLoading$ = this.sharedService.isLoading$;
+
+
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    this.tenantId = loggedInUser.tenant_id;
+
     this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
     this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
     if(this.generalConfig?.length) {
@@ -73,6 +81,10 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
       this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
     }
+
+
+    this.fetchTotalTimeSpend();
+    this.getSubscription();
     this.fetchDashboardData();
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
@@ -83,8 +95,10 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     }, 20000);  
   }
 
+
+
+
   ngAfterViewInit(): void {
-    
   }
 
   ngOnDestroy(): void {
@@ -94,17 +108,53 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
 
-  
+  getSubscription(){
+    // this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        if(data.length <= 0) {
+          console.log("No Subscription");
+        }
+        else{
+          const data_ = data[data.length - 1]?.plan
+          console.log("genral_config_data",data_)
+          localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+          this.tenantGeneralConfig = data_
+          this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+          const plan = this.generalConfig?.filter((x: any) => x.type == this.tenantGeneralConfig?.name);
+          const filterJobCount = plan.filter(x => x.configKey == "totalAllowedTimeinMins")
+          this.totaltime = Number(filterJobCount[0]?.configValue)
+          console.log('Total Time left',this.totaltime);
+          localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+          this.setTimeLeft();
+        }
+      }
+    ); 
+  }
+
+
+
   fetchDashboardData() {
     this.sharedService.fetchDashboardData().subscribe(
       (data) => {
         if(data) {
           this.dashboardData = data;
-        } 
-      
+        }      
       }
     );
   }
+
+
+  setTimeLeft(){
+    console.log("time spent------>",this.timespent);
+    console.log("total time------>",this.totaltime);
+    this.timeleft = this.totaltime - this.timespent;
+    // this.timeleft = 0;
+    console.log("time left------>",this.timeleft);
+  }
+
+
+
 
   fetchJobProfiles() {
     this.sharedService.fetchAllJobProfiles(0, 99).subscribe(
@@ -115,6 +165,22 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
+
+  fetchTotalTimeSpend() {
+    
+    this.sharedService.totalTimeSpend(this.candidateId).subscribe(
+      data => {
+        this.timespent = data;
+        if(data) {
+          this.timespent = data;
+        }
+      }
+    );
+  }
+
+
+
 
   fetchAllResumes() {
     this.sharedService.fetchAllResumes(0, 99).subscribe(
@@ -285,6 +351,30 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   startMockintoSchedule(schedule: any) {
+
+    if (this.timeleft==0){
+
+      (Swal as any).fire({
+        text: "No Minutes Left for scheduling! Upgrade your plan to get more minutes.",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Upgrade Plan",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+        }
+      }).then((result: any) => {
+        if(result.isDismissed) {
+          return;
+        }
+        if(result.isConfirmed) {
+          this.router.navigate([`/dashboard/mockinto-plan`]);
+        }
+      });
+    }else{
+
     (Swal as any).fire({
       text: "Are you sure you would like to Start? This will start the Mock Interview and the minutes will start counting down.",
       icon: "warning",
@@ -304,6 +394,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
       }
     });
+  }
   }
 
   

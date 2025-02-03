@@ -188,6 +188,26 @@ export class SharedService implements OnInit, OnDestroy {
     );
   }
   
+
+
+  totalTimeSpend(id: any): Observable<any> {
+    // this.isLoadingSubject?.next(true);
+    return this.http.get<any>(`${environment.apiUrl}/candidate/totalTimeSpent?CandidateId=${id}`)
+    .pipe(
+      map((data: any) => {
+        this.isLoadingSubject?.next(false);
+        return data;
+      }),
+      catchError((err) => {
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject?.next(false))
+    );
+  }
+
+
+
+
   submitTicket(email:any,message:any): Observable<any> {
     this.isLoadingSubject?.next(true);
     const payload = { 
@@ -704,7 +724,7 @@ export class SharedService implements OnInit, OnDestroy {
   }
 
   getSubscriptionByTenantId(tenantId:any):Observable<any>{
-    this.isLoadingSubject?.next(true);
+    // this.isLoadingSubject?.next(true);
    
     return this.http.get<any>(`${environment.apiUrl}/subscription/all?tenantId=${tenantId}`)
     .pipe(

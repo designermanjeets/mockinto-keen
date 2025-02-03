@@ -108,15 +108,15 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editJobProfile(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item.jobHeader}}</a>
+                                    
+                                       {{item.jobHeader}}
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center desc-mock">
                                     <i class="ki-duotone ki-files fs-2x text-primary me-4"></i>
-                                    <a (click)="editJobProfile(item)"
-                                        class="text-gray-800 text-hover-primary c-p">{{item.jobDescription.length > 50 ? (item.jobDescription | slice:0:50) + '.....' : item.jobDescription }}</a>
+                                   
+                                     {{ item?.jobDescription }}
                                 </div>
                             </td>
                             <td>{{item.createdDate | date}}</td>

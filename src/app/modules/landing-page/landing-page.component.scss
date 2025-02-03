@@ -862,17 +862,27 @@ li.nav-item {
 }
 
 
-.sticky-button {
+
+.sticky-button{
+    display: flex;
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    padding: 10px !important;
     height: 50px;
-    border-radius: 50%;
+    width: 125px;
+    justify-content: center;
+    padding: 10px !important;
+    border-radius: 5%;
     z-index: 1000;
-    
-}
-.sticky-button img{
-    width: 100%;
-}
+    align-items: center;
+  }
+  .sticky-button svg {
+    width: 20%;
+  }
+  .sticky-button img{
+    width: 20%;
+  }
+  .sticky-button p{
+    margin: 0px;
+    padding-left: 10px;
+  }

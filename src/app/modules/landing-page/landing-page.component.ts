@@ -27,7 +27,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
 
 
-  submitTicketData(email:any,message:any) {
+submitTicketData(email:any,message:any) {
     this.sharedService.submitTicket(email,message).subscribe(
       (data) => {
         if(data) {

@@ -1,4 +1,6 @@
 <!--begin::Container-->
+
+
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
     <!--begin::Post-->
     <div class="content flex-row-fluid" id="kt_content">
@@ -38,6 +40,26 @@
         <!--end::Card-->
         <!--begin::Card-->
         <div class="card card-flush">
+
+            <div class="card-body border-top p-9">
+                <!-- Conditionally show this div only when timeleft is 0 -->
+                <div
+                  *ngIf="timeleft === 0"
+                  class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6"
+                >
+                  <div class="d-flex flex-stack flex-grow-1">
+                    <div class="fw-bold">
+                      <h4 class="text-gray-800 fw-bolder">⚠️ Your Interview Time Has Expired!</h4>
+                      <div class="fs-6 text-gray-600">
+                        You have used all your allotted minutes. Upgrade your plan to continue conducting interviews.<br />
+                        <a class="fw-bolder" href="/dashboard/mockinto-plan">Upgrade Plan</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            
             <!--begin::Card header-->
             <div class="card-header pt-8">
                 <div class="card-title">
@@ -54,6 +76,9 @@
                 </div>
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
+
+
+                    
                     <!--begin::Toolbar-->
                     <div class="d-flex justify-content-end">
                         <!--begin::Add customer-->

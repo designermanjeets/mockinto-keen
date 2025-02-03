@@ -25,6 +25,7 @@ import { HeaderMenuComponent } from './components/header/header-menu/header-menu
 import { DrawersModule, DropdownMenusModule, ModalsModule, EngagesModule} from '../partials';
 import {EngagesComponent} from "../partials/layout/engages/engages.component";
 import { ThemeModeModule } from '../partials/layout/theme-mode-switcher/theme-mode.module';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -67,7 +68,8 @@ const routes: Routes = [
     DropdownMenusModule,
     NgbTooltipModule,
     TranslateModule,
-    ThemeModeModule
+    ThemeModeModule,
+    FormsModule
   ],
   exports: [RouterModule],
 })

@@ -5,7 +5,6 @@ import { AuthService } from 'src/app/modules/auth';
 import { SharedService } from 'src/app/pages/services/shared.service';
 import * as Swal from 'sweetalert2';
 
-
 interface Payload {
   first_name: string;
   last_name: string;
@@ -14,6 +13,9 @@ interface Payload {
   active:boolean;
   deleted:boolean;
 }
+
+
+
 
 @Component({
   selector: 'app-profile-details',
@@ -29,6 +31,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
 
+
+
+
   first_name: string = '';
   last_name: string = '';
   candidatePhone: string = '';
@@ -36,12 +41,19 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   preferredTimezone: string = '';
   candidatePassword: string = '';
   confirmPassword: string = '';
-  planName:string = 'starter';
-  planPrice:string = '0';
+  planName!:any;
+  planPrice!:any;
+  totaltime:any;
+  candidateId = JSON.parse(localStorage.getItem('candidateId') || '1');
+  tenantId:any;
+  tenantGeneralConfig:any;
+  generalConfig:any[]=[];
+  timeleft!:any;
+  timespent:any;
+
 
   passwordMismatch: boolean = false;
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-  
   private authLocalStorageToken = `auth-user`;
   authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
 
@@ -49,6 +61,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private auth: AuthService,
+    private router: Router
 
   ) {
     const loadingSubscr = this.isLoading$
@@ -58,11 +71,63 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   this.getCandidateDetails();
-   this.first_name = this.authUser.firstName;
-   this.last_name = this.authUser.lastName;
-   this.fetchDashboardData();
+    
+    this.fetchTotalTimeSpend();
+    
+    this.getCandidateDetails();
+    this.first_name = this.authUser.firstName;
+    this.last_name = this.authUser.lastName;
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    this.tenantId = loggedInUser.tenant_id;
+    this.fetchDashboardData();
+    this.getSubscription();
   }
+
+  fetchTotalTimeSpend() {
+    this.sharedService.totalTimeSpend(this.candidateId).subscribe(
+      data => {
+        this.timespent = data;
+        if(data) {
+          this.timespent = data;
+        }
+      }
+    );
+  }
+
+  getSubscription(){
+    // this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        if(data.length <= 0) {
+          console.log("No Subscription");
+        }
+        else{
+          const data_ = data[data.length - 1]?.plan
+          
+          localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+          this.tenantGeneralConfig = data_
+          this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
+          const plan = this.generalConfig?.filter((x: any) => x.type == this.tenantGeneralConfig?.name);     
+          const filterJobCount = plan.filter(x => x.configKey == "totalAllowedTimeinMins");
+          this.totaltime = Number(filterJobCount[0]?.configValue)
+          
+          localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+          this.setTimeLeft();
+        }
+      }
+    ); 
+}
+
+
+  setTimeLeft(){
+    
+    this.timeleft = this.totaltime - this.timespent;
+
+    this.cdr.detectChanges();
+  }
+
+
+
 
 
 
@@ -73,10 +138,10 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       (data) => {
         if(!data) {
         } else {
-          console.log("subscription data --->",data?.subscription);
+          
           this.planName = data?.subscription[data?.subscription.length -1]?.plan?.name;
           this.planPrice =data?.subscription[data?.subscription.length -1]?.plan?.price;
-          console.log(this.planName,this.planPrice);
+          this.cdr.detectChanges();
           // localStorage.setItem('mockintoSubscriptionId', JSON.stringify(data?.subscription[data?.subscription.length -1]?.id));
           // localStorage.setItem("stripeCustomerId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.tenant?.stripeCustomer?.stripeCustomerId))
           // localStorage.setItem("stripeSubscriptionId",JSON.stringify(data?.subscription[data?.subscription.length -1]?.stripeSubscriptionId))
@@ -96,6 +161,11 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       }
     });      
+  }
+
+
+  updatePlan(){
+    this.router.navigate(['/dashboard/mockinto-plan']);
   }
 
   saveSettings() {
@@ -151,7 +221,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         });
       }
       if(res) {
-        console.log(res);
+      
         if(payload.password){
           (Swal as any).fire({
             title: 'Warning!',
@@ -231,7 +301,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         });
       }
       if(res) {
-        console.log(res);
+       
         if(payload.password){
           (Swal as any).fire({
             title: 'Warning!',

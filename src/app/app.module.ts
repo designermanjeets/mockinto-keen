@@ -56,6 +56,7 @@ import { DashboardWrapperComponent } from './pages/dashboard-wrapper/dashboard-w
 import { SuccessPageComponent } from './pages/success-page/success-page.component';
 import { CancelPaymentPageComponent } from './pages/cancel-payment-page/cancel-payment-page.component';
 import { ConactSupportDialogueComponent } from './pages/conact-support-dialogue/conact-support-dialogue.component';
+import { FooterComponent } from './_metronic/layout/components/footer/footer.component';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {
@@ -91,7 +92,8 @@ function appInitializer(authService: AuthService) {
     DashboardWrapperComponent,
     SuccessPageComponent,
     CancelPaymentPageComponent,
-    ConactSupportDialogueComponent
+    ConactSupportDialogueComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -127,6 +129,7 @@ function appInitializer(authService: AuthService) {
     MatSelectModule,
     MatDividerModule,
     MatCardModule,
+    
     NgxStripeModule.forRoot('pk_test_51QA7S8AWH1At8PiUavNwOL5XwoiIMBb6wS5YjDBlKnjHZr2a703Xwdbkjn0wjyiZ83XaqaoBXoZifc85weR8SeoB00IZPZtpH0'),
   ],
   providers: [
