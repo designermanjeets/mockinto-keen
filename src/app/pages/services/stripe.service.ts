@@ -430,7 +430,7 @@ cancelSubscription(subscriptionId:any){
 updateCandidateSubscription(itemId:any,subscriptionId:any,productPrice:any): Observable<any>{
   const payload = {
     item:itemId,
-    priceId : productPrice
+    priceId : productPrice,
   }
   return this.http.put<any>(
     `${environment.stripeApiUrl}/update-subscription/${subscriptionId}`,payload)
@@ -444,6 +444,38 @@ updateCandidateSubscription(itemId:any,subscriptionId:any,productPrice:any): Obs
        finalize(() => this.isLoadingSubject?.next(false))
      );
 }
+
+
+
+
+
+// DownGrading Plan
+
+
+downgradeSubscription(subscriptionId:any,productPrice:any): Observable<any>{
+  const payload = {
+    subscriptionId:subscriptionId,
+    priceId : productPrice,
+  }
+  return this.http.post<any>(
+    `${environment.stripeApiUrl}/downgrade-subscription`,payload)
+     .pipe(
+       map((data: any) => {
+         return data;
+       }),
+       catchError((err) => {
+         return of(undefined);
+       }),
+       finalize(() => this.isLoadingSubject?.next(false))
+     );
+}
+
+
+
+
+// Get Checkout Session
+
+
 
 getCheckoutSession(sessionId: any) {
   let payload = {

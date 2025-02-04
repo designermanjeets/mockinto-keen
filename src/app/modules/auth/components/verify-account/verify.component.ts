@@ -210,7 +210,7 @@ export class VerifyComponent implements OnInit {
         if (this.subscriptionId) {
           const backendPayload = {
             plan: {
-              id: this.planId 
+              id: this.planId || 9
             },
             tenant: {
               id: this.tenantId
@@ -231,11 +231,7 @@ export class VerifyComponent implements OnInit {
       }
     })
   }
-
-
-
-
-    updateBackendForPlanChange(updateBackendForPlanChange: any) {
+  updateBackendForPlanChange(updateBackendForPlanChange: any) {
       this.sharedService.updateBackendForPlanChange(updateBackendForPlanChange).subscribe((res: any) => {
         if (res) {
           localStorage.setItem('mockintoSubscriptionId', JSON.stringify(res?.id));

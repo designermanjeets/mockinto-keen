@@ -25,20 +25,23 @@ export class CreateSubscriptionComponent implements OnInit {
   productList:any[]=[];
   isLoading$: Observable<boolean>;
   isPaying : any = false;
-  
+  tenantId : any;
   subscriptionId=JSON.parse(localStorage.getItem('stripeSubscriptionId') || '{}');
   customerId = JSON.parse(localStorage.getItem('stripeCustomerId') || '{}');
   productId = JSON.parse(localStorage.getItem('stripeProductId') || '{}');
   productPrice = JSON.parse(localStorage.getItem('stripeProductPrice') || '{}');
   plan = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
   mockintoSubscriptionId = JSON.parse(localStorage.getItem('mockintoSubscriptionId') || '{}');
-
   paymentMethodId:any;
   setupIntentId:any;
   sessionId = localStorage.getItem('sessionId') || '{}';
-
   currentPlan:any;
   newPlanPrice:any;
+
+
+
+
+  
   previousPlan= JSON.parse(localStorage.getItem('peviousPlan') || '{}');
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
 
@@ -77,11 +80,24 @@ export class CreateSubscriptionComponent implements OnInit {
         console.log("params",params)
         this.selectedPlan = params.plan;
         this.currentPlan = params.plan;
+
+        console.log("current plan",this.currentPlan);
+        console.log("previous plan",this.previousPlan);
+        
         localStorage.setItem('currentPlan',JSON.stringify(this.currentPlan));
       }
     });
   }
   ngOnInit(): void {
+    this.fetchAllPlans();
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    this.tenantId = loggedInUser.tenant_id;
+    if(Object.keys(loggedInUser).length != 0) {
+      this.getSubscription();
+    }
+
+
+
     this.isLoading$ = this.sharedService.isLoading$;
 
     
@@ -100,7 +116,7 @@ export class CreateSubscriptionComponent implements OnInit {
     });
 
     
-    this.fetchAllPlans();
+    
     
   }
 
@@ -119,10 +135,8 @@ export class CreateSubscriptionComponent implements OnInit {
         this.productId = this.productList[0]?.id
         localStorage.setItem('stripeProductPrice',JSON.stringify(this.productPrice));
         localStorage.setItem('stripeProductId',JSON.stringify(this.productId));
-
       }
       })
-
   }
 
 
@@ -130,7 +144,11 @@ export class CreateSubscriptionComponent implements OnInit {
 
   initCheckoutform() {
     this.checkoutForm = this.fb.group({
-      name: [this.logginInUser.firstName || '', [Validators.required]],
+      name: [
+        `${this.logginInUser.firstName || ''} ${this.logginInUser.lastName || ''}`, 
+        [Validators.required]
+      ],
+      
       email: [this.logginInUser.email_id || '', [Validators.required]],
       address: [this.logginInUser.address || '', [Validators.required]],
       zipcode: ['', [Validators.required, Validators.maxLength(6),  Validators.minLength(6),Validators.pattern('^[0-9]*$'),]],
@@ -244,7 +262,33 @@ export class CreateSubscriptionComponent implements OnInit {
 
 
   getSubscription(){
-   
+    this.sharedService.isLoadingSubject?.next(true);
+    this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
+      data => {
+        if(data.length <= 0) {
+          (Swal as any).fire({
+            title: 'Error',
+            text: 'No Subscription found, please contact Customer Support',
+            icon: 'error',
+            confirmButtonText: "Ok",
+          }).then((result: any) => {
+            if(result.isConfirmed) {
+              // this.auth.logout();
+            }
+          });
+        }
+        else{
+          localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+
+          console.log("subs",data);
+          this.previousPlan = data[data.length - 1]?.plan?.name;
+          console.log("previous_plan-------->",this.previousPlan);
+          
+          localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+
+        }
+      }
+    ); 
   }
 
 
@@ -259,6 +303,36 @@ export class CreateSubscriptionComponent implements OnInit {
        this.subscriptionId = res?.subscription;
        this.plutoService.getCandidateSubscription(subscription).subscribe(val=>{
         if(val){
+
+
+          if (this.currentPlan == "Starter" && this.previousPlan == "Professional" || this.currentPlan == "Starter" && this.previousPlan == "Enterprise" || this.currentPlan == "Professional" && this.previousPlan == "Enterprise"){
+            console.log("plan downgrade");
+            this.plutoService.downgradeSubscription(subscription,this.productPrice).subscribe(sub=>{
+              if (sub.status == true){
+                // localStorage.setItem('stripeSubscriptionId',JSON.stringify(sub.updatedSubscription?.id));
+                // this.deleteCandidateSubscription();
+                console.log('plan downgraded successfully');
+                (Swal as any).fire({
+                  icon: 'success',
+                  title: 'Success',
+                  text: sub.message,
+                }).then(() => {
+                  this.router.navigate(['/']);
+                });
+              }
+              else{
+                (Swal as any).fire({
+                  icon: 'warning',
+                  title: 'Error',
+                  text: sub.error,
+                }).then(() => {
+                  this.router.navigate(['/']);
+                });
+                console.log(sub);
+              }
+            })
+          }else{
+          //here need to add if previous plan is higher than updateCandidateSubscription else DowngradeSubscription
           let itemId = val?.items?.data[0]?.id
           this.plutoService.updateCandidateSubscription(itemId,subscription,this.productPrice).subscribe(sub=>{
             if(sub){
@@ -266,7 +340,8 @@ export class CreateSubscriptionComponent implements OnInit {
               //this.addSubcriptionPayment(session);
               this.deleteCandidateSubscription();
             }
-           })    
+           }) 
+          }   
       }
       })
     }
@@ -287,9 +362,10 @@ export class CreateSubscriptionComponent implements OnInit {
       if(res){
         const backendPayload = {
           plan: {
-            id: this.selectedPlanDetails[0]?.id, //this.selectedPlan.id,
+            id: this.selectedPlanDetails[0]?.id, 
           },
           tenant: {
+            
           id: this.logginInUser.tenant_id
         },
         stripeSubscriptionId: this.subscriptionId,
@@ -391,6 +467,7 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   fetchAllPlans() {
+    console.log("fetching plans");
     this.plutoService.getAllPlans().subscribe((res) => {
       if(res) {
         this.allPlans = res.data;
@@ -399,22 +476,30 @@ export class CreateSubscriptionComponent implements OnInit {
             this.selectedPlan = this.allPlans.find((p: any) => {
               if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'Starter') {
                 p.planname = 'Starter';
+                console.log("starter plan",p);
+              
                 return p;
               }
               if( p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'Professional') {
                 p.planname = 'Professional';
+                console.log("professional plan",p);
                 return p;
               }
               if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'Enterprise') {
                 p.planname = 'Enterprise';
+                console.log("enterprise plan",p);
+
                 return p;
               }
             });
-
+           
             this.sharedService.getAllPlan(this.logginInUser.tenant_id).subscribe(res=>{
               if(res){
+               
                 let allPlan = res;
-                this.selectedPlanDetails = allPlan.filter((x:any)=>x.name == params.plan);
+              
+                this.selectedPlanDetails = allPlan.filter((x:any)=>x.name.toLowerCase() == params.plan.toLowerCase());
+                
               }
             })
           }
@@ -425,6 +510,7 @@ export class CreateSubscriptionComponent implements OnInit {
         this.cdRef.detectChanges();
       }
     });
+    
   }
 
 }
