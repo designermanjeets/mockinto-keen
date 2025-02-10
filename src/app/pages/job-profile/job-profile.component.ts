@@ -89,7 +89,6 @@ export class JobProfileComponent implements OnInit {
           localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
           this.tenantGeneralConfig = data_
           this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
-
           const plan = this.generalConfig?.filter((x: any) => x.type == this.tenantGeneralConfig?.name);
           const filterJobCount = plan.filter(x => x.configKey == "jobdescription")
           this.jobCount = Number(filterJobCount[0]?.configValue)

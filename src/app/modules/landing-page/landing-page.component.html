@@ -648,14 +648,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              
-
-
-
-
                 <form #myForm="ngForm" (ngSubmit)="submitForm(myForm)" novalidate>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
+                        <label for="email" class="form-label">Email<span style="color: red;">*</span></label>
                         <input type="email" class="form-control" id="email" 
                                [(ngModel)]="formData.email" name="email" required email #email="ngModel"> 
                         <div *ngIf="email.invalid && email.touched" class="text-danger">

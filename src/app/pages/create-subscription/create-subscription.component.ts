@@ -360,27 +360,75 @@ export class CreateSubscriptionComponent implements OnInit {
   deleteCandidateSubscription(){
     this.sharedService.deleteSubscription(this.mockintoSubscriptionId).subscribe(res=>{
       if(res){
-        const backendPayload = {
-          plan: {
-            id: this.selectedPlanDetails[0]?.id, 
-          },
-          tenant: {
-            
-          id: this.logginInUser.tenant_id
-        },
-        stripeSubscriptionId: this.subscriptionId,
-        stripeProductId: this.productId,
-          startDate: new Date().toISOString(),
-          status : true,
-         // status: res.status === 'succeess' ? true : false,
-          deleted: 0,
-          endDate: new Date().toISOString(),
-          lastPaymentDate: new Date().toISOString(),
-          lastPaymentAmount: this.amount,
-          renewalDate: new Date().toISOString(),
-          futureDiscount: 0,
-        };
-       this.updateBackendPlanChange(backendPayload);
+
+
+        this.plutoService.getAllPlans().subscribe((res) => {
+          if(res) {
+            this.allPlans = res.data;
+            this.activatedRoute.queryParams.subscribe((params) => {
+              if (params.plan) {
+                this.selectedPlan = this.allPlans.find((p: any) => {
+                  if(p.product === 'prod_RE6gpXJjiUWQwu' && params.plan === 'Starter') {
+                    p.planname = 'Starter';
+                    console.log("starter plan",p);
+                  
+                    return p;
+                  }
+                  if( p.product === 'prod_RE6iUE4yKY0i3Q' && params.plan === 'Professional') {
+                    p.planname = 'Professional';
+                    console.log("professional plan",p);
+                    return p;
+                  }
+                  if(p.product === 'prod_RE6icvAZSyUQ6n' && params.plan === 'Enterprise') {
+                    p.planname = 'Enterprise';
+                    console.log("enterprise plan",p);
+    
+                    return p;
+                  }
+                });
+               
+                this.sharedService.getAllPlan(this.logginInUser.tenant_id).subscribe(res=>{
+                  if(res){
+                   
+                    let allPlan = res;
+                  
+                    this.selectedPlanDetails = allPlan.filter((x:any)=>x.name.toLowerCase() == params.plan.toLowerCase());
+
+                    console.log('selected plan details ---------->',this.selectedPlanDetails);
+                    console.log("Changing Backend plan")
+                    const backendPayload = {
+                      plan: {
+                        id: this.selectedPlanDetails[0]?.id, 
+                      },
+                      tenant: {
+                        
+                      id: this.logginInUser.tenant_id
+                    },
+                    stripeSubscriptionId: this.subscriptionId,
+                    stripeProductId: this.productId,
+                      startDate: new Date().toISOString(),
+                      status : true,
+                     // status: res.status === 'succeess' ? true : false,
+                      deleted: 0,
+                      endDate: new Date().toISOString(),
+                      lastPaymentDate: new Date().toISOString(),
+                      lastPaymentAmount: this.amount,
+                      renewalDate: new Date().toISOString(),
+                      futureDiscount: 0,
+                    };
+                   this.updateBackendPlanChange(backendPayload);
+                  }
+                })
+              }
+            });
+    
+    
+            this.initCheckoutform();
+            this.cdRef.detectChanges();
+          }
+        });
+
+       
       }
     })
 
@@ -424,10 +472,7 @@ export class CreateSubscriptionComponent implements OnInit {
       if(res) {
         let session = localStorage.getItem('sessionId') || '{}';
         this.addSubcriptionPayment(session,JSON.stringify(res?.id));
-
         this.sharedService.isLoadingSubject?.next(false);
-
-
         (Swal as any).fire({
                   icon: 'success',
                   title: 'Success',
@@ -467,7 +512,7 @@ export class CreateSubscriptionComponent implements OnInit {
   }
 
   fetchAllPlans() {
-    console.log("fetching plans");
+    
     this.plutoService.getAllPlans().subscribe((res) => {
       if(res) {
         this.allPlans = res.data;

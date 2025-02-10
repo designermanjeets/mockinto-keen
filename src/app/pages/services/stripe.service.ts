@@ -447,11 +447,6 @@ updateCandidateSubscription(itemId:any,subscriptionId:any,productPrice:any): Obs
 
 
 
-
-
-// DownGrading Plan
-
-
 downgradeSubscription(subscriptionId:any,productPrice:any): Observable<any>{
   const payload = {
     subscriptionId:subscriptionId,
@@ -469,13 +464,6 @@ downgradeSubscription(subscriptionId:any,productPrice:any): Observable<any>{
        finalize(() => this.isLoadingSubject?.next(false))
      );
 }
-
-
-
-
-// Get Checkout Session
-
-
 
 getCheckoutSession(sessionId: any) {
   let payload = {
@@ -496,14 +484,11 @@ getCheckoutSession(sessionId: any) {
     );
 }
 
-
-
 getCandidateSubscription(subscriptionId: any) {
   let payload = {
     subscriptionId : subscriptionId
   }
   this.isLoadingSubject?.next(true);
-
   return this.http.post<any>(`${environment.stripeApiUrl}/get-subscription`, payload)
     .pipe(
       map((data: any) => {
@@ -515,6 +500,7 @@ getCandidateSubscription(subscriptionId: any) {
       finalize(() => this.isLoadingSubject?.next(false))
     );
 }
+
 
 createSessionChekout(params: any): Observable<any> {
   return this.http.post<any>(
@@ -528,7 +514,5 @@ createSessionChekout(params: any): Observable<any> {
     finalize(() => this.isLoadingSubject?.next(false))
   );
 }
-
-
 }
 

@@ -115,6 +115,7 @@ export class AuthService implements OnDestroy {
     localStorage.removeItem('stripeSubscriptionId');  
     localStorage.removeItem('currentPlan'); 
     localStorage.removeItem('mockintoSubscriptionId'); 
+    sessionStorage.removeItem('reloaded');
 
   
     

@@ -4,6 +4,7 @@ import { TranslationService } from '../../../../../../modules/i18n';
 import { AuthService, UserType } from '../../../../../../modules/auth';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-user-inner',
   templateUrl: './user-inner.component.html',
@@ -27,6 +28,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
     this.user$ = this.auth.currentUserSubject.asObservable();
     this.setLanguage(this.translationService.getSelectedLanguage());
   }
+  
 
   logout() {
       (Swal as any).fire({

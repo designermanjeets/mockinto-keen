@@ -183,7 +183,7 @@ export class VerifyComponent implements OnInit {
         localStorage.setItem('stripeProductPrice', JSON.stringify(this.productPrice));
         localStorage.setItem('stripeProductId', JSON.stringify(this.productId));
         this.getAllPlan();
-        this.createSubscription();
+        
       }
     })
   }
@@ -195,6 +195,7 @@ export class VerifyComponent implements OnInit {
       if(plan){
         let planDetails = plan.filter((x:any)=>x.name == this.selectedPlan);
         this.planId = planDetails[0]?.id || 9;
+        this.createSubscription();
       }
     })
   }

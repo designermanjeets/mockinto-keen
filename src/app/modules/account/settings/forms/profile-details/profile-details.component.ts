@@ -13,27 +13,14 @@ interface Payload {
   active:boolean;
   deleted:boolean;
 }
-
-
-
-
 @Component({
   selector: 'app-profile-details',
   templateUrl: './profile-details.component.html',
 })
-
-
 export class ProfileDetailsComponent implements OnInit, OnDestroy {
-
-  
-
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
-
-
-
-
   first_name: string = '';
   last_name: string = '';
   candidatePhone: string = '';
@@ -50,19 +37,15 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   generalConfig:any[]=[];
   timeleft!:any;
   timespent:any;
-
-
   passwordMismatch: boolean = false;
   logginInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
   private authLocalStorageToken = `auth-user`;
   authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
-
   constructor(
     private cdr: ChangeDetectorRef,
     private sharedService: SharedService,
     private auth: AuthService,
     private router: Router
-
   ) {
     const loadingSubscr = this.isLoading$
       .asObservable()
@@ -80,16 +63,20 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
     this.tenantId = loggedInUser.tenant_id;
     this.fetchDashboardData();
-    this.getSubscription();
+    //this.getSubscription();
   }
 
   fetchTotalTimeSpend() {
     this.sharedService.totalTimeSpend(this.candidateId).subscribe(
       data => {
+
         this.timespent = data;
+        
+        console.log("time spent--------------------------->",this.timespent)
         if(data) {
           this.timespent = data;
         }
+        this.getSubscription()
       }
     );
   }
@@ -112,7 +99,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
           this.totaltime = Number(filterJobCount[0]?.configValue)
           
           localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
-          this.setTimeLeft();
+         this.setTimeLeft()
         }
       }
     ); 
@@ -121,6 +108,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   setTimeLeft(){
     
+    console.log('Total Time ----->',this.totaltime);
+    console.log('time spent ------>',this.timespent);
     this.timeleft = this.totaltime - this.timespent;
 
     this.cdr.detectChanges();

@@ -27,20 +27,20 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
 
 
-  timespent : any;
-  timeleft : any;
-  totaltime : any;
+  timespent: any;
+  timeleft: any;
+  totaltime: any;
 
   indicatorprogress = false;
   isLoading$: Observable<boolean>;
   allJobProfiles: any = [];
   candidateId = JSON.parse(localStorage.getItem('candidateId') || '{}');
   allResumes: any = [];
-  generalConfig:any[]=[];
-  tenantGeneralConfig:any;
-  scheduleCount :any;
-  scheduleStatusId:any;
-  tenantId : any;
+  generalConfig: any[] = [];
+  tenantGeneralConfig: any;
+  scheduleCount: any;
+  scheduleStatusId: any;
+  tenantId: any;
 
   @ViewChild('addDialogTemplate', { static: true }) addDialogTemplate!: TemplateRef<any>;
   @ViewChild('paginator', { static: true }) paginator!: MatPaginator;
@@ -54,8 +54,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   public dateControl = new FormControl(new Date());
   public timeControlMinMax = new FormControl(new Date());
   private intervalId: any;
-  allReadySchedule:any
-  dashboardData:any;
+  allReadySchedule: any
+  dashboardData: any;
   isLoading: boolean = false;
   origSchedules: any = [];
   constructor(
@@ -63,7 +63,8 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+   
   ) {
   }
 
@@ -76,23 +77,23 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
     this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
     this.tenantGeneralConfig = JSON.parse(localStorage.getItem('tenant_general_config') || '{}');
-    if(this.generalConfig?.length) {
-      const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
-      const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
-      this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
-    }
+    // if(this.generalConfig?.length) {
+    //   const plan = this.generalConfig?.filter((x:any)=>x.type == this.tenantGeneralConfig?.name);
+    //   const filterScheduleCount = plan.filter(x=>x.configKey == "mockinterviewcount");
+    //   this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
+    //   console.log('Schedule count----------------->',this.scheduleCount);
+    // }
 
 
     this.fetchTotalTimeSpend();
-    this.getSubscription();
     this.fetchDashboardData();
     this.fetchAllMockintoSchedules();
     this.fetchJobProfiles();
     this.fetchAllResumes();
     this.intervalId = setInterval(() => {
-      if(!this.allReadySchedule)
-      this.fetchAllMockintoSchedules();
-    }, 20000);  
+      if (!this.allReadySchedule)
+        this.fetchAllMockintoSchedules();
+    }, 20000);
   }
 
 
@@ -108,28 +109,31 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
 
-  getSubscription(){
+  getSubscription() {
     // this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.getSubscriptionByTenantId(this.tenantId).subscribe(
       data => {
-        if(data.length <= 0) {
+        if (data.length <= 0) {
           console.log("No Subscription");
         }
-        else{
+        else {
           const data_ = data[data.length - 1]?.plan
-          console.log("genral_config_data",data_)
-          localStorage.setItem('tenant_general_config',JSON.stringify(data[data.length - 1]?.plan));
+          console.log("genral_config_data", data_)
+          localStorage.setItem('tenant_general_config', JSON.stringify(data[data.length - 1]?.plan));
           this.tenantGeneralConfig = data_
           this.generalConfig = JSON.parse(localStorage.getItem('general_config') || '{}');
           const plan = this.generalConfig?.filter((x: any) => x.type == this.tenantGeneralConfig?.name);
           const filterJobCount = plan.filter(x => x.configKey == "totalAllowedTimeinMins")
+          const filterScheduleCount = plan.filter(x => x.configKey == "mockinterviewcount");
+          this.scheduleCount = Number(filterScheduleCount[0]?.configValue)
+          console.log('Schedule count----------------->', this.scheduleCount);
           this.totaltime = Number(filterJobCount[0]?.configValue)
-          console.log('Total Time left',this.totaltime);
-          localStorage.setItem('peviousPlan',JSON.stringify(data[data.length - 1]?.plan?.name));
+          console.log('Total Time left', this.totaltime);
+          localStorage.setItem('peviousPlan', JSON.stringify(data[data.length - 1]?.plan?.name));
           this.setTimeLeft();
         }
       }
-    ); 
+    );
   }
 
 
@@ -137,20 +141,21 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   fetchDashboardData() {
     this.sharedService.fetchDashboardData().subscribe(
       (data) => {
-        if(data) {
+        if (data) {
           this.dashboardData = data;
-        }      
+        }
       }
     );
   }
 
 
-  setTimeLeft(){
-    console.log("time spent------>",this.timespent);
-    console.log("total time------>",this.totaltime);
+  setTimeLeft() {
+    console.log("time spent------>", this.timespent);
+    console.log("total time------>", this.totaltime);
     this.timeleft = this.totaltime - this.timespent;
     // this.timeleft = 0;
-    console.log("time left------>",this.timeleft);
+    console.log("time left------>", this.timeleft);
+    this.cdRef.detectChanges();
   }
 
 
@@ -159,7 +164,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   fetchJobProfiles() {
     this.sharedService.fetchAllJobProfiles(0, 99).subscribe(
       data => {
-        if(data) {
+        if (data) {
           this.allJobProfiles = data.content;
         }
       }
@@ -168,13 +173,14 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
 
 
   fetchTotalTimeSpend() {
-    
+
     this.sharedService.totalTimeSpend(this.candidateId).subscribe(
       data => {
         this.timespent = data;
-        if(data) {
+        if (data) {
           this.timespent = data;
         }
+        this.getSubscription();
       }
     );
   }
@@ -185,7 +191,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   fetchAllResumes() {
     this.sharedService.fetchAllResumes(0, 99).subscribe(
       data => {
-        if(data) {
+        if (data) {
           this.allResumes = data.content;
         }
       }
@@ -196,11 +202,11 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
     this.sharedService.isLoadingSubject?.next(true);
     this.sharedService.fetchAllMockintoSchedules(0, page, size, 'id', 'ASC').subscribe(
       data => {
-        if(data) {
+        if (data) {
           this.paginator.length = data.totalElements;
           this.mockintoSchedules = data.content;
           this.origSchedules = JSON.parse(JSON.stringify(this.mockintoSchedules));
-         this.allReadySchedule = this.mockintoSchedules.every((schedule:any) => schedule.statusDescription === 'Ready');
+          this.allReadySchedule = this.mockintoSchedules.every((schedule: any) => schedule.statusDescription === 'Ready');
         }
         this.resetSelection();
         this.sharedService.isLoadingSubject?.next(false);
@@ -225,10 +231,10 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         cancelButton: "btn btn-active-light"
       }
     }).then((result: any) => {
-      if(result.isDismissed) {
+      if (result.isDismissed) {
         return;
       }
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         this.sharedService.deleteMockintoScheduleBulk([{ id: profile?.id }]).subscribe(
           data => {
             this.fetchAllMockintoSchedules();
@@ -251,10 +257,10 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
         cancelButton: "btn btn-active-light"
       }
     }).then((result: any) => {
-      if(result.isDismissed) {
+      if (result.isDismissed) {
         return;
       }
-      if(result.isConfirmed) {
+      if (result.isConfirmed) {
         const profiles_filter = this.mockintoSchedules.filter((item: any) => item.checked);
         const profiles = profiles_filter.map((item: any) => {
           return { id: item?.id };
@@ -285,74 +291,82 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   }
 
   addMockintoScheduleDialog() {
-    if(this.dashboardData.totalSchedules == this.scheduleCount) {
-        (Swal as any).fire({
-        title: "Mockinto Schedule Limit Reached", 
-        text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.", 
-        icon: "warning",
-        showCancelButton: true,
-        buttonsStyling: false,
-        confirmButtonText: "Go to Subscription",
-        cancelButtonText: "Cancel",
-        customClass: {
-          confirmButton: "btn btn-primary",
-          cancelButton: "btn btn-active-light"
-        }
-      }).then((result: any) => {
-        if(result.isDismissed) {
-          return;
-        }
-        if(result.isConfirmed) {
-        this.router.navigate(['dashboard/mockinto-plan']);
-        }
-      });
-    } else {
-      const dialogRef = this.dialog.open(this.addDialogTemplate, {
-        data: { },
-      });
 
-      dialogRef.afterOpened().subscribe(result => {
-        const newDate = new Date();
-        this.mockResume = "";
-        this.mockJobProfile = "";
-        newDate.setMinutes(newDate.getMinutes() + 31);
-        this.dateControl.patchValue(newDate);
-        this.dateControl.valueChanges.subscribe((value) => {
-          if (value) {
-            const currentTime = new Date();
-            const givenTime = new Date(value);
-            const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
-            if (timeDifference >= 30) {
-              // Proceed with your logic
-            } else {
-              // Show error
-              (Swal as any).fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'The time should be at least 30 minutes from now!',
-              }).then((result: any) => {
-                const newDate = new Date();
-                newDate.setMinutes(newDate.getMinutes() + 31);
-                this.dateControl.patchValue(newDate);
+    this.sharedService.fetchDashboardData().subscribe(
+      (data) => {
+        if (data) {
+          this.dashboardData = data;
+          console.log('Total Schedules --------------->', this.dashboardData.totalSchedules)
+          this.fetchDashboardData();
+          if (this.dashboardData.totalSchedules >= this.scheduleCount) {
+            (Swal as any).fire({
+              title: "Mockinto Schedule Limit Reached",
+              text: "You have reached the maximum number of Mockinto Schedule. Please buy a subscription to add more Mockinto Schedule.",
+              icon: "warning",
+              showCancelButton: true,
+              buttonsStyling: false,
+              confirmButtonText: "Go to Subscription",
+              cancelButtonText: "Cancel",
+              customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+              }
+            }).then((result: any) => {
+              if (result.isDismissed) {
+                return;
+              }
+              if (result.isConfirmed) {
+                this.router.navigate(['dashboard/mockinto-plan']);
+              }
+            });
+          } else {
+            const dialogRef = this.dialog.open(this.addDialogTemplate, {
+              data: {},
+            });
+            dialogRef.afterOpened().subscribe(result => {
+              const newDate = new Date();
+              this.mockResume = "";
+              this.mockJobProfile = "";
+              newDate.setMinutes(newDate.getMinutes() + 31);
+              this.dateControl.patchValue(newDate);
+              this.dateControl.valueChanges.subscribe((value) => {
+                if (value) {
+                  const currentTime = new Date();
+                  const givenTime = new Date(value);
+                  const timeDifference = (givenTime.getTime() - currentTime.getTime()) / (1000 * 60); // Difference in minutes
+                  if (timeDifference >= 30) {
+                    // Proceed with your logic
+                  } else {
+                    // Show error
+                    (Swal as any).fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'The time should be at least 30 minutes from now!',
+                    }).then((result: any) => {
+                      const newDate = new Date();
+                      newDate.setMinutes(newDate.getMinutes() + 31);
+                      this.dateControl.patchValue(newDate);
+                    });
+                  }
+                }
+                this.cdRef.detectChanges();
               });
-            }
+            });
+            dialogRef.afterClosed().subscribe(result => {
+            });
           }
-          this.cdRef.detectChanges();
-        });
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-      });
-    }
+        }
+      }
+    );
   }
-  
+
   closeDialog() {
     this.dialog.closeAll();
   }
 
   startMockintoSchedule(schedule: any) {
 
-    if (this.timeleft==0){
+    if (this.timeleft <= 0) {
 
       (Swal as any).fire({
         text: "No Minutes Left for scheduling! Upgrade your plan to get more minutes.",
@@ -366,113 +380,113 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
           cancelButton: "btn btn-active-light"
         }
       }).then((result: any) => {
-        if(result.isDismissed) {
+        if (result.isDismissed) {
           return;
         }
-        if(result.isConfirmed) {
+        if (result.isConfirmed) {
           this.router.navigate([`/dashboard/mockinto-plan`]);
         }
       });
-    }else{
+    } else {
 
-    (Swal as any).fire({
-      text: "Are you sure you would like to Start? This will start the Mock Interview and the minutes will start counting down.",
-      icon: "warning",
-      showCancelButton: true,
-      buttonsStyling: false,
-      confirmButtonText: "Yes, Start it!",
-      cancelButtonText: "No",
-      customClass: {
-        confirmButton: "btn btn-primary",
-        cancelButton: "btn btn-active-light"
-      }
-    }).then((result: any) => {
-      if(result.isDismissed) {
-        return;
-      }
-      if(result.isConfirmed) {
-        this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
-      }
-    });
-  }
+      (Swal as any).fire({
+        text: "Are you sure you would like to Start? This will start the Mock Interview and the minutes will start counting down.",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, Start it!",
+        cancelButtonText: "No",
+        customClass: {
+          confirmButton: "btn btn-primary",
+          cancelButton: "btn btn-active-light"
+        }
+      }).then((result: any) => {
+        if (result.isDismissed) {
+          return;
+        }
+        if (result.isConfirmed) {
+          this.router.navigate([`/dashboard/mockinto-live/${schedule?.id}`]);
+        }
+      });
+    }
   }
 
-  
+
 
   addUpdateMockintoSchedule(patchValue?: any) {
-      this.isLoading = true; // Set loading to true when the operation begins
-      this.sharedService.isLoadingSubject?.next(true);
-      const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
-      if (patchValue) {
-          const payload = Object.assign({}, {
-              "id": patchValue.id,
-              "active": 1,
-              "deleted": 0,
-              "interviewPeriodMinutes": 0,
-              "scheduleStartDate": moment(this.dateControl.value).toISOString(),
-              "scheduleStatusId": 0,
-              "updatedBy": 0,
-              "jobPosting": {
-                  "id": this.mockJobProfile,
-                  "active": 1,
-                  "deleted": 0,
-                  "updatedBy": 0,
-                  "tenant": {
-                      "id": loggedInUser.tenant_id
-                  }
-              },
-              "resume": {
-                  "id": this.mockResume
-              }
-          });
-          const cleanedData = this.removeCircularReferences(payload);
-          this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
-              if (data) {
-                  this.isLoading = false; // Set loading to false when the operation completes
-                  this.sharedService.isLoadingSubject?.next(false);
-                  this.closeDialog();
-                  this.fetchAllMockintoSchedules();
-              }
-          }, error => {
-              this.isLoading = false; // Ensure loading is turned off even if there's an error
-              this.sharedService.isLoadingSubject?.next(false);
-          });
-      } else {
-          const payload = {
-              "active": 1,
-              "deleted": 0,
-              "interviewPeriodMinutes": 0,
-              "scheduleStartDate": moment(this.dateControl.value).toISOString(),
-              "scheduleStatusId": 0,
-              "updatedBy": 0,
-              "jobPosting": {
-                  "id": this.mockJobProfile,
-                  "active": 1,
-                  "deleted": 0,
-                  "updatedBy": 0,
-                  "tenant": {
-                      "id": loggedInUser.tenant_id
-                  }
-              },
-              "resume": {
-                  "id": this.mockResume
-              }
-          };
-          this.sharedService.addMockintoSchedule(payload).subscribe(data => {
-              if (data) {
-                  this.isLoading = false; // Set loading to false when the operation completes
-                  this.sharedService.isLoadingSubject?.next(false);
-                  this.closeDialog();
-                  this.fetchAllMockintoSchedules();
-              }
-          }, error => {
-              this.isLoading = false; // Ensure loading is turned off even if there's an error
-              this.sharedService.isLoadingSubject?.next(false);
-          });
-      }
+    this.isLoading = true; // Set loading to true when the operation begins
+    this.sharedService.isLoadingSubject?.next(true);
+    const loggedInUser = JSON.parse(localStorage.getItem('auth-user') || '{}');
+    if (patchValue) {
+      const payload = Object.assign({}, {
+        "id": patchValue.id,
+        "active": 1,
+        "deleted": 0,
+        "interviewPeriodMinutes": 0,
+        "scheduleStartDate": moment(this.dateControl.value).toISOString(),
+        "scheduleStatusId": 0,
+        "updatedBy": 0,
+        "jobPosting": {
+          "id": this.mockJobProfile,
+          "active": 1,
+          "deleted": 0,
+          "updatedBy": 0,
+          "tenant": {
+            "id": loggedInUser.tenant_id
+          }
+        },
+        "resume": {
+          "id": this.mockResume
+        }
+      });
+      const cleanedData = this.removeCircularReferences(payload);
+      this.sharedService.updateMockintoSchedule(cleanedData).subscribe(data => {
+        if (data) {
+          this.isLoading = false; // Set loading to false when the operation completes
+          this.sharedService.isLoadingSubject?.next(false);
+          this.closeDialog();
+          this.fetchAllMockintoSchedules();
+        }
+      }, error => {
+        this.isLoading = false; // Ensure loading is turned off even if there's an error
+        this.sharedService.isLoadingSubject?.next(false);
+      });
+    } else {
+      const payload = {
+        "active": 1,
+        "deleted": 0,
+        "interviewPeriodMinutes": 0,
+        "scheduleStartDate": moment(this.dateControl.value).toISOString(),
+        "scheduleStatusId": 0,
+        "updatedBy": 0,
+        "jobPosting": {
+          "id": this.mockJobProfile,
+          "active": 1,
+          "deleted": 0,
+          "updatedBy": 0,
+          "tenant": {
+            "id": loggedInUser.tenant_id
+          }
+        },
+        "resume": {
+          "id": this.mockResume
+        }
+      };
+      this.sharedService.addMockintoSchedule(payload).subscribe(data => {
+        if (data) {
+          this.isLoading = false; // Set loading to false when the operation completes
+          this.sharedService.isLoadingSubject?.next(false);
+          this.closeDialog();
+          this.fetchAllMockintoSchedules();
+        }
+      }, error => {
+        this.isLoading = false; // Ensure loading is turned off even if there's an error
+        this.sharedService.isLoadingSubject?.next(false);
+      });
+    }
   }
-  
- removeCircularReferences(obj: any, seen = new WeakSet()) {
+
+  removeCircularReferences(obj: any, seen = new WeakSet()) {
     if (obj && typeof obj === 'object') {
       if (seen.has(obj)) return undefined;
       seen.add(obj);
@@ -510,7 +524,7 @@ export class MockintoScheduleComponent implements OnInit, AfterViewInit {
   scheduleSearch(event: any) {
     this.sharedService.isLoadingSubject?.next(true);
     const searchValue = event.target.value;
-    if(searchValue) {
+    if (searchValue) {
       this.mockintoSchedules = this.origSchedules.filter((item: any) => {
         return item.jobHeader.toLowerCase().includes(searchValue.toLowerCase()) || item.jobDescription.toLowerCase().includes(searchValue.toLowerCase());
       });

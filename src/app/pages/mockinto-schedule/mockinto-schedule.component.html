@@ -43,8 +43,7 @@
 
             <div class="card-body border-top p-9">
                 <!-- Conditionally show this div only when timeleft is 0 -->
-                <div
-                  *ngIf="timeleft === 0"
+                <div *ngIf="timeleft <= 0x"
                   class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-9 p-6"
                 >
                   <div class="d-flex flex-stack flex-grow-1">
@@ -139,8 +138,7 @@
                                     ki-files fs-2x text-primary me-4"></i>
                                     <!--  [disabled]="item.scheduleStatusId !== 2" -->
                                     <button type="button" (click)="startMockintoSchedule(item)"
-                                        [disabled]="item.scheduleStatusId !== 2" class="btn btn-flex btn-primary">Start
-                                        Mockinto</button>
+                                        [disabled]="item.scheduleStatusId !== 2" class="btn btn-flex btn-primary">Start Mockinto</button>
                                 </div>
                             </td>
                             <td>
