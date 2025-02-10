@@ -60,7 +60,7 @@ export class StripeMockintoService {
     
     getPaymentHistory(email:any): Observable<any> {
         return this.http.get<any>(
-            `${environment.stripeApiUrl}/api/charges-list?email=${email}`, { headers: this.HEADERS }
+            `${environment.stripeApiUrl}/charges-list?email=${email}`, { headers: this.HEADERS }
         );
     }
 
