@@ -46,10 +46,29 @@ export class SharedService implements OnInit, OnDestroy {
     this.setUpAuthUser();
   }
 
+  // setUpAuthUser() {
+  //   this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
+  //   if(Object.keys(this.authUser).length === 0) {
+  //     this.router.navigate(['/auth/login']);
+  //   } else {
+  //     if(this.authUser.candidates?.length !== 0) {
+  //       this.candidateId = this.authUser.candidates[0].id;
+  //     }
+  //     this.tenantId = this.authUser.tenant_id;
+  //     this.userId = this.authUser.user_id
+  //     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
+  //     this.isLoading$ = this.isLoadingSubject.asObservable()
+  //     this.sendToRouter$ = this.sendToRouterSubject.asObservable();
+  //   }
+  // }
+
+
   setUpAuthUser() {
     this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
     if(Object.keys(this.authUser).length === 0) {
-      this.router.navigate(['/auth/login']);
+      if(!this.router.url.includes('auth/login') && !this.router.url.includes('auth/registration')) {
+        this.router.navigate(['/auth/login']);
+      }
     } else {
       if(this.authUser.candidates?.length !== 0) {
         this.candidateId = this.authUser.candidates[0].id;
