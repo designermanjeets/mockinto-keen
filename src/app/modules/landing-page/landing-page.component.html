@@ -380,53 +380,37 @@
 
     <footer class="main-landing-footer">
         <div class="container">
-            <div class="col-lg-12 d-flex align-items-center justify-content-center">
-                <div class="col-lg-4 inner-footer">
-                    <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid" class="def-logo">
-                    <p>Mockinto: Your AI mock interview partner—practice, prepare, and land your dream job with
-                        confidence!</p>
-                    <ul class="d-flex gap-2 ">
-                        <li><a class="c-p" (click)="scrollToFeatures()">Features</a></li>
-                        <li><a class="c-p" (click)="scrollToFaq()">FAQ'S</a></li>
-                        <li><a class="c-p" (click)="scrollToAllPlan()">All Plans</a></li>
-                    </ul>
-                    <ul class="d-flex gap-3 mt-5 social-tag d-none">
-                        <li>
-                            <i class="ki-duotone ki-facebook">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </li>
-                        <li>
-                            <i class="ki-duotone ki-twitter">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </li>
-                        <li>
-                            <i class="ki-duotone ki-instagram">
-                                <span class="path1"></span>
-                                <span class="path2"></span>
-                            </i>
-                        </li>
+            <div class="col-lg-12 d-flex align-items-start justify-content-between text-white">
+                <div class="contact-details m-0 p-0" style="flex: 1;">
+                    <h4 class="mb-2" style="color: white; font-weight: bold;">Contact Us</h4>
+                    <p class="mb-1"><i class="ki-duotone ki-phone"></i> Customer Support 24/7: <strong>+1 4692429399</strong></p>
+                    <p><i class="ki-duotone ki-mail"></i> Email Address: <a href="mailto:support@stylexio.in" class="text-white">support@mockinto.com</a></p>
+                </div>
+                <div class="col-lg-4 inner-footer text-end" style="flex: 1;">
+                    <img src="./assets/media/white-logo.svg" alt="Logo" class="img-fluid def-logo">
+                    <p>Mockinto: Your AI mock interview partner—practice, prepare, and land your dream job with confidence!</p>
+                    <ul class="d-flex gap-2">
+                        <li><a class="c-p text-white" (click)="scrollToFeatures()">Features</a></li>
+                        <li><a class="c-p text-white" (click)="scrollToFaq()">FAQ'S</a></li>
+                        <li><a class="c-p text-white" (click)="scrollToAllPlan()">All Plans</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-12 mt-5 pt-4 bottom-footer d-flex justify-content-between pb-4">
+            <div class="col-lg-12 mt-3 pt-3 bottom-footer d-flex justify-content-between pb-3 text-white border-top">
                 <div class="col">
                     <p> © 2025 Mockinto. All Rights Reserved.</p>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <div>
-                        <a class="c-p" (click)="openSupportDialog()">Support</a> &nbsp; &nbsp;  <a class="c-p" (click)="openTermsDialog()">Term and Privacy</a>
+                    <div class="ms-4">
+                        <a class="c-p text-white" (click)="openSupportDialog()">Support</a> &nbsp; &nbsp;  
+                        <a class="c-p text-white" (click)="openTermsDialog()">Term and Privacy</a>
                     </div>
-                    <!-- <div>
-                        <a class="c-p" (click)="openTermsDialog()">Term and Privacy</a>
-                    </div> -->
                 </div>
             </div>
         </div>
     </footer>
+
+
 
 </section>
 

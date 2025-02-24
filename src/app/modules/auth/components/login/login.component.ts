@@ -60,7 +60,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         queryParams: { plan: this.selectedPlan },
       });
     } else {
-      this.router.navigate(['/auth/registration']);
+      this.router.navigate(['/auth/registration'],{
+        queryParams: { plan: "Starter" },
+      });
     }
   }
 

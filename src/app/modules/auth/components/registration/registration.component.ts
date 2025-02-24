@@ -31,6 +31,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   tenantId: any;
   candidateId: any;
   planId:any;
+  returnUrl: string;
 
   private unsubscribe: Subscription[] = []; 
   private readonly plutoService = inject(StripeMockintoService);
@@ -46,17 +47,19 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
+    
 
   ) {
     this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
     if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
+      // this.router.navigate(['/']);
     }
   }
 
   ngOnInit(): void {
     this.initForm();
+    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'.toString()] || '/';
     this.activatedRoute.queryParams.subscribe((params) => {
       console.log(params);
       if (params.plan) {
@@ -69,16 +72,14 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   signIn() {
     if (this.selectedPlan) {
-      this.router.navigate(['/auth/login'], {
-        queryParams: { plan: this.selectedPlan },
-      });
+      this.router.navigate(['/auth/login']);
     } else {
       this.router.navigate(['/auth/login']);
     }
   }
 
   cancel(){
-    this.router.navigate(['/landing-page']);
+    this.router.navigate(['/auth/login']);
   }
 
   // convenience getter for easy access to form fields
@@ -113,7 +114,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.email,
             Validators.minLength(3),
-            Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+            Validators.maxLength(320), 
           ]),
         ],
         password: [

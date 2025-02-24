@@ -81,10 +81,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.isLoading$.next(false);
         this.router.navigate(['auth/login']); 
       }
-     
-       
     });
-  
     this.unsubscribe.push(forgotPasswordSubscr);
   }
 }

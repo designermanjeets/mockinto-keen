@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
    
     this.tenantId = loggedInUser.tenant_id;
     if(Object.keys(loggedInUser).length === 0) {
-      this.router.navigate(['/landing-page']);
+      this.router.navigate(['/auth/login']);
     } else {
       this.fetchDashboardData();
       this.getConfig();

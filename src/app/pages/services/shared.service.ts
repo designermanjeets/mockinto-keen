@@ -49,7 +49,7 @@ export class SharedService implements OnInit, OnDestroy {
   setUpAuthUser() {
     this.authUser = JSON.parse(localStorage.getItem(this.authLocalStorageToken) || '{}');
     if(Object.keys(this.authUser).length === 0) {
-      this.router.navigate(['/landing-page']);
+      this.router.navigate(['/auth/login']);
     } else {
       if(this.authUser.candidates?.length !== 0) {
         this.candidateId = this.authUser.candidates[0].id;

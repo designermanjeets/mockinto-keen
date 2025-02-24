@@ -57,7 +57,7 @@ export class VerifyComponent implements OnInit {
     console.log(this.verify_email);
     if (!this.verify_email || Object.keys(this.verify_email).length === 0) {
       console.log("Email not found");
-      this.router.navigate(['/landing-page']);
+      this.router.navigate(['/auth/login']);
      
       
     }else{
